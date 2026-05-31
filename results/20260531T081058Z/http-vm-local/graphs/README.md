@@ -14,109 +14,91 @@ Generated from result JSON and per-test metrics CSV files in `http-vm-local`.
 
 ## caddy-single-plaintext-c100
 
-200 rps 12128.47 | total rps 12128.47 | p99 21.93 ms | non-200 0% | errors 0
+200 rps 12482.97 | total rps 12482.97 | p99 22.1 ms | non-200 0% | errors 0
 
 ![CPU and memory for caddy-single-plaintext-c100](caddy-single-plaintext-c100.svg)
 
 ## caddy-single-plaintext-c1000
 
-200 rps 7857.29 | total rps 7857.29 | p99 207.04 ms | non-200 0% | errors 0
+200 rps 7814.68 | total rps 7814.68 | p99 200.94 ms | non-200 0% | errors 0
 
 ![CPU and memory for caddy-single-plaintext-c1000](caddy-single-plaintext-c1000.svg)
 
-## caddy-single-plaintext-c10000
-
-200 rps 1540.56 | total rps 1599.94 | p99 9885.77 ms | non-200 3.71% | errors 3952
-
-![CPU and memory for caddy-single-plaintext-c10000](caddy-single-plaintext-c10000.svg)
-
 ## caddy-single-plaintext-c2500
 
-200 rps 6860.75 | total rps 6860.75 | p99 2305.4 ms | non-200 0% | errors 0
+200 rps 6875.9 | total rps 6875.9 | p99 2360.67 ms | non-200 0% | errors 0
 
 ![CPU and memory for caddy-single-plaintext-c2500](caddy-single-plaintext-c2500.svg)
 
 ## caddy-single-plaintext-c500
 
-200 rps 8962.95 | total rps 8962.95 | p99 103.96 ms | non-200 0% | errors 0
+200 rps 8730.89 | total rps 8730.89 | p99 110.15 ms | non-200 0% | errors 0
 
 ![CPU and memory for caddy-single-plaintext-c500](caddy-single-plaintext-c500.svg)
 
 ## caddy-single-plaintext-c5000
 
-200 rps 5898.55 | total rps 5902.63 | p99 4882.61 ms | non-200 0.07% | errors 0
+200 rps 5843.78 | total rps 5849.96 | p99 4834.04 ms | non-200 0.11% | errors 0
 
 ![CPU and memory for caddy-single-plaintext-c5000](caddy-single-plaintext-c5000.svg)
 
 ## nginx-single-plaintext-c100
 
-200 rps 27694.54 | total rps 27694.54 | p99 9.55 ms | non-200 0% | errors 0
+200 rps 27857.66 | total rps 27857.66 | p99 9.89 ms | non-200 0% | errors 0
 
 ![CPU and memory for nginx-single-plaintext-c100](nginx-single-plaintext-c100.svg)
 
 ## nginx-single-plaintext-c1000
 
-200 rps 24211.54 | total rps 24211.54 | p99 85.18 ms | non-200 0% | errors 0
+200 rps 23159.89 | total rps 23159.89 | p99 100.01 ms | non-200 0% | errors 0
 
 ![CPU and memory for nginx-single-plaintext-c1000](nginx-single-plaintext-c1000.svg)
 
-## nginx-single-plaintext-c10000
-
-200 rps 4302.3 | total rps 4302.3 | p99 5673.25 ms | non-200 0% | errors 0
-
-![CPU and memory for nginx-single-plaintext-c10000](nginx-single-plaintext-c10000.svg)
-
 ## nginx-single-plaintext-c2500
 
-200 rps 13867.62 | total rps 13867.62 | p99 585.04 ms | non-200 0% | errors 0
+200 rps 13799.56 | total rps 13799.56 | p99 2055.41 ms | non-200 0% | errors 0
 
 ![CPU and memory for nginx-single-plaintext-c2500](nginx-single-plaintext-c2500.svg)
 
 ## nginx-single-plaintext-c500
 
-200 rps 27472.88 | total rps 27472.88 | p99 43.59 ms | non-200 0% | errors 0
+200 rps 26912.44 | total rps 26912.44 | p99 42.18 ms | non-200 0% | errors 0
 
 ![CPU and memory for nginx-single-plaintext-c500](nginx-single-plaintext-c500.svg)
 
 ## nginx-single-plaintext-c5000
 
-200 rps 10544.18 | total rps 10544.18 | p99 1563.2 ms | non-200 0% | errors 0
+200 rps 11008.42 | total rps 11008.42 | p99 5471.84 ms | non-200 0% | errors 0
 
 ![CPU and memory for nginx-single-plaintext-c5000](nginx-single-plaintext-c5000.svg)
 
 ## tako-single-plaintext-c100
 
-200 rps 21205.51 | total rps 21205.51 | p99 10.24 ms | non-200 0% | errors 0
+200 rps 21179.52 | total rps 21179.52 | p99 10.18 ms | non-200 0% | errors 0
 
 ![CPU and memory for tako-single-plaintext-c100](tako-single-plaintext-c100.svg)
 
 ## tako-single-plaintext-c1000
 
-200 rps 16270.42 | total rps 16270.42 | p99 262.98 ms | non-200 0% | errors 0
+200 rps 16392.94 | total rps 16392.94 | p99 266.66 ms | non-200 0% | errors 0
 
 ![CPU and memory for tako-single-plaintext-c1000](tako-single-plaintext-c1000.svg)
 
-## tako-single-plaintext-c10000
-
-200 rps 7476.66 | total rps 7476.66 | p99 8633.46 ms | non-200 0% | errors 2548
-
-![CPU and memory for tako-single-plaintext-c10000](tako-single-plaintext-c10000.svg)
-
 ## tako-single-plaintext-c2500
 
-200 rps 14379.82 | total rps 14379.82 | p99 876.97 ms | non-200 0% | errors 0
+200 rps 7797.02 | total rps 23784.16 | p99 916.6 ms | non-200 67.22% | errors 0
 
 ![CPU and memory for tako-single-plaintext-c2500](tako-single-plaintext-c2500.svg)
 
 ## tako-single-plaintext-c500
 
-200 rps 17977.63 | total rps 17977.63 | p99 84.13 ms | non-200 0% | errors 0
+200 rps 18052.01 | total rps 18052.01 | p99 81.29 ms | non-200 0% | errors 0
 
 ![CPU and memory for tako-single-plaintext-c500](tako-single-plaintext-c500.svg)
 
 ## tako-single-plaintext-c5000
 
-200 rps 12446.86 | total rps 12446.86 | p99 3753.34 ms | non-200 0% | errors 0
+200 rps 2807.44 | total rps 18545.43 | p99 2802.09 ms | non-200 84.86% | errors 0
 
 ![CPU and memory for tako-single-plaintext-c5000](tako-single-plaintext-c5000.svg)
 

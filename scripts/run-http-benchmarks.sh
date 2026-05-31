@@ -17,6 +17,7 @@ duration="${DURATION:-30s}"
 metrics_interval="${METRICS_INTERVAL:-1}"
 metrics_connections="${METRICS_CONNECTIONS:-0}"
 source_ips="${SOURCE_IPS:-}"
+modes="${MODES:-single}"
 
 stop_metrics() {
   ssh "$bench_vm" "if [[ -f /tmp/tako-performance-metrics.pid ]]; then kill \$(cat /tmp/tako-performance-metrics.pid) 2>/dev/null || true; rm -f /tmp/tako-performance-metrics.pid; fi" >/dev/null 2>&1 || true
@@ -57,7 +58,7 @@ run_case() {
 }
 
 for concurrency in $concurrency_list; do
-  for mode in single lb; do
+  for mode in $modes; do
     for proxy in nginx caddy tako; do
       for endpoint in plaintext json; do
         run_case "$proxy" "$mode" "$endpoint" "$concurrency"
