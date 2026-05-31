@@ -86,10 +86,10 @@ func readSamples(path string) ([]sample, error) {
 		loadRSS := parseFloat(value(row, header, "loadgen_rss_bytes"))
 		samples = append(samples, sample{
 			t:           t,
-			cpuPct:      parseFloat(value(row, header, "cpu_pct")),
-			appCPUPct:   parseFloat(value(row, header, "app_cpu_pct")),
-			proxyCPUPct: parseFloat(value(row, header, "proxy_cpu_pct")),
-			loadCPUPct:  parseFloat(value(row, header, "loadgen_cpu_pct")),
+			cpuPct:      nonNegative(parseFloat(value(row, header, "cpu_pct"))),
+			appCPUPct:   nonNegative(parseFloat(value(row, header, "app_cpu_pct"))),
+			proxyCPUPct: nonNegative(parseFloat(value(row, header, "proxy_cpu_pct"))),
+			loadCPUPct:  nonNegative(parseFloat(value(row, header, "loadgen_cpu_pct"))),
 			memGiB:      memUsed / (1024 * 1024 * 1024),
 			benchRSSGiB: benchRSS / (1024 * 1024 * 1024),
 			proxyRSSGiB: proxyRSS / (1024 * 1024 * 1024),
@@ -111,6 +111,13 @@ func value(row []string, header map[string]int, name string) string {
 
 func parseFloat(s string) float64 {
 	v, _ := strconv.ParseFloat(strings.TrimSpace(s), 64)
+	return v
+}
+
+func nonNegative(v float64) float64 {
+	if v < 0 {
+		return 0
+	}
 	return v
 }
 

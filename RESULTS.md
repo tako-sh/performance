@@ -11,7 +11,7 @@ all run on the same benchmark VM, with TLS enabled for every proxy.
 
 ## Executive Summary
 
-Latest clean HTTP/TLS run:
+Full HTTP/TLS baseline run:
 
 - Tako release: `tako-server 0.0.0-850a9e2`
 - HTTP data: `results/20260531T193211Z/http-vm-local`
@@ -19,6 +19,12 @@ Latest clean HTTP/TLS run:
 - Channel/workflow data: `results/20260531T195359Z/tako-features-vm-local`
 - Channel/workflow graphs:
   `results/20260531T195359Z/tako-features-vm-local/graphs/README.md`
+
+Fixed high-load client-error follow-up:
+
+- HTTP high-load data: `results/20260531T205609Z/http-vm-local`
+- HTTP high-load graphs:
+  `results/20260531T205609Z/http-vm-local/graphs/README.md`
 
 Clean single-upstream HTTP/TLS rows:
 
@@ -37,6 +43,12 @@ Takeaways:
   and is mostly failure/timeout mode by c15000-c20000.
 - Tako gets close to nginx on successful RPS at c7500, but p99 is already
   several seconds. Treat c7500+ as overload behavior on this 2 vCPU VM.
+- The earlier c10000+ client-error rows were partly benchmark-harness
+  artifacts. The fixed harness uses a 60s request timeout, records sampled
+  error text, and caps load-generator connections to the requested concurrency.
+  In the fixed high-load rerun, Tako has 0 client errors and 0 non-200
+  responses through c20000. Nginx is still faster, but has EOF client errors
+  and HTTP 500s at c20000. Caddy has timeouts and 502s at c20000.
 - The 2 vCPU VM does not reach 60k-100k clean TLS RPS. CPU is saturated across
   the heavy rows, and the load generator, proxy, and app share the same CPU
   budget.
@@ -67,8 +79,16 @@ The final benchmark also uses an improved sampler and controller:
 - per-test graphs include total CPU plus proxy, app, and loadgen CPU;
 - per-test graphs include proxy, app, and loadgen RSS;
 - the controller waits for benchmark ports to be free between proxy swaps.
+- the load generator uses a configurable request timeout, records
+  `request_timeout_sec`, stores sampled error messages, and classifies timeout,
+  EOF, reset, local-address, and file-descriptor failures separately;
+- the load generator caps total per-host connections at the requested
+  concurrency so c20000 does not become a local file-descriptor exhaustion test;
+- the metrics sampler and renderer clamp negative per-process CPU deltas that
+  can happen when a process exits between samples, and metrics cleanup now kills
+  the sampler process group.
 
-## Latest HTTP Rerun
+## Full HTTP Baseline Rerun
 
 ![HTTP 200 RPS by concurrency](results/20260531T193211Z/http-vm-local/graphs/throughput-200-rps.svg)
 
@@ -104,10 +124,44 @@ The final benchmark also uses an improved sampler and controller:
 | caddy-single | 20,000 | 130 | 9,432 | 9,948 | 13.82% | 91.02% | 200:4741, 502:760 |
 | tako-single | 20,000 | 2,079 | 4,790 | 9,978 | 0.00% | 23.92% | 200:72478 |
 
+### High-Load Client-Error Follow-Up
+
+This rerun uses the fixed load generator: `REQUEST_TIMEOUT=60s`, sampled error
+messages, and `MaxConnsPerHost = concurrency`. It supersedes the c10000-c20000
+client-error interpretation in the baseline table above; the lower-load baseline
+rows remain useful for the full c1000-c7500 comparison.
+
+![Fixed high-load 200 RPS by concurrency](results/20260531T205609Z/http-vm-local/graphs/throughput-200-rps.svg)
+
+![Fixed high-load p99 latency by concurrency](results/20260531T205609Z/http-vm-local/graphs/p99-latency-ms.svg)
+
+![Fixed high-load non-200 response rate](results/20260531T205609Z/http-vm-local/graphs/non-200-rate.svg)
+
+![Fixed high-load client error rate](results/20260531T205609Z/http-vm-local/graphs/client-error-rate.svg)
+
+| case | conc | 200 rps | p50 ms | p99 ms | non-200 | client errors | status | error kinds |
+|---|---:|---:|---:|---:|---:|---:|---|---|
+| nginx-single | 10,000 | 15,279 | 552 | 2,603 | 0.00% | 0.00% | 200:461588 | |
+| caddy-single | 10,000 | 4,618 | 1,127 | 12,226 | 0.80% | 0.00% | 200:153066, 502:1235 | |
+| tako-single | 10,000 | 10,001 | 931 | 6,829 | 0.00% | 0.00% | 200:307096 | |
+| nginx-single | 15,000 | 12,621 | 1,015 | 3,143 | 0.00% | 0.00% | 200:386782 | |
+| caddy-single | 15,000 | 1,896 | 7,274 | 26,018 | 0.24% | 0.00% | 200:62817, 502:148 | |
+| tako-single | 15,000 | 8,167 | 1,502 | 11,546 | 0.00% | 0.00% | 200:249649 | |
+| nginx-single | 20,000 | 10,817 | 1,495 | 8,680 | 0.74% | 0.36% | 200:339342, 500:2535 | eof:1246 |
+| caddy-single | 20,000 | 1,325 | 10,106 | 24,318 | 13.27% | 15.56% | 200:46979, 502:7186 | timeout:9979 |
+| tako-single | 20,000 | 6,964 | 1,955 | 15,359 | 0.00% | 0.00% | 200:218669 | |
+
+The old Tako client errors were not a Tako failure mode in this setup. With the
+fixed harness, Tako remains slower than nginx on successful RPS, but it is clean
+at c20000 while nginx has a small EOF client-error bucket plus HTTP 500s. Caddy
+is clearly in timeout/failure mode at c20000.
+
 ### Resource Highlights
 
 In these graphs, 100% CPU means the whole 2 vCPU VM is busy, not one core.
 Process CPU columns are the process share of total VM CPU over each sample.
+This table is from the full baseline run; the fixed high-load follow-up has
+per-case CPU/RAM/TLS graphs in its graph directory.
 
 | case | conc | max CPU | proxy CPU | app CPU | loadgen CPU | proxy RSS | app RSS | loadgen RSS | max TLS conns |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -292,6 +346,8 @@ returns immediately.
   TLS.
 - Each timed case has a 10 second warmup followed by a 30 second measurement
   window.
+- Current scripts use `REQUEST_TIMEOUT=60s`; each result JSON records the
+  effective `request_timeout_sec`.
 - Single mode uses one upstream instance.
 - Tako runs with `--metrics-port 0` and `--no-acme` during proxy comparison.
 - High-concurrency runs use 16 loopback source IPs, `127.0.0.2` through
@@ -318,8 +374,10 @@ Older result directories are kept for comparison and regression analysis:
   feature rerun.
 - `results/20260531T182907Z/http-vm-local`: route-hot-path release rerun before
   the upstream keepalive fix.
-- `results/20260531T193211Z/http-vm-local`: latest clean HTTP rerun.
+- `results/20260531T193211Z/http-vm-local`: full clean HTTP baseline rerun.
 - `results/20260531T195359Z/tako-features-vm-local`: latest feature rerun.
+- `results/20260531T205609Z/http-vm-local`: fixed load-generator high-load
+  client-error rerun.
 
 ## Reproducing
 
@@ -332,6 +390,7 @@ SOURCE_IPS='127.0.0.2,127.0.0.3,127.0.0.4,127.0.0.5,127.0.0.6,127.0.0.7,127.0.0.
 CONCURRENCY_LIST='1000 2500 5000 7500 10000 15000 20000' \
 WARMUP=10s \
 DURATION=30s \
+REQUEST_TIMEOUT=60s \
 METRICS_INTERVAL=1 \
 METRICS_CONNECTIONS=1 \
 MODES=single \
@@ -347,6 +406,7 @@ SOURCE_IPS='127.0.0.2,127.0.0.3,127.0.0.4,127.0.0.5,127.0.0.6,127.0.0.7,127.0.0.
 CONCURRENCY_LIST='500 1000 2000 4000 8000' \
 WARMUP=10s \
 DURATION=30s \
+REQUEST_TIMEOUT=60s \
 METRICS_INTERVAL=1 \
 METRICS_CONNECTIONS=1 \
 ./scripts/run-vm-local-tako-feature-benchmarks.sh

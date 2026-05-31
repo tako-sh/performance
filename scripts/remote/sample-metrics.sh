@@ -71,7 +71,7 @@ sum_jiffies() {
 
 proc_cpu_pct() {
   local delta="$1"
-  if [[ "$total_delta" -le 0 ]]; then
+  if [[ "$total_delta" -le 0 || "$delta" -le 0 ]]; then
     echo "0"
     return
   fi

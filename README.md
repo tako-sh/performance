@@ -2,8 +2,8 @@
 
 Repeatable benchmarks for Tako, Caddy, and nginx.
 
-See [RESULTS.md](RESULTS.md) for the first baseline, raw result links,
-findings, and follow-up profiling targets.
+See [RESULTS.md](RESULTS.md) for the baseline, high-load follow-up, raw result
+links, findings, and profiling targets.
 
 This repo contains:
 
@@ -22,10 +22,12 @@ intentionally omits exact hostnames, IP addresses, and private network details.
 ```bash
 BENCH_VM=<ssh-host> ./scripts/sync-to-vm.sh
 BENCH_VM=<ssh-host> BENCH_IP=<target-ip> CONCURRENCY_LIST="100 500" ./scripts/run-http-benchmarks.sh
-BENCH_VM=<ssh-host> SOURCE_IPS="127.0.0.2,127.0.0.3" CONCURRENCY_LIST="1000 2500 5000" ./scripts/run-vm-local-http-benchmarks.sh
+BENCH_VM=<ssh-host> SOURCE_IPS="127.0.0.2,127.0.0.3" CONCURRENCY_LIST="1000 2500 5000" REQUEST_TIMEOUT=60s ./scripts/run-vm-local-http-benchmarks.sh
 ./scripts/render-metrics-graphs.sh results/<timestamp>/http-vm-local
 BENCH_VM=<ssh-host> BENCH_IP=<target-ip> TAKO_SERVER_BIN=/opt/tako-performance/bin/tako-server-patched ./scripts/run-tako-feature-benchmarks.sh
 ```
 
 HTTP scripts default to `MODES=single`. Use `MODES="single lb"` only on a
 larger testbed where four upstream app processes have enough CPU capacity.
+HTTP scripts also default to `REQUEST_TIMEOUT=60s` so high-concurrency rows
+measure overload latency instead of a short client timeout.

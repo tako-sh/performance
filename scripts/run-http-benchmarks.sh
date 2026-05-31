@@ -14,13 +14,15 @@ bench_host="${BENCH_HOST:-bench.test}"
 concurrency_list="${CONCURRENCY_LIST:-100}"
 warmup="${WARMUP:-10s}"
 duration="${DURATION:-30s}"
+request_timeout="${REQUEST_TIMEOUT:-60s}"
 metrics_interval="${METRICS_INTERVAL:-1}"
 metrics_connections="${METRICS_CONNECTIONS:-0}"
 source_ips="${SOURCE_IPS:-}"
 modes="${MODES:-single}"
+proxies="${PROXIES:-nginx caddy tako}"
 
 stop_metrics() {
-  ssh "$bench_vm" "if [[ -f /tmp/tako-performance-metrics.pid ]]; then kill \$(cat /tmp/tako-performance-metrics.pid) 2>/dev/null || true; rm -f /tmp/tako-performance-metrics.pid; fi" >/dev/null 2>&1 || true
+  ssh "$bench_vm" 'if [[ -f /tmp/tako-performance-metrics.pid ]]; then pid="$(cat /tmp/tako-performance-metrics.pid 2>/dev/null || true)"; if [[ -n "$pid" ]]; then kill -- "-$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true; fi; rm -f /tmp/tako-performance-metrics.pid; fi' >/dev/null 2>&1 || true
 }
 
 stop_remote() {
@@ -51,6 +53,7 @@ run_case() {
     -insecure \
     -warmup "$warmup" \
     -duration "$duration" \
+    -request-timeout "$request_timeout" \
     -concurrency "$concurrency" \
     > "$out_dir/$name.json"
   stop_metrics
@@ -59,7 +62,7 @@ run_case() {
 
 for concurrency in $concurrency_list; do
   for mode in $modes; do
-    for proxy in nginx caddy tako; do
+    for proxy in $proxies; do
       for endpoint in plaintext json; do
         run_case "$proxy" "$mode" "$endpoint" "$concurrency"
       done

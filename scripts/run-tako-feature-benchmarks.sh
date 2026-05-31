@@ -14,6 +14,7 @@ bench_host="${BENCH_HOST:-bench.test}"
 concurrency="${CONCURRENCY:-50}"
 warmup="${WARMUP:-5s}"
 duration="${DURATION:-30s}"
+request_timeout="${REQUEST_TIMEOUT:-60s}"
 tako_server_bin="${TAKO_SERVER_BIN:-/opt/tako-performance/bin/tako-server-patched}"
 
 ssh "$bench_vm" "cd /opt/tako-performance/source && TAKO_SERVER_BIN='$tako_server_bin' ./scripts/remote/control.sh tako-features"
@@ -34,6 +35,7 @@ run_case() {
     -insecure \
     -warmup "$warmup" \
     -duration "$duration" \
+    -request-timeout "$request_timeout" \
     -concurrency "$concurrency" \
     > "$out_dir/$name.json"
 }

@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -21,23 +22,25 @@ import (
 )
 
 type result struct {
-	Name          string             `json:"name"`
-	Method        string             `json:"method"`
-	URL           string             `json:"url"`
-	HostHeader    string             `json:"host_header,omitempty"`
-	ServerName    string             `json:"server_name,omitempty"`
-	SourceIPCount int                `json:"source_ip_count,omitempty"`
-	DurationSec   float64            `json:"duration_sec"`
-	Concurrency   int                `json:"concurrency"`
-	Requests      int64              `json:"requests"`
-	Errors        int64              `json:"errors"`
-	Bytes         int64              `json:"bytes"`
-	RequestsPerS  float64            `json:"requests_per_sec"`
-	BytesPerS     float64            `json:"bytes_per_sec"`
-	LatencyMillis map[string]float64 `json:"latency_ms"`
-	StatusCounts  map[string]int64   `json:"status_counts"`
-	ErrorKinds    map[string]int64   `json:"error_kinds,omitempty"`
-	StartedAt     string             `json:"started_at"`
+	Name          string              `json:"name"`
+	Method        string              `json:"method"`
+	URL           string              `json:"url"`
+	HostHeader    string              `json:"host_header,omitempty"`
+	ServerName    string              `json:"server_name,omitempty"`
+	SourceIPCount int                 `json:"source_ip_count,omitempty"`
+	DurationSec   float64             `json:"duration_sec"`
+	Concurrency   int                 `json:"concurrency"`
+	Requests      int64               `json:"requests"`
+	Errors        int64               `json:"errors"`
+	Bytes         int64               `json:"bytes"`
+	RequestsPerS  float64             `json:"requests_per_sec"`
+	BytesPerS     float64             `json:"bytes_per_sec"`
+	ReqTimeoutSec float64             `json:"request_timeout_sec"`
+	LatencyMillis map[string]float64  `json:"latency_ms"`
+	StatusCounts  map[string]int64    `json:"status_counts"`
+	ErrorKinds    map[string]int64    `json:"error_kinds,omitempty"`
+	ErrorSamples  map[string][]string `json:"error_samples,omitempty"`
+	StartedAt     string              `json:"started_at"`
 }
 
 func main() {
@@ -53,6 +56,7 @@ func main() {
 		sourceIPs   = flag.String("source-ips", "", "comma-separated local source IPs for outbound TCP connections")
 		duration    = flag.Duration("duration", 30*time.Second, "measurement duration")
 		warmup      = flag.Duration("warmup", 5*time.Second, "warmup duration")
+		reqTimeout  = flag.Duration("request-timeout", 30*time.Second, "per-request timeout; use 0 to disable")
 		concurrency = flag.Int("concurrency", 100, "concurrent workers")
 		insecure    = flag.Bool("insecure", false, "skip TLS verification")
 	)
@@ -74,8 +78,9 @@ func main() {
 
 	transport := &http.Transport{
 		Proxy:               http.ProxyFromEnvironment,
-		MaxIdleConns:        *concurrency * 2,
-		MaxIdleConnsPerHost: *concurrency * 2,
+		MaxIdleConns:        *concurrency,
+		MaxIdleConnsPerHost: *concurrency,
+		MaxConnsPerHost:     *concurrency,
 		IdleConnTimeout:     90 * time.Second,
 		ForceAttemptHTTP2:   false,
 		TLSClientConfig: &tls.Config{
@@ -104,7 +109,7 @@ func main() {
 		}
 	}
 
-	client := &http.Client{Transport: transport, Timeout: 10 * time.Second}
+	client := &http.Client{Transport: transport, Timeout: *reqTimeout}
 	if *warmup > 0 {
 		run(client, runConfig{
 			name:        *name,
@@ -115,6 +120,7 @@ func main() {
 			hostHeader:  *hostHeader,
 			sourceIPs:   len(parsedSourceIPs),
 			duration:    *warmup,
+			reqTimeout:  *reqTimeout,
 			concurrency: *concurrency,
 		})
 	}
@@ -129,6 +135,7 @@ func main() {
 		serverName:  *serverName,
 		sourceIPs:   len(parsedSourceIPs),
 		duration:    *duration,
+		reqTimeout:  *reqTimeout,
 		concurrency: *concurrency,
 	})
 
@@ -150,6 +157,7 @@ type runConfig struct {
 	serverName  string
 	sourceIPs   int
 	duration    time.Duration
+	reqTimeout  time.Duration
 	concurrency int
 }
 
@@ -161,6 +169,7 @@ func run(client *http.Client, cfg runConfig) result {
 	latencies := make([]int64, 0, 1024)
 	statusCounts := map[string]int64{}
 	errorKinds := map[string]int64{}
+	errorSamples := map[string][]string{}
 
 	var wg sync.WaitGroup
 	for i := 0; i < cfg.concurrency; i++ {
@@ -170,7 +179,7 @@ func run(client *http.Client, cfg runConfig) result {
 			for time.Now().Before(deadline) {
 				req, err := http.NewRequest(cfg.method, cfg.url, bytes.NewReader(cfg.body))
 				if err != nil {
-					recordError(&mu, errorKinds, "build_request")
+					recordError(&mu, errorKinds, errorSamples, "build_request", err)
 					atomic.AddInt64(&errors, 1)
 					continue
 				}
@@ -184,14 +193,14 @@ func run(client *http.Client, cfg runConfig) result {
 				resp, err := client.Do(req)
 				elapsed := time.Since(t0).Nanoseconds()
 				if err != nil {
-					recordError(&mu, errorKinds, classifyError(err))
+					recordError(&mu, errorKinds, errorSamples, classifyError(err), err)
 					atomic.AddInt64(&errors, 1)
 					continue
 				}
 				n, readErr := io.Copy(io.Discard, resp.Body)
 				closeErr := resp.Body.Close()
 				if readErr != nil || closeErr != nil {
-					recordError(&mu, errorKinds, "read_response")
+					recordError(&mu, errorKinds, errorSamples, "read_response", firstErr(readErr, closeErr))
 					atomic.AddInt64(&errors, 1)
 				}
 				atomic.AddInt64(&requests, 1)
@@ -222,13 +231,18 @@ func run(client *http.Client, cfg runConfig) result {
 		Bytes:         totalBytes,
 		RequestsPerS:  float64(reqs) / elapsedSec,
 		BytesPerS:     float64(totalBytes) / elapsedSec,
+		ReqTimeoutSec: cfg.reqTimeout.Seconds(),
 		LatencyMillis: latencySummary(latencies),
 		StatusCounts:  statusCounts,
 		ErrorKinds:    errorKinds,
+		ErrorSamples:  errorSamples,
 		StartedAt:     startedAt.UTC().Format(time.RFC3339),
 	}
 	if len(res.ErrorKinds) == 0 {
 		res.ErrorKinds = nil
+	}
+	if len(res.ErrorSamples) == 0 {
+		res.ErrorSamples = nil
 	}
 	return res
 }
@@ -279,26 +293,66 @@ func nsToMs(ns int64) float64 {
 	return float64(ns) / float64(time.Millisecond)
 }
 
-func recordError(mu *sync.Mutex, counts map[string]int64, kind string) {
+func recordError(mu *sync.Mutex, counts map[string]int64, samples map[string][]string, kind string, err error) {
 	mu.Lock()
+	defer mu.Unlock()
 	counts[kind]++
-	mu.Unlock()
+	if err == nil || len(samples[kind]) >= 3 {
+		return
+	}
+	samples[kind] = append(samples[kind], truncateError(err.Error()))
 }
 
 func classifyError(err error) string {
-	text := err.Error()
+	if err == nil {
+		return "unknown"
+	}
+	if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, os.ErrDeadlineExceeded) {
+		return "timeout"
+	}
+	var netErr net.Error
+	if errors.As(err, &netErr) && netErr.Timeout() {
+		return "timeout"
+	}
+	text := strings.ToLower(err.Error())
 	switch {
 	case strings.Contains(text, "connection refused"):
 		return "connection_refused"
-	case strings.Contains(text, "timeout"):
+	case strings.Contains(text, "timeout"),
+		strings.Contains(text, "deadline exceeded"),
+		strings.Contains(text, "i/o timeout"):
 		return "timeout"
-	case strings.Contains(text, "connection reset"):
+	case strings.Contains(text, "cannot assign requested address"),
+		strings.Contains(text, "address already in use"):
+		return "local_address_exhausted"
+	case strings.Contains(text, "too many open files"):
+		return "too_many_open_files"
+	case strings.Contains(text, "connection reset"),
+		strings.Contains(text, "broken pipe"):
 		return "connection_reset"
-	case strings.Contains(text, "EOF"):
+	case strings.Contains(text, "eof"):
 		return "eof"
 	default:
 		return "request_error"
 	}
+}
+
+func firstErr(errs ...error) error {
+	for _, err := range errs {
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func truncateError(value string) string {
+	const limit = 240
+	value = strings.Join(strings.Fields(value), " ")
+	if len(value) <= limit {
+		return value
+	}
+	return value[:limit] + "..."
 }
 
 func parseResolve(value string) (host, port, ip string, err error) {
