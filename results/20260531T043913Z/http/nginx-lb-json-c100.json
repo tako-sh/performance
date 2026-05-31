@@ -1,0 +1,27 @@
+{
+  "name": "nginx-lb-json-c100",
+  "method": "GET",
+  "url": "https://bench.test:18443/json",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 30.032747792,
+  "concurrency": 100,
+  "requests": 82752,
+  "errors": 0,
+  "bytes": 2482560,
+  "requests_per_sec": 2755.3922329425727,
+  "bytes_per_sec": 82661.76698827719,
+  "latency_ms": {
+    "max": 274.773875,
+    "mean": 36.245475,
+    "min": 26.564084,
+    "p50": 35.196833,
+    "p90": 42.590708,
+    "p95": 44.951542,
+    "p99": 51.234167
+  },
+  "status_counts": {
+    "200": 82752
+  },
+  "started_at": "2026-05-31T04:44:52Z"
+}

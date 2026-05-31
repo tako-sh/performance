@@ -1,0 +1,27 @@
+{
+  "name": "caddy-single-json-c500",
+  "method": "GET",
+  "url": "https://bench.test:18443/json",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 30.067606834,
+  "concurrency": 500,
+  "requests": 172383,
+  "errors": 0,
+  "bytes": 5171490,
+  "requests_per_sec": 5733.17992854263,
+  "bytes_per_sec": 171995.3978562789,
+  "latency_ms": {
+    "max": 651.25525,
+    "mean": 87.049112,
+    "min": 28.65575,
+    "p50": 85.940875,
+    "p90": 119.212667,
+    "p95": 129.263458,
+    "p99": 151.821208
+  },
+  "status_counts": {
+    "200": 172383
+  },
+  "started_at": "2026-05-31T04:52:44Z"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "tako-single-json-c100",
+  "method": "GET",
+  "url": "https://bench.test:18443/json",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 30.027763875,
+  "concurrency": 100,
+  "requests": 83138,
+  "errors": 0,
+  "bytes": 2494140,
+  "requests_per_sec": 2768.7043346313776,
+  "bytes_per_sec": 83061.13003894134,
+  "latency_ms": {
+    "max": 285.826542,
+    "mean": 36.082783,
+    "min": 26.482,
+    "p50": 34.977583,
+    "p90": 42.578041,
+    "p95": 44.966167,
+    "p99": 50.5295
+  },
+  "status_counts": {
+    "200": 83138
+  },
+  "started_at": "2026-05-31T04:43:17Z"
+}

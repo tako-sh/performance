@@ -1,0 +1,27 @@
+{
+  "name": "nginx-single-json-c500",
+  "method": "GET",
+  "url": "https://bench.test:18443/json",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 30.033791542,
+  "concurrency": 500,
+  "requests": 407489,
+  "errors": 0,
+  "bytes": 12224670,
+  "requests_per_sec": 13567.684234278488,
+  "bytes_per_sec": 407030.52702835464,
+  "latency_ms": {
+    "max": 535.892166,
+    "mean": 36.776368,
+    "min": 26.3305,
+    "p50": 35.284583,
+    "p90": 42.231959,
+    "p95": 45.443666,
+    "p99": 63.533
+  },
+  "status_counts": {
+    "200": 407489
+  },
+  "started_at": "2026-05-31T04:51:14Z"
+}

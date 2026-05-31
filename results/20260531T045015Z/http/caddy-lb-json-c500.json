@@ -1,0 +1,27 @@
+{
+  "name": "caddy-lb-json-c500",
+  "method": "GET",
+  "url": "https://bench.test:18443/json",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 30.059914041,
+  "concurrency": 500,
+  "requests": 162588,
+  "errors": 0,
+  "bytes": 4877640,
+  "requests_per_sec": 5408.797902024579,
+  "bytes_per_sec": 162263.9370607374,
+  "latency_ms": {
+    "max": 925.301916,
+    "mean": 92.296098,
+    "min": 29.990625,
+    "p50": 88.828208,
+    "p90": 127.433708,
+    "p95": 139.016209,
+    "p99": 166.913667
+  },
+  "status_counts": {
+    "200": 162588
+  },
+  "started_at": "2026-05-31T04:57:24Z"
+}
