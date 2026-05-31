@@ -102,6 +102,10 @@ testbed.
 
 Interpretation:
 
+- A follow-up code fix after this run changes Tako's Pingora service from the
+  default one thread to host parallelism and raises the upstream keepalive pool
+  to 256. These published numbers are pre-fix and should be rerun before
+  treating the nginx gap as final.
 - c2500 is the cleanest high-load comparison. Nginx single leads, Tako single
   is second among single-instance proxies, and Caddy is far behind. Tako single
   is about 18.6% below nginx single on clean 200 RPS in this row.
