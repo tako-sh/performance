@@ -13,11 +13,13 @@ import (
 )
 
 type sample struct {
-	t       time.Time
-	cpuPct  float64
-	memGiB  float64
-	conn    float64
-	loadOne float64
+	t           time.Time
+	cpuPct      float64
+	memGiB      float64
+	benchRSSGiB float64
+	proxyRSSGiB float64
+	conn        float64
+	loadOne     float64
 }
 
 func main() {
@@ -75,12 +77,16 @@ func readSamples(path string) ([]sample, error) {
 			continue
 		}
 		memUsed := parseFloat(value(row, header, "mem_used_bytes"))
+		benchRSS := parseFloat(value(row, header, "bench_rss_bytes"))
+		proxyRSS := parseFloat(value(row, header, "proxy_rss_bytes"))
 		samples = append(samples, sample{
-			t:       t,
-			cpuPct:  parseFloat(value(row, header, "cpu_pct")),
-			memGiB:  memUsed / (1024 * 1024 * 1024),
-			conn:    parseFloat(value(row, header, "conn_established")),
-			loadOne: parseFloat(value(row, header, "load1")),
+			t:           t,
+			cpuPct:      parseFloat(value(row, header, "cpu_pct")),
+			memGiB:      memUsed / (1024 * 1024 * 1024),
+			benchRSSGiB: benchRSS / (1024 * 1024 * 1024),
+			proxyRSSGiB: proxyRSS / (1024 * 1024 * 1024),
+			conn:        parseFloat(value(row, header, "conn_established")),
+			loadOne:     parseFloat(value(row, header, "load1")),
 		})
 	}
 	return samples, nil
@@ -109,14 +115,17 @@ func renderSVG(title string, summary string, samples []sample) string {
 		panelH     = 150.0
 		plotWidth  = width - left - right
 		cpuTop     = top
-		memTop     = top + panelH + panelGap
-		connTop    = top + 2*(panelH+panelGap)
+		rssTop     = top + panelH + panelGap
+		memTop     = top + 2*(panelH+panelGap)
+		connTop    = top + 3*(panelH+panelGap)
 		background = "#101114"
 		grid       = "#343843"
 		text       = "#d7dae0"
 		muted      = "#9ea3ad"
 		cpuColor   = "#4ea1ff"
-		memColor   = "#7ee787"
+		proxyColor = "#ff7b72"
+		appColor   = "#7ee787"
+		memColor   = "#a371f7"
 		connColor  = "#f6c177"
 	)
 
@@ -136,6 +145,13 @@ func renderSVG(title string, summary string, samples []sample) string {
 	if maxMem < 1 {
 		maxMem = 1
 	}
+	maxRSS := niceCeil(math.Max(
+		maxOf(samples, func(s sample) float64 { return s.proxyRSSGiB }),
+		maxOf(samples, func(s sample) float64 { return s.benchRSSGiB }),
+	))
+	if maxRSS < 0.25 {
+		maxRSS = 0.25
+	}
 	maxConn := niceCeil(maxOf(samples, func(s sample) float64 { return s.conn }))
 	if maxConn < 1 {
 		maxConn = 1
@@ -149,12 +165,75 @@ func renderSVG(title string, summary string, samples []sample) string {
 		fmt.Fprintf(&b, `<text x="24" y="54" fill="%s" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">%s</text>`, muted, html.EscapeString(summary))
 	}
 	drawPanel(&b, "CPU (% total)", cpuTop, panelH, 0, maxCPU, cpuColor, samples, func(s sample) float64 { return s.cpuPct }, start, total, left, plotWidth, grid, text, muted)
+	drawMultiPanel(
+		&b,
+		"Process RSS (GiB)",
+		rssTop,
+		panelH,
+		0,
+		maxRSS,
+		[]series{
+			{
+				label: "proxy",
+				color: proxyColor,
+				get:   func(s sample) float64 { return s.proxyRSSGiB },
+			},
+			{
+				label: "app",
+				color: appColor,
+				get:   func(s sample) float64 { return s.benchRSSGiB },
+			},
+		},
+		samples,
+		start,
+		total,
+		left,
+		plotWidth,
+		grid,
+		text,
+		muted,
+	)
 	drawPanel(&b, "Memory used (GiB)", memTop, panelH, 0, maxMem, memColor, samples, func(s sample) float64 { return s.memGiB }, start, total, left, plotWidth, grid, text, muted)
 	if showConn {
 		drawPanel(&b, "TLS connections", connTop, panelH, 0, maxConn, connColor, samples, func(s sample) float64 { return s.conn }, start, total, left, plotWidth, grid, text, muted)
 	}
 	fmt.Fprint(&b, `</svg>`)
 	return b.String()
+}
+
+type series struct {
+	label string
+	color string
+	get   func(sample) float64
+}
+
+func drawMultiPanel(
+	b *strings.Builder,
+	label string,
+	yTop float64,
+	h float64,
+	minY float64,
+	maxY float64,
+	seriesList []series,
+	samples []sample,
+	start time.Time,
+	totalSeconds float64,
+	left float64,
+	plotWidth float64,
+	grid string,
+	text string,
+	muted string,
+) {
+	drawGrid(b, label, yTop, h, minY, maxY, start, totalSeconds, left, plotWidth, grid, text, muted)
+	legendX := left
+	for _, s := range seriesList {
+		fmt.Fprintf(b, `<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="3" stroke-linecap="round"/>`, legendX, yTop-30, legendX+18, yTop-30, s.color)
+		fmt.Fprintf(b, `<text x="%.1f" y="%.1f" fill="%s" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11">%s</text>`, legendX+24, yTop-26, muted, html.EscapeString(s.label))
+		legendX += 76
+	}
+	for _, s := range seriesList {
+		fmt.Fprintf(b, `<path d="%s" fill="none" stroke="%s" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`, pathFor(samples, s.get, start, totalSeconds, left, yTop, plotWidth, h, minY, maxY), s.color)
+	}
 }
 
 func drawPanel(
@@ -167,6 +246,25 @@ func drawPanel(
 	color string,
 	samples []sample,
 	get func(sample) float64,
+	start time.Time,
+	totalSeconds float64,
+	left float64,
+	plotWidth float64,
+	grid string,
+	text string,
+	muted string,
+) {
+	drawGrid(b, label, yTop, h, minY, maxY, start, totalSeconds, left, plotWidth, grid, text, muted)
+	fmt.Fprintf(b, `<path d="%s" fill="none" stroke="%s" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`, pathFor(samples, get, start, totalSeconds, left, yTop, plotWidth, h, minY, maxY), color)
+}
+
+func drawGrid(
+	b *strings.Builder,
+	label string,
+	yTop float64,
+	h float64,
+	minY float64,
+	maxY float64,
 	start time.Time,
 	totalSeconds float64,
 	left float64,
@@ -189,7 +287,6 @@ func drawPanel(
 		fmt.Fprintf(b, `<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="1"/>`, x, yTop, x, bottom, grid)
 		fmt.Fprintf(b, `<text x="%.1f" y="%.1f" fill="%s" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" text-anchor="middle">%.0fs</text>`, x, bottom+18, muted, float64(i)*totalSeconds/4)
 	}
-	fmt.Fprintf(b, `<path d="%s" fill="none" stroke="%s" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`, pathFor(samples, get, start, totalSeconds, left, yTop, plotWidth, h, minY, maxY), color)
 }
 
 func pathFor(

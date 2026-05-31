@@ -1,0 +1,31 @@
+{
+  "name": "tako-single-plaintext-c10000",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 31.293147245,
+  "concurrency": 10000,
+  "requests": 166348,
+  "errors": 4411,
+  "bytes": 2162524,
+  "requests_per_sec": 5315.79641694809,
+  "bytes_per_sec": 69105.35342032518,
+  "latency_ms": {
+    "max": 10464.481481,
+    "mean": 1546.466747,
+    "min": 3.742972,
+    "p50": 1295.057926,
+    "p90": 3065.983725,
+    "p95": 4509.102451,
+    "p99": 9270.150223
+  },
+  "status_counts": {
+    "200": 166348
+  },
+  "error_kinds": {
+    "request_error": 4411
+  },
+  "started_at": "2026-05-31T17:25:45Z"
+}

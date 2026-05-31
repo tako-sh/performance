@@ -45,7 +45,7 @@ while true; do
 
   read mem_used mem_available < <(read_mem)
   read load1 load5 load15 _ < /proc/loadavg
-  bench_rss="$(sum_rss '/opt/tako-performance/.*/benchapp|/opt/tako-performance/bin/benchapp')"
+  bench_rss="$(sum_rss '/opt/tako-performance/.*/benchapp|/opt/tako-performance/bin/benchapp|/opt/tako-performance/tako-data/.*/bun')"
   proxy_rss="$(sum_rss 'tako-server|nginx: worker|nginx: master|caddy run')"
   conn_established="0"
   if [[ "$sample_connections" == "1" ]]; then
