@@ -14,6 +14,20 @@ bench_host="${BENCH_HOST:-bench.test}"
 concurrency_list="${CONCURRENCY_LIST:-100}"
 warmup="${WARMUP:-10s}"
 duration="${DURATION:-30s}"
+metrics_interval="${METRICS_INTERVAL:-1}"
+metrics_connections="${METRICS_CONNECTIONS:-0}"
+source_ips="${SOURCE_IPS:-}"
+
+stop_metrics() {
+  ssh "$bench_vm" "if [[ -f /tmp/tako-performance-metrics.pid ]]; then kill \$(cat /tmp/tako-performance-metrics.pid) 2>/dev/null || true; rm -f /tmp/tako-performance-metrics.pid; fi" >/dev/null 2>&1 || true
+}
+
+stop_remote() {
+  stop_metrics
+  ssh "$bench_vm" "cd /opt/tako-performance/source && ./scripts/remote/control.sh stop" >/dev/null 2>&1 || true
+}
+
+trap stop_remote EXIT
 
 run_case() {
   local proxy="$1"
@@ -25,17 +39,21 @@ run_case() {
 
   ssh "$bench_vm" "cd /opt/tako-performance/source && ./scripts/remote/control.sh $remote_case"
   sleep 2
+  ssh "$bench_vm" "cd /opt/tako-performance/source && SAMPLE_CONNECTIONS='$metrics_connections' ./scripts/remote/start-metrics.sh '$out_dir/$name-metrics.csv' '$metrics_interval'"
   ./.bin/loadgen \
     -name "$name" \
     -url "https://$bench_host:18443/$endpoint" \
     -host "$bench_host" \
     -sni "$bench_host" \
     -resolve "$bench_host:18443:$bench_ip" \
+    -source-ips "$source_ips" \
     -insecure \
     -warmup "$warmup" \
     -duration "$duration" \
     -concurrency "$concurrency" \
     > "$out_dir/$name.json"
+  stop_metrics
+  rsync -az "$bench_vm:/opt/tako-performance/source/$out_dir/$name-metrics.csv" "$out_dir/"
 }
 
 for concurrency in $concurrency_list; do
@@ -48,5 +66,6 @@ for concurrency in $concurrency_list; do
   done
 done
 
-ssh "$bench_vm" "cd /opt/tako-performance/source && ./scripts/remote/control.sh stop"
+stop_remote
+trap - EXIT
 echo "$out_dir"

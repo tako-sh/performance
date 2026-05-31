@@ -1,0 +1,27 @@
+{
+  "name": "caddy-lb-plaintext-c500",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 20.037446078,
+  "concurrency": 500,
+  "requests": 186622,
+  "errors": 0,
+  "bytes": 2426086,
+  "requests_per_sec": 9313.661994324744,
+  "bytes_per_sec": 121077.60592622169,
+  "latency_ms": {
+    "max": 637.662361,
+    "mean": 53.591301,
+    "min": 0.224071,
+    "p50": 51.139918,
+    "p90": 75.199201,
+    "p95": 83.520443,
+    "p99": 102.364847
+  },
+  "status_counts": {
+    "200": 186622
+  },
+  "started_at": "2026-05-31T08:17:45Z"
+}

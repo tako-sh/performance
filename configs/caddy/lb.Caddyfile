@@ -5,9 +5,5 @@
 
 https://bench.test:18443 {
     tls /opt/tako-performance/certs/bench.test.crt /opt/tako-performance/certs/bench.test.key
-    log {
-        output discard
-    }
     reverse_proxy 127.0.0.1:9101 127.0.0.1:9102 127.0.0.1:9103 127.0.0.1:9104
 }
-

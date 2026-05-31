@@ -1,0 +1,28 @@
+{
+  "name": "tako-lb-plaintext-c2500",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 20.139315145,
+  "concurrency": 2500,
+  "requests": 251868,
+  "errors": 0,
+  "bytes": 3274284,
+  "requests_per_sec": 12506.284259747104,
+  "bytes_per_sec": 162581.69537671236,
+  "latency_ms": {
+    "max": 2559.401288,
+    "mean": 198.868701,
+    "min": 1.797445,
+    "p50": 103.890058,
+    "p90": 465.56011,
+    "p95": 662.358808,
+    "p99": 1338.500561
+  },
+  "status_counts": {
+    "200": 251868
+  },
+  "started_at": "2026-05-31T08:50:42Z"
+}

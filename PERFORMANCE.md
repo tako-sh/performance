@@ -3,24 +3,38 @@
 Date: 2026-05-31 UTC
 
 This is the first repeatable baseline for Tako against nginx and Caddy on the
-benchmark VM. The benchmark was driven from a laptop over Tailscale, using the
-same TLS route, certificate, application payloads, and load generator for each
-proxy. Exact hostnames, public IPs, private Tailscale IPs, MagicDNS suffixes,
-peer names, and user identifiers are intentionally omitted from this public
-report.
+benchmark VM. It includes both a laptop-driven run over Tailscale and a
+VM-local high-load run, using the same TLS route, certificate, application
+payloads, and load generator for each proxy. Exact hostnames, public IPs,
+private Tailscale IPs, MagicDNS suffixes, peer names, and user identifiers are
+intentionally omitted from this public report.
 
 ## Executive Summary
 
-At 500 concurrent HTTP/1.1 clients over TLS, nginx was the fastest HTTP proxy in
-this run. Tako single-instance was close to nginx single-instance, trailing by
-about 7.4% on both plaintext and JSON responses. Tako was much faster than
-Caddy in this environment: about 112% higher throughput than Caddy on the
-single plaintext case.
+At 500 concurrent HTTP/1.1 clients over TLS from the laptop, nginx was the
+fastest HTTP proxy. Tako single-instance trailed nginx single-instance by about
+7.4% on both plaintext and JSON responses, and was much faster than Caddy in
+this environment.
 
-Load-balanced Tako is the main performance gap: Tako with four upstream
-instances was about 19-20% behind nginx with four upstream instances, and also
-slower than Tako's single-instance case. That makes the load-balanced path the
-first area to profile.
+A VM-local high-load pass was added to find the ceiling of the single 2 vCPU
+VM. With TLS, the same app, and load generation running on the VM itself, the
+best clean 200-throughput was:
+
+- nginx single: 27,694 rps at c100, p99 9 ms
+- Tako single: 21,205 rps at c100, p99 10 ms
+- Caddy load-balanced: 13,683 rps at c100, p99 20 ms
+
+The VM did not get close to 60k-100k clean TLS rps under these conditions. The
+machine saturates before that: by c500-c1000 the load generator, proxy, and app
+are sharing the full 2 vCPU budget. At overload levels, source-sharded Tako
+does better than nginx on clean 200 rps at c2500 and c5000, but p99 latency is
+already hundreds of milliseconds to seconds, so those are not good steady-state
+targets.
+
+The first high-load Tako runs returned many 429 responses above c2048 because
+Tako has a built-in per-client-IP concurrent request cap. A final source-sharded
+run used 16 loopback source IPs so the c2500+ rows measure proxy capacity
+rather than the per-IP limiter.
 
 The channel and workflow benchmark initially failed on the released
 `tako-server 0.0.0-ea3eb66` because app processes could not use the internal
@@ -131,6 +145,33 @@ Because the load generator is the laptop and the VM is in Tokyo, the `c=100`
 run is mostly RTT/concurrency limited. The `c=500` run is more useful for proxy
 comparison, but still includes real Tailscale and cross-network overhead.
 
+The VM-local high-load runs use the same TLS certificate, Host/SNI, HTTP app,
+and proxy configs, but the load generator runs on the VM and resolves
+`bench.test:18443` to `127.0.0.1`. Tailscale is not in the measured HTTP path
+for these runs; it is only used for SSH orchestration and result collection.
+This is not a pure proxy microbenchmark because the load generator, proxy, and
+app processes all share the same 2 vCPU VM.
+
+The final high-load run used 16 loopback source IPs:
+
+```text
+127.0.0.2 through 127.0.0.17
+```
+
+That avoids measuring Tako's per-client-IP DDoS limiter when concurrency is
+above 2048. A separate single-source diagnostic run is kept to show that limiter
+behavior.
+
+Metrics were sampled once per second from `/proc` on the VM:
+
+- total CPU utilization
+- memory used and available
+- aggregate benchmark app RSS
+- aggregate proxy RSS
+
+Connection counting is disabled in the final run because enumerating thousands
+of sockets with `ss` showed measurable CPU overhead at very high concurrency.
+
 ## HTTP Results: 100 Concurrent Clients
 
 Raw data: `results/20260531T043913Z/http`
@@ -184,6 +225,103 @@ Key comparisons from the 500-concurrency run:
 - Tako load-balanced plaintext was about 91% faster than Caddy load-balanced
   plaintext.
 
+## VM-Local High-Load Results
+
+Raw final data: `results/20260531T083525Z/http-vm-local`
+
+CPU/RAM graphs: `results/20260531T083525Z/http-vm-local/graphs`
+
+This run keeps TLS enabled but removes laptop-to-VM network latency from the
+request path. The load generator runs on the same VM as the proxy and app, so
+the result is the total throughput the single VM can produce end-to-end.
+
+The final pass used 16 loopback source IPs. This matters for Tako because its
+default per-client-IP concurrent request cap is 2048. The single-source
+diagnostic run, `results/20260531T081058Z/http-vm-local`, reproduced that
+behavior: at c2500 and c5000, Tako returned many 429 responses. The
+source-sharded run below avoids that artifact and is the fairer high-concurrency
+comparison.
+
+| case | conc | source IPs | rps | 200 rps | errors | p99 ms | status |
+|---|---:|---:|---:|---:|---:|---:|---|
+| caddy-lb-plaintext-c100 | 100 | 16 | 13,683 | 13,683 | 0 | 20 | 200:273725 |
+| caddy-single-plaintext-c100 | 100 | 16 | 12,128 | 12,128 | 0 | 21 | 200:242615 |
+| nginx-lb-plaintext-c100 | 100 | 16 | 25,329 | 25,329 | 0 | 10 | 200:506653 |
+| nginx-single-plaintext-c100 | 100 | 16 | 27,694 | 27,694 | 0 | 9 | 200:553921 |
+| tako-lb-plaintext-c100 | 100 | 16 | 18,402 | 18,402 | 0 | 11 | 200:368165 |
+| tako-single-plaintext-c100 | 100 | 16 | 21,205 | 21,205 | 0 | 10 | 200:424182 |
+| caddy-lb-plaintext-c500 | 500 | 16 | 9,407 | 9,407 | 0 | 101 | 200:188588 |
+| caddy-single-plaintext-c500 | 500 | 16 | 8,962 | 8,962 | 0 | 103 | 200:179608 |
+| nginx-lb-plaintext-c500 | 500 | 16 | 24,624 | 24,624 | 0 | 45 | 200:495630 |
+| nginx-single-plaintext-c500 | 500 | 16 | 27,472 | 27,472 | 0 | 43 | 200:549607 |
+| tako-lb-plaintext-c500 | 500 | 16 | 15,530 | 15,530 | 0 | 93 | 200:311058 |
+| tako-single-plaintext-c500 | 500 | 16 | 17,977 | 17,977 | 0 | 84 | 200:359914 |
+| caddy-lb-plaintext-c1000 | 1000 | 16 | 7,689 | 7,689 | 0 | 216 | 200:154618 |
+| caddy-single-plaintext-c1000 | 1000 | 16 | 7,857 | 7,857 | 0 | 207 | 200:157659 |
+| nginx-lb-plaintext-c1000 | 1000 | 16 | 19,306 | 19,306 | 0 | 169 | 200:386861 |
+| nginx-single-plaintext-c1000 | 1000 | 16 | 24,211 | 24,211 | 0 | 85 | 200:485030 |
+| tako-lb-plaintext-c1000 | 1000 | 16 | 14,255 | 14,255 | 0 | 325 | 200:285655 |
+| tako-single-plaintext-c1000 | 1000 | 16 | 16,270 | 16,270 | 0 | 262 | 200:326102 |
+| caddy-lb-plaintext-c2500 | 2500 | 16 | 6,035 | 6,035 | 0 | 2,434 | 200:122354 |
+| caddy-single-plaintext-c2500 | 2500 | 16 | 6,860 | 6,860 | 0 | 2,305 | 200:138615 |
+| nginx-lb-plaintext-c2500 | 2500 | 16 | 11,390 | 11,390 | 0 | 752 | 200:229346 |
+| nginx-single-plaintext-c2500 | 2500 | 16 | 13,867 | 13,867 | 0 | 585 | 200:278468 |
+| tako-lb-plaintext-c2500 | 2500 | 16 | 12,506 | 12,506 | 0 | 1,338 | 200:251868 |
+| tako-single-plaintext-c2500 | 2500 | 16 | 14,379 | 14,379 | 0 | 876 | 200:289340 |
+| caddy-lb-plaintext-c5000 | 5000 | 16 | 5,136 | 5,136 | 0 | 5,056 | 200:105292 |
+| caddy-single-plaintext-c5000 | 5000 | 16 | 5,902 | 5,898 | 0 | 4,882 | 200:121336, 502:84 |
+| nginx-lb-plaintext-c5000 | 5000 | 16 | 9,854 | 9,854 | 0 | 1,449 | 200:200016 |
+| nginx-single-plaintext-c5000 | 5000 | 16 | 10,544 | 10,544 | 0 | 1,563 | 200:212829 |
+| tako-lb-plaintext-c5000 | 5000 | 16 | 10,681 | 10,681 | 0 | 4,046 | 200:216471 |
+| tako-single-plaintext-c5000 | 5000 | 16 | 12,446 | 12,446 | 0 | 3,753 | 200:252142 |
+| caddy-lb-plaintext-c10000 | 10000 | 16 | 1,571 | 1,571 | 1,666 | 9,473 | 200:36325 |
+| caddy-single-plaintext-c10000 | 10000 | 16 | 1,599 | 1,540 | 3,952 | 9,885 | 200:36945, 502:1424 |
+| nginx-lb-plaintext-c10000 | 10000 | 16 | 6,303 | 6,303 | 0 | 3,625 | 200:128534 |
+| nginx-single-plaintext-c10000 | 10000 | 16 | 4,302 | 4,302 | 0 | 5,673 | 200:88449 |
+| tako-lb-plaintext-c10000 | 10000 | 16 | 6,184 | 6,184 | 5,029 | 7,435 | 200:127575 |
+| tako-single-plaintext-c10000 | 10000 | 16 | 7,476 | 7,476 | 2,548 | 8,633 | 200:154736 |
+
+Interpretation:
+
+- The practical low-latency ceiling is below 60k-100k rps on this 2 vCPU VM.
+  The best clean row is nginx single at 27.7k rps with p99 9 ms.
+- Tako single peaks at 21.2k rps in the low-latency range. At c2500 and c5000,
+  Tako's clean 200 rps beats nginx, but p99 latency is already too high for a
+  healthy steady-state target.
+- Load balancing does not help the benchmark app on this VM. Four app
+  processes compete for the same 2 vCPUs, and every proxy's LB mode is slower
+  than its single-instance mode until overload changes the shape of queueing.
+- c10000 is failure-mode data. It shows how each proxy behaves under extreme
+  overload, not a target operating point.
+
+### VM-Local Resource Summary
+
+| case | max CPU % | max memory GiB | max proxy RSS MiB | max app RSS MiB |
+|---|---:|---:|---:|---:|
+| nginx-single-c500 | 98.1 | 0.42 | 61 | 30 |
+| tako-single-c500 | 94.1 | 0.45 | 140 | 25 |
+| caddy-single-c500 | 100.0 | 0.45 | 138 | 30 |
+| nginx-single-c2500 | 100.0 | 1.27 | 177 | 56 |
+| tako-single-c2500 | 94.7 | 0.85 | 361 | 35 |
+| caddy-single-c2500 | 100.0 | 0.91 | 351 | 104 |
+| nginx-single-c5000 | 100.0 | 1.88 | 283 | 81 |
+| tako-single-c5000 | 95.2 | 1.44 | 730 | 32 |
+| caddy-single-c5000 | 100.0 | 1.40 | 608 | 134 |
+| nginx-lb-c5000 | 100.0 | 1.96 | 268 | 114 |
+| tako-lb-c5000 | 94.7 | 1.42 | 724 | 62 |
+| caddy-lb-c5000 | 100.0 | 1.43 | 602 | 214 |
+| nginx-single-c10000 | 100.0 | 2.65 | 398 | 90 |
+| tako-single-c10000 | 99.0 | 2.41 | 1,434 | 34 |
+| caddy-single-c10000 | 100.0 | 2.55 | 1,278 | 135 |
+
+Example graphs:
+
+- `results/20260531T083525Z/http-vm-local/graphs/nginx-single-plaintext-c500.svg`
+- `results/20260531T083525Z/http-vm-local/graphs/tako-single-plaintext-c500.svg`
+- `results/20260531T083525Z/http-vm-local/graphs/nginx-single-plaintext-c2500.svg`
+- `results/20260531T083525Z/http-vm-local/graphs/tako-single-plaintext-c2500.svg`
+- `results/20260531T083525Z/http-vm-local/graphs/tako-single-plaintext-c5000.svg`
+
 ## Channel And Workflow Results
 
 Raw valid data: `results/20260531T053951Z/tako-features`
@@ -207,16 +345,27 @@ socket problem fixed in the source tree.
 1. Tako's normal single-instance proxy path is reasonably close to nginx in
    this cross-network TLS run. The measured gap was about 7.4% at 500
    concurrency.
-2. Tako's load-balanced path underperformed its single-instance path. That is
-   the clearest performance issue from this baseline.
-3. Caddy 2.6.2 was much slower than both nginx and Tako in this setup.
-4. The channel/workflow feature path was blocked in the released server by the
+2. In the VM-local high-load run, the single VM did not approach 60k-100k clean
+   TLS rps. The best clean low-latency result was nginx single at 27.7k rps.
+3. Tako's built-in per-client-IP cap returns 429 above 2048 concurrent requests
+   from one source IP. That is correct DDoS-protection behavior, but benchmarks
+   above c2048 must either shard source IPs or apply an equivalent cap to nginx
+   and Caddy.
+4. Source-sharded Tako beats nginx on clean 200 rps at c2500 and c5000 in the
+   VM-local test, but p99 latency is already high. That is overload behavior,
+   not a good production target.
+5. Tako's load-balanced path still underperforms Tako single-instance in the
+   useful latency range. That makes load-balanced request selection and
+   upstream handling the first area to profile.
+6. Caddy 2.6.2 was much slower than both nginx and Tako in this setup.
+7. Tako proxy RSS grows sharply at high concurrency, reaching about 730 MiB at
+   c5000 and 1.4 GiB at c10000 in single-instance mode. Nginx uses much less
+   proxy RSS in the same rows.
+8. The channel/workflow feature path was blocked in the released server by the
    internal socket issue. The patched source build fixed the failure and
    produced clean 200-only results.
-5. The benchmark is not a pure local proxy ceiling test. It includes a real
-   28-33ms Tailscale path from the laptop to Tokyo. For an additional ceiling
-   benchmark, run the same harness from a same-region load generator or from a
-   second VM near the benchmark VM.
+9. The laptop-driven benchmark is not a pure local proxy ceiling test. It
+   includes a real 28-33ms Tailscale path from the laptop to Tokyo.
 
 ## Follow-up Profiling Targets
 
@@ -225,9 +374,17 @@ socket problem fixed in the source tree.
   - per-request locking in the route/load-balancer path
   - connection reuse and keep-alive behavior to app instances
   - health/state checks on hot request paths
-- Add an in-region or VM-local load generator pass to separate proxy overhead
-  from Tailscale RTT.
-- Add higher-concurrency runs once the load generator path is closer to the VM.
+- Profile memory growth in Tako under c2500-c10000:
+  - TLS/session allocation behavior
+  - Pingora request/session buffering
+  - response body handling for very small responses
+  - per-request metadata cloned into the proxy context
+- Make the per-IP concurrent request cap configurable, or expose a benchmark
+  mode that can raise it explicitly. Keep the current default for production
+  DDoS protection.
+- Add a second same-region load-generator VM. VM-local load generation is useful
+  for total-box throughput, but it makes the client compete with the proxy and
+  app for the same 2 vCPUs.
 - Add repeated runs and confidence intervals after the first load-balanced Tako
   optimization pass.
 - Keep channel/workflow benchmarks in CI or release validation so internal
@@ -245,6 +402,24 @@ Run HTTP proxy comparisons:
 
 ```bash
 BENCH_VM=<ssh-host> BENCH_IP=<target-ip> CONCURRENCY_LIST="100 500" ./scripts/run-http-benchmarks.sh
+```
+
+Run VM-local high-load comparisons with source-IP sharding:
+
+```bash
+BENCH_VM=<ssh-host> \
+SOURCE_IPS="127.0.0.2,127.0.0.3,127.0.0.4,127.0.0.5,127.0.0.6,127.0.0.7,127.0.0.8,127.0.0.9,127.0.0.10,127.0.0.11,127.0.0.12,127.0.0.13,127.0.0.14,127.0.0.15,127.0.0.16,127.0.0.17" \
+CONCURRENCY_LIST="100 500 1000 2500 5000 10000" \
+WARMUP=5s \
+DURATION=20s \
+ENDPOINTS=plaintext \
+./scripts/run-vm-local-http-benchmarks.sh
+```
+
+Render CPU/RAM graphs:
+
+```bash
+./scripts/render-metrics-graphs.sh results/<timestamp>/http-vm-local
 ```
 
 Run Tako channel/workflow feature benchmarks with a patched server binary on

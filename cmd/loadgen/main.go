@@ -26,6 +26,7 @@ type result struct {
 	URL           string             `json:"url"`
 	HostHeader    string             `json:"host_header,omitempty"`
 	ServerName    string             `json:"server_name,omitempty"`
+	SourceIPCount int                `json:"source_ip_count,omitempty"`
 	DurationSec   float64            `json:"duration_sec"`
 	Concurrency   int                `json:"concurrency"`
 	Requests      int64              `json:"requests"`
@@ -49,6 +50,7 @@ func main() {
 		hostHeader  = flag.String("host", "", "Host header override")
 		serverName  = flag.String("sni", "", "TLS server name override")
 		resolve     = flag.String("resolve", "", "host:port:ip mapping")
+		sourceIPs   = flag.String("source-ips", "", "comma-separated local source IPs for outbound TCP connections")
 		duration    = flag.Duration("duration", 30*time.Second, "measurement duration")
 		warmup      = flag.Duration("warmup", 5*time.Second, "warmup duration")
 		concurrency = flag.Int("concurrency", 100, "concurrent workers")
@@ -64,6 +66,11 @@ func main() {
 		fmt.Fprintln(os.Stderr, "-method must not be empty")
 		os.Exit(2)
 	}
+	parsedSourceIPs, err := parseSourceIPs(*sourceIPs)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "invalid -source-ips: %v\n", err)
+		os.Exit(2)
+	}
 
 	transport := &http.Transport{
 		Proxy:               http.ProxyFromEnvironment,
@@ -77,16 +84,21 @@ func main() {
 			MinVersion:         tls.VersionTLS12,
 		},
 	}
-	if *resolve != "" {
+	if *resolve != "" || len(parsedSourceIPs) > 0 {
 		host, port, ip, err := parseResolve(*resolve)
-		if err != nil {
+		if *resolve != "" && err != nil {
 			fmt.Fprintf(os.Stderr, "invalid -resolve: %v\n", err)
 			os.Exit(2)
 		}
-		dialer := &net.Dialer{Timeout: 10 * time.Second, KeepAlive: 30 * time.Second}
+		var dialCounter uint64
 		transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-			if addr == net.JoinHostPort(host, port) {
+			if *resolve != "" && addr == net.JoinHostPort(host, port) {
 				addr = net.JoinHostPort(ip, port)
+			}
+			dialer := &net.Dialer{Timeout: 10 * time.Second, KeepAlive: 30 * time.Second}
+			if len(parsedSourceIPs) > 0 {
+				idx := atomic.AddUint64(&dialCounter, 1) - 1
+				dialer.LocalAddr = &net.TCPAddr{IP: parsedSourceIPs[int(idx)%len(parsedSourceIPs)]}
 			}
 			return dialer.DialContext(ctx, network, addr)
 		}
@@ -101,6 +113,7 @@ func main() {
 			body:        []byte(*body),
 			contentType: *contentType,
 			hostHeader:  *hostHeader,
+			sourceIPs:   len(parsedSourceIPs),
 			duration:    *warmup,
 			concurrency: *concurrency,
 		})
@@ -114,6 +127,7 @@ func main() {
 		contentType: *contentType,
 		hostHeader:  *hostHeader,
 		serverName:  *serverName,
+		sourceIPs:   len(parsedSourceIPs),
 		duration:    *duration,
 		concurrency: *concurrency,
 	})
@@ -134,6 +148,7 @@ type runConfig struct {
 	contentType string
 	hostHeader  string
 	serverName  string
+	sourceIPs   int
 	duration    time.Duration
 	concurrency int
 }
@@ -199,6 +214,7 @@ func run(client *http.Client, cfg runConfig) result {
 		URL:           cfg.url,
 		HostHeader:    cfg.hostHeader,
 		ServerName:    cfg.serverName,
+		SourceIPCount: cfg.sourceIPs,
 		DurationSec:   elapsedSec,
 		Concurrency:   cfg.concurrency,
 		Requests:      reqs,
@@ -286,6 +302,9 @@ func classifyError(err error) string {
 }
 
 func parseResolve(value string) (host, port, ip string, err error) {
+	if strings.TrimSpace(value) == "" {
+		return "", "", "", nil
+	}
 	parts := strings.Split(value, ":")
 	if len(parts) != 3 {
 		return "", "", "", fmt.Errorf("expected host:port:ip")
@@ -297,4 +316,21 @@ func parseResolve(value string) (host, port, ip string, err error) {
 		return "", "", "", fmt.Errorf("invalid port %q", parts[1])
 	}
 	return parts[0], parts[1], parts[2], nil
+}
+
+func parseSourceIPs(value string) ([]net.IP, error) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return nil, nil
+	}
+	parts := strings.Split(value, ",")
+	ips := make([]net.IP, 0, len(parts))
+	for _, part := range parts {
+		ip := net.ParseIP(strings.TrimSpace(part))
+		if ip == nil {
+			return nil, fmt.Errorf("invalid IP %q", part)
+		}
+		ips = append(ips, ip)
+	}
+	return ips, nil
 }

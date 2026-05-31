@@ -13,7 +13,11 @@ TAKO_FEATURE_RELEASE="$TAKO_DATA/apps/$TAKO_FEATURE_APP/releases/$TAKO_VERSION"
 ROUTE=bench.test
 BENCH_IP="${BENCH_IP:-127.0.0.1}"
 
-ulimit -n 4096 2>/dev/null || true
+ulimit -n 65535 2>/dev/null || ulimit -n 4096 2>/dev/null || true
+
+sudo_high_nofile() {
+  sudo -n sh -c 'ulimit -n 65535; exec "$@"' sh "$@"
+}
 
 stop_pidfile() {
   local file="$1"
@@ -21,12 +25,12 @@ stop_pidfile() {
     local pid
     pid="$(cat "$file" 2>/dev/null || true)"
     if [[ -n "$pid" ]]; then
-      kill "$pid" 2>/dev/null || true
+      kill "$pid" 2>/dev/null || sudo -n kill "$pid" 2>/dev/null || true
       for _ in $(seq 1 50); do
         kill -0 "$pid" 2>/dev/null || break
         sleep 0.1
       done
-      kill -9 "$pid" 2>/dev/null || true
+      kill -9 "$pid" 2>/dev/null || sudo -n kill -9 "$pid" 2>/dev/null || true
     fi
     rm -f "$file"
   fi
@@ -36,6 +40,7 @@ stop_all() {
   stop_pidfile "$ROOT/run/tako-server.pid"
   stop_pidfile "$ROOT/run/caddy.pid"
   if [[ -f "$ROOT/run/nginx.pid" ]]; then
+    sudo -n nginx -s quit -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx" 2>/dev/null || true
     nginx -s quit -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx" 2>/dev/null || true
     sleep 0.5
     stop_pidfile "$ROOT/run/nginx.pid"
@@ -44,6 +49,8 @@ stop_all() {
     [[ -e "$file" ]] || continue
     stop_pidfile "$file"
   done
+  sudo -n pkill -f "caddy run --config $ROOT/configs/" 2>/dev/null || true
+  sudo -n pkill -f "$TAKO_SERVER_BIN --data-dir $TAKO_DATA" 2>/dev/null || true
   pkill -f "$ROOT/bin/benchapp" 2>/dev/null || true
   pkill -f "$TAKO_DATA/apps/.*/benchapp" 2>/dev/null || true
   rm -f "$ROOT/run/tako.sock" "$ROOT/run/tako-"*.sock
@@ -62,7 +69,7 @@ start_apps() {
 wait_https() {
   local url="https://bench.test:18443/plaintext"
   for _ in $(seq 1 100); do
-    if curl -ksS --resolve "bench.test:18443:$BENCH_IP" "$url" >/dev/null 2>&1; then
+    if curl -fksS --resolve "bench.test:18443:$BENCH_IP" "$url" >/dev/null 2>&1; then
       return 0
     fi
     sleep 0.1
@@ -76,7 +83,7 @@ tako_cmd() {
 }
 
 start_tako_server() {
-  sudo "$TAKO_SERVER_BIN" \
+  sudo_high_nofile "$TAKO_SERVER_BIN" \
     --data-dir "$TAKO_DATA" \
     --socket "$TAKO_SOCKET" \
     --http-port 18080 \
@@ -142,6 +149,7 @@ deploy_tako() {
 
 deploy_http_tako() {
   local count="$1"
+  delete_tako_app "$TAKO_FEATURE_APP"
   deploy_tako "$TAKO_APP" "$TAKO_RELEASE" "$count" no
 }
 
@@ -159,7 +167,7 @@ case "${1:-}" in
     mkdir -p "$ROOT/nginx"
     cp "$ROOT/configs/single.conf" "$ROOT/configs/nginx-active.conf"
     start_apps 1
-    nginx -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx"
+    sudo_high_nofile nginx -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx"
     wait_https
     ;;
   nginx-lb)
@@ -167,13 +175,13 @@ case "${1:-}" in
     mkdir -p "$ROOT/nginx"
     cp "$ROOT/configs/lb.conf" "$ROOT/configs/nginx-active.conf"
     start_apps 4
-    nginx -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx"
+    sudo_high_nofile nginx -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx"
     wait_https
     ;;
   caddy-single)
     stop_all
     start_apps 1
-    caddy run --config "$ROOT/configs/single.Caddyfile" --adapter caddyfile \
+    sudo_high_nofile caddy run --config "$ROOT/configs/single.Caddyfile" --adapter caddyfile \
       > "$ROOT/logs/caddy.log" 2>&1 &
     echo $! > "$ROOT/run/caddy.pid"
     wait_https
@@ -181,7 +189,7 @@ case "${1:-}" in
   caddy-lb)
     stop_all
     start_apps 4
-    caddy run --config "$ROOT/configs/lb.Caddyfile" --adapter caddyfile \
+    sudo_high_nofile caddy run --config "$ROOT/configs/lb.Caddyfile" --adapter caddyfile \
       > "$ROOT/logs/caddy.log" 2>&1 &
     echo $! > "$ROOT/run/caddy.pid"
     wait_https

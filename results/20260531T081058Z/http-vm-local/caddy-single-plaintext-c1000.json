@@ -1,0 +1,27 @@
+{
+  "name": "caddy-single-plaintext-c1000",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "duration_sec": 20.084630873,
+  "concurrency": 1000,
+  "requests": 156955,
+  "errors": 0,
+  "bytes": 2040415,
+  "requests_per_sec": 7814.681832714009,
+  "bytes_per_sec": 101590.86382528213,
+  "latency_ms": {
+    "max": 1020.803495,
+    "mean": 127.622149,
+    "min": 0.225893,
+    "p50": 124.702774,
+    "p90": 162.640744,
+    "p95": 172.930665,
+    "p99": 200.939239
+  },
+  "status_counts": {
+    "200": 156955
+  },
+  "started_at": "2026-05-31T08:19:42Z"
+}

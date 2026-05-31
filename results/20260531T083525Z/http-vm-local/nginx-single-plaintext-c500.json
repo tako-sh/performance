@@ -1,0 +1,28 @@
+{
+  "name": "nginx-single-plaintext-c500",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 20.005434576,
+  "concurrency": 500,
+  "requests": 549607,
+  "errors": 0,
+  "bytes": 7144891,
+  "requests_per_sec": 27472.884825973702,
+  "bytes_per_sec": 357147.5027376581,
+  "latency_ms": {
+    "max": 248.005996,
+    "mean": 16.969522,
+    "min": 0.059651,
+    "p50": 15.641702,
+    "p90": 26.176593,
+    "p95": 30.739118,
+    "p99": 43.585988
+  },
+  "status_counts": {
+    "200": 549607
+  },
+  "started_at": "2026-05-31T08:39:35Z"
+}
