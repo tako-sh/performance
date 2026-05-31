@@ -1,4 +1,4 @@
-# Tako Proxy Performance
+# Tako Proxy Performance Results
 
 Date: 2026-05-31 UTC
 

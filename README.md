@@ -2,7 +2,7 @@
 
 Repeatable benchmarks for Tako, Caddy, and nginx.
 
-See [PERFORMANCE.md](PERFORMANCE.md) for the first baseline, raw result links,
+See [RESULTS.md](RESULTS.md) for the first baseline, raw result links,
 findings, and follow-up profiling targets.
 
 This repo contains:
