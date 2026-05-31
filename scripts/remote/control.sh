@@ -36,6 +36,27 @@ stop_pidfile() {
   fi
 }
 
+wait_port_free() {
+  local port="$1"
+  for _ in $(seq 1 100); do
+    if ! ss -ltn "sport = :$port" 2>/dev/null | tail -n +2 | grep -q .; then
+      return 0
+    fi
+    sleep 0.1
+  done
+
+  sudo -n fuser -k "$port/tcp" >/dev/null 2>&1 || true
+  for _ in $(seq 1 50); do
+    if ! ss -ltn "sport = :$port" 2>/dev/null | tail -n +2 | grep -q .; then
+      return 0
+    fi
+    sleep 0.1
+  done
+
+  echo "port $port is still in use" >&2
+  return 1
+}
+
 stop_all() {
   stop_pidfile "$ROOT/run/tako-server.pid"
   stop_pidfile "$ROOT/run/caddy.pid"
@@ -54,6 +75,8 @@ stop_all() {
   pkill -f "$ROOT/bin/benchapp" 2>/dev/null || true
   pkill -f "$TAKO_DATA/apps/.*/benchapp" 2>/dev/null || true
   rm -f "$ROOT/run/tako.sock" "$ROOT/run/tako-"*.sock
+  wait_port_free 18443
+  wait_port_free 18080
 }
 
 start_apps() {

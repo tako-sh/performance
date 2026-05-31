@@ -11,11 +11,11 @@ This repo contains:
 - Proxy configs for single-upstream runs, with load-balanced mode available for
   larger testbeds.
 - Remote setup and restore scripts for benchmark hosts.
-- A VM-local high-load harness with CPU/RAM graph rendering.
+- A VM-local high-load harness with CPU/RAM/RPS/failure graph rendering.
 - Raw benchmark output and Markdown reports.
 
-The first baseline target was an Ubuntu 24.04 VM reachable over Tailscale. The
-public report intentionally omits exact hostnames and IP addresses.
+The first baseline target was an Ubuntu 24.04 VM. The public report
+intentionally omits exact hostnames, IP addresses, and private network details.
 
 ## Run
 

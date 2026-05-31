@@ -1,0 +1,32 @@
+{
+  "name": "caddy-single-plaintext-c7500",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.890960664,
+  "concurrency": 7500,
+  "requests": 97543,
+  "errors": 3200,
+  "bytes": 1264666,
+  "requests_per_sec": 3157.6551166851727,
+  "bytes_per_sec": 40939.678560201864,
+  "latency_ms": {
+    "max": 9966.77949,
+    "mean": 2000.889244,
+    "min": 0.672501,
+    "p50": 1255.797928,
+    "p90": 4767.236533,
+    "p95": 6791.806547,
+    "p99": 8774.425876
+  },
+  "status_counts": {
+    "200": 97282,
+    "502": 261
+  },
+  "error_kinds": {
+    "request_error": 3200
+  },
+  "started_at": "2026-05-31T18:38:44Z"
+}

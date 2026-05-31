@@ -1,0 +1,31 @@
+{
+  "name": "tako-feature-channel-publish-c8000",
+  "method": "POST",
+  "url": "https://bench.test:18443/channel-publish",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 31.07790472,
+  "concurrency": 8000,
+  "requests": 89995,
+  "errors": 3095,
+  "bytes": 2339870,
+  "requests_per_sec": 2895.7872421200987,
+  "bytes_per_sec": 75290.46829512257,
+  "latency_ms": {
+    "max": 10523.967411,
+    "mean": 2348.308018,
+    "min": 38.759241,
+    "p50": 2068.598855,
+    "p90": 4515.994326,
+    "p95": 5825.638335,
+    "p99": 9564.119433
+  },
+  "status_counts": {
+    "200": 89995
+  },
+  "error_kinds": {
+    "request_error": 3095
+  },
+  "started_at": "2026-05-31T20:01:48Z"
+}

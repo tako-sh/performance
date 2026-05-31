@@ -2,197 +2,209 @@
 
 Date: 2026-05-31 UTC
 
-This report is the public performance baseline for Tako against nginx and
+This is the public single-VM performance report for Tako against nginx and
 Caddy. It intentionally omits exact hostnames, public IPs, private network
-addresses, peer names, and user identifiers. The timed high-load path is
-VM-local: load generator, proxy, and application all run on the same benchmark
-VM, with TLS still enabled.
+addresses, peer names, and user identifiers.
+
+The timed high-load path is VM-local: load generator, proxy, and application
+all run on the same benchmark VM, with TLS enabled for every proxy.
 
 ## Executive Summary
 
-The latest post-release run used `tako-server 0.0.0-d81cc6d`. It includes the
-request-metrics guard, disabled default response cache, and skipped Pingora's
-default downstream compression module. The nginx configs were also equalized to
-set `X-Forwarded-For` and `X-Forwarded-Proto`, matching the forwarding work
-Tako and Caddy do.
+Latest clean HTTP/TLS run:
+
+- Tako release: `tako-server 0.0.0-850a9e2`
+- HTTP data: `results/20260531T193211Z/http-vm-local`
+- HTTP graphs: `results/20260531T193211Z/http-vm-local/graphs/README.md`
+- Channel/workflow data: `results/20260531T195359Z/tako-features-vm-local`
+- Channel/workflow graphs:
+  `results/20260531T195359Z/tako-features-vm-local/graphs/README.md`
 
 Clean single-upstream HTTP/TLS rows:
 
 | conc | nginx 200 rps | nginx p99 | Tako 200 rps | Tako p99 | Caddy 200 rps | Caddy p99 |
 |---:|---:|---:|---:|---:|---:|---:|
-| 1,000 | 23,445 | 98 ms | 16,408 | 152 ms | 7,926 | 204 ms |
-| 2,500 | 17,824 | 495 ms | 14,916 | 509 ms | 7,055 | 2,236 ms |
-| 5,000 | 12,446 | 1,251 ms | 12,977 | 2,647 ms | 6,138 | 4,801 ms |
-| 7,500 | 9,984 | 2,511 ms | 11,059 | 4,903 ms | 4,820 | 7,878 ms |
+| 1,000 | 19,245 | 145 ms | 14,476 | 158 ms | 6,835 | 247 ms |
+| 2,500 | 14,092 | 652 ms | 13,029 | 585 ms | 6,066 | 2,608 ms |
+| 5,000 | 11,696 | 1,388 ms | 8,023 | 3,108 ms | 5,318 | 5,460 ms |
+| 7,500 | 9,485 | 2,885 ms | 9,264 | 6,893 ms | 2,203 | 7,591 ms |
 
 Takeaways:
 
-- Tako is still slower than nginx in the clean lower-load rows. At c2500, after
-  equalizing forwarding headers, Tako is about 16% behind nginx on successful
-  RPS with nearly identical p99.
-- Tako clearly beats Caddy in this setup.
-- Tako returns more successful responses than nginx at c5000 and c7500, but
-  p99 latency is already in seconds. Treat those rows as overload behavior, not
-  as the intended operating point.
+- Tako still trails nginx in the lower-load clean rows. At c2500 it is within
+  about 8% of nginx on successful RPS and has slightly better p99 in this run.
+- Tako clearly beats Caddy in this setup. Caddy degrades sharply after c5000
+  and is mostly failure/timeout mode by c15000-c20000.
+- Tako gets close to nginx on successful RPS at c7500, but p99 is already
+  several seconds. Treat c7500+ as overload behavior on this 2 vCPU VM.
 - The 2 vCPU VM does not reach 60k-100k clean TLS RPS. CPU is saturated across
-  the heavy rows, and proxy/app/loadgen all share the same machine.
+  the heavy rows, and the load generator, proxy, and app share the same CPU
+  budget.
 - Load-balanced mode is intentionally excluded for this exe-node result set.
   Four app processes on a 2 vCPU VM mostly measure process contention; use a
   larger or multi-node testbed for load-balancer results.
 
+## What Changed During This Round
+
+Before the final run, Tako had already picked up these performance fixes:
+
+- disabled default response cache on the benchmark path;
+- skipped Pingora's default downstream compression module;
+- guarded request metrics so disabled metrics do not allocate timers;
+- reused compiled route app/path strings via `Arc<str>`;
+- replaced the async route-table hot-path lock with a synchronous route-table
+  read lock;
+- reused the load-balancer app name in selected backend handles.
+
+During this round, we found one simple mismatch with nginx and fixed it in
+`850a9e2`:
+
+- Tako now sizes Pingora's upstream keepalive pool at 256 entries per proxy
+  thread instead of 256 total (`tako-server/src/proxy/server.rs:128`).
+
+The final benchmark also uses an improved sampler and controller:
+
+- per-test graphs include total CPU plus proxy, app, and loadgen CPU;
+- per-test graphs include proxy, app, and loadgen RSS;
+- the controller waits for benchmark ports to be free between proxy swaps.
+
 ## Latest HTTP Rerun
 
-Raw HTTP data: `results/20260531T171211Z/http-vm-local`  
-HTTP graphs: `results/20260531T171211Z/http-vm-local/graphs/README.md`
+![HTTP 200 RPS by concurrency](results/20260531T193211Z/http-vm-local/graphs/throughput-200-rps.svg)
 
-![HTTP 200 RPS by concurrency](results/20260531T171211Z/http-vm-local/graphs/throughput-200-rps.svg)
+![p99 latency by concurrency](results/20260531T193211Z/http-vm-local/graphs/p99-latency-ms.svg)
 
-![p99 latency by concurrency](results/20260531T171211Z/http-vm-local/graphs/p99-latency-ms.svg)
+![Non-200 response rate by concurrency](results/20260531T193211Z/http-vm-local/graphs/non-200-rate.svg)
 
-![Non-200 response rate by concurrency](results/20260531T171211Z/http-vm-local/graphs/non-200-rate.svg)
-
-![Client error rate by concurrency](results/20260531T171211Z/http-vm-local/graphs/client-error-rate.svg)
+![Client error rate by concurrency](results/20260531T193211Z/http-vm-local/graphs/client-error-rate.svg)
 
 ### HTTP Results
 
 | case | conc | 200 rps | p50 ms | p99 ms | non-200 | client errors | status |
 |---|---:|---:|---:|---:|---:|---:|---|
-| nginx-single | 1,000 | 23,445 | 37 | 98 | 0.00% | 0.00% | 200:703703 |
-| tako-single | 1,000 | 16,408 | 59 | 152 | 0.00% | 0.00% | 200:492953 |
-| caddy-single | 1,000 | 7,926 | 124 | 204 | 0.00% | 0.00% | 200:238386 |
-| nginx-single | 2,500 | 17,824 | 112 | 495 | 0.00% | 0.00% | 200:535896 |
-| tako-single | 2,500 | 14,916 | 181 | 509 | 0.00% | 0.00% | 200:449728 |
-| caddy-single | 2,500 | 7,055 | 341 | 2,236 | 0.00% | 0.00% | 200:213072 |
-| nginx-single | 5,000 | 12,446 | 291 | 1,251 | 0.00% | 0.00% | 200:375311 |
-| tako-single | 5,000 | 12,977 | 421 | 2,647 | 0.00% | 0.00% | 200:393011 |
-| caddy-single | 5,000 | 6,138 | 720 | 4,801 | 0.06% | 0.00% | 200:187534, 502:113 |
-| nginx-single | 7,500 | 9,984 | 472 | 2,511 | 0.00% | 0.00% | 200:304114 |
-| tako-single | 7,500 | 11,059 | 666 | 4,903 | 0.00% | 0.00% | 200:336593 |
-| caddy-single | 7,500 | 4,820 | 1,105 | 7,878 | 0.00% | 0.04% | 200:147838 |
-| nginx-single | 10,000 | 6,539 | 962 | 4,537 | 0.00% | 0.00% | 200:228106 |
-| tako-single | 10,000 | 5,316 | 1,295 | 9,270 | 0.00% | 2.58% | 200:166348 |
-| caddy-single | 10,000 | 3,003 | 2,446 | 9,802 | 0.00% | 2.56% | 200:92657 |
-| nginx-single | 15,000 | 2,280 | 3,497 | 9,817 | 0.00% | 33.18% | 200:83567 |
-| tako-single | 15,000 | 4,488 | 2,081 | 10,230 | 0.00% | 5.22% | 200:140341 |
-| caddy-single | 15,000 | 206 | 8,458 | 9,799 | 7.44% | 83.05% | 200:7662, 502:616 |
-| nginx-single | 20,000 | 2,448 | 4,438 | 10,191 | 0.00% | 24.76% | 200:85835 |
-| tako-single | 20,000 | 2,832 | 4,617 | 9,784 | 0.00% | 17.55% | 200:93573 |
-| caddy-single | 20,000 | 135 | 8,780 | 9,621 | 9.15% | 91.10% | 200:5101, 502:514 |
+| nginx-single | 1,000 | 19,245 | 45 | 145 | 0.00% | 0.00% | 200:577653 |
+| caddy-single | 1,000 | 6,835 | 141 | 247 | 0.00% | 0.00% | 200:205771 |
+| tako-single | 1,000 | 14,476 | 68 | 158 | 0.00% | 0.00% | 200:434887 |
+| nginx-single | 2,500 | 14,092 | 134 | 652 | 0.00% | 0.00% | 200:424793 |
+| caddy-single | 2,500 | 6,066 | 389 | 2,608 | 0.00% | 0.00% | 200:183579 |
+| tako-single | 2,500 | 13,029 | 209 | 585 | 0.00% | 0.00% | 200:392756 |
+| nginx-single | 5,000 | 11,696 | 315 | 1,388 | 0.00% | 0.00% | 200:353696 |
+| caddy-single | 5,000 | 5,318 | 812 | 5,460 | 0.09% | 0.00% | 200:162345, 502:151 |
+| tako-single | 5,000 | 8,023 | 486 | 3,108 | 0.00% | 0.00% | 200:243985 |
+| nginx-single | 7,500 | 9,485 | 492 | 2,885 | 0.00% | 0.00% | 200:287322 |
+| caddy-single | 7,500 | 2,203 | 1,420 | 7,591 | 0.00% | 6.78% | 200:67708 |
+| tako-single | 7,500 | 9,264 | 732 | 6,893 | 0.00% | 0.00% | 200:283011 |
+| nginx-single | 10,000 | 5,452 | 889 | 6,298 | 0.14% | 0.00% | 200:174506, 500:237 |
+| caddy-single | 10,000 | 798 | 6,676 | 9,950 | 2.96% | 32.65% | 200:27300, 502:832 |
+| tako-single | 10,000 | 4,409 | 1,309 | 8,733 | 0.00% | 4.96% | 200:137170 |
+| nginx-single | 15,000 | 2,468 | 4,412 | 9,772 | 0.00% | 7.19% | 200:86367 |
+| caddy-single | 15,000 | 203 | 7,256 | 9,760 | 0.00% | 84.80% | 200:7439 |
+| tako-single | 15,000 | 1,048 | 4,197 | 9,870 | 0.00% | 45.46% | 200:34251 |
+| nginx-single | 20,000 | 2,327 | 6,010 | 9,905 | 9.18% | 5.85% | 200:80872, 500:8176 |
+| caddy-single | 20,000 | 130 | 9,432 | 9,948 | 13.82% | 91.02% | 200:4741, 502:760 |
+| tako-single | 20,000 | 2,079 | 4,790 | 9,978 | 0.00% | 23.92% | 200:72478 |
 
 ### Resource Highlights
 
-The per-test SVGs now include CPU, proxy/app RSS, total memory, and TLS
-connection samples. In these graphs, 100% CPU means the whole 2 vCPU VM is
-busy, not one core.
+In these graphs, 100% CPU means the whole 2 vCPU VM is busy, not one core.
+Process CPU columns are the process share of total VM CPU over each sample.
 
-| case | conc | max CPU | proxy RSS | app RSS | max TLS conns |
-|---|---:|---:|---:|---:|---:|
-| nginx-single | 1,000 | 99.1% | 103 MiB | 40 MiB | 3,042 |
-| tako-single | 1,000 | 100.0% | 211 MiB | 39 MiB | 1,188 |
-| caddy-single | 1,000 | 100.0% | 193 MiB | 50 MiB | 1,037 |
-| nginx-single | 2,500 | 100.0% | 168 MiB | 61 MiB | 8,219 |
-| tako-single | 2,500 | 100.0% | 446 MiB | 71 MiB | 2,954 |
-| caddy-single | 2,500 | 100.0% | 382 MiB | 102 MiB | 2,804 |
-| nginx-single | 5,000 | 100.0% | 271 MiB | 119 MiB | 15,118 |
-| tako-single | 5,000 | 100.0% | 844 MiB | 124 MiB | 6,045 |
-| caddy-single | 5,000 | 100.0% | 691 MiB | 136 MiB | 8,221 |
-| nginx-single | 7,500 | 100.0% | 333 MiB | 105 MiB | 15,327 |
-| tako-single | 7,500 | 100.0% | 1,362 MiB | 169 MiB | 11,326 |
-| caddy-single | 7,500 | 100.0% | 1,058 MiB | 139 MiB | 12,463 |
-| nginx-single | 10,000 | 100.0% | 437 MiB | 120 MiB | 15,822 |
-| tako-single | 10,000 | 100.0% | 2,129 MiB | 199 MiB | 21,624 |
-| caddy-single | 10,000 | 100.0% | 1,484 MiB | 137 MiB | 20,400 |
-| nginx-single | 15,000 | 100.0% | 576 MiB | 117 MiB | 15,470 |
-| tako-single | 15,000 | 100.0% | 2,368 MiB | 299 MiB | 24,332 |
-| caddy-single | 15,000 | 100.0% | 1,073 MiB | 125 MiB | 15,007 |
-| nginx-single | 20,000 | 100.0% | 490 MiB | 119 MiB | 15,766 |
-| tako-single | 20,000 | 100.0% | 1,926 MiB | 213 MiB | 23,451 |
-| caddy-single | 20,000 | 100.0% | 1,224 MiB | 132 MiB | 15,448 |
+| case | conc | max CPU | proxy CPU | app CPU | loadgen CPU | proxy RSS | app RSS | loadgen RSS | max TLS conns |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| nginx-single | 1,000 | 99.8% | 37.7% | 20.8% | 46.0% | 87 MiB | 34 MiB | 239 MiB | 3,115 |
+| caddy-single | 1,000 | 99.6% | 58.6% | 18.3% | 18.7% | 198 MiB | 46 MiB | 113 MiB | 1,516 |
+| tako-single | 1,000 | 99.2% | 46.8% | 17.8% | 35.5% | 200 MiB | 36 MiB | 104 MiB | 1,019 |
+| nginx-single | 2,500 | 100.0% | 43.4% | 19.2% | 46.2% | 177 MiB | 54 MiB | 623 MiB | 7,459 |
+| caddy-single | 2,500 | 99.7% | 62.5% | 19.1% | 22.0% | 369 MiB | 98 MiB | 204 MiB | 3,049 |
+| tako-single | 2,500 | 99.2% | 48.2% | 18.6% | 35.1% | 456 MiB | 68 MiB | 242 MiB | 3,063 |
+| nginx-single | 5,000 | 100.0% | 46.2% | 17.0% | 45.2% | 268 MiB | 118 MiB | 1,106 MiB | 13,926 |
+| caddy-single | 5,000 | 99.8% | 70.3% | 17.1% | 27.3% | 644 MiB | 135 MiB | 381 MiB | 5,356 |
+| tako-single | 5,000 | 99.9% | 51.0% | 17.4% | 37.1% | 1,579 MiB | 117 MiB | 872 MiB | 17,340 |
+| nginx-single | 7,500 | 100.0% | 50.0% | 15.7% | 48.1% | 309 MiB | 123 MiB | 1,406 MiB | 14,864 |
+| caddy-single | 7,500 | 100.0% | 74.7% | 15.3% | 30.5% | 1,075 MiB | 133 MiB | 697 MiB | 14,089 |
+| tako-single | 7,500 | 99.8% | 52.6% | 17.7% | 36.8% | 1,352 MiB | 162 MiB | 681 MiB | 12,489 |
+| nginx-single | 10,000 | 100.0% | 48.3% | 20.1% | 44.1% | 481 MiB | 119 MiB | 2,128 MiB | 15,474 |
+| caddy-single | 10,000 | 99.9% | 72.4% | 4.9% | 39.2% | 1,185 MiB | 132 MiB | 785 MiB | 18,782 |
+| tako-single | 10,000 | 100.0% | 67.4% | 13.1% | 41.4% | 1,761 MiB | 198 MiB | 1,346 MiB | 18,849 |
+| nginx-single | 15,000 | 100.0% | 52.0% | 8.0% | 53.7% | 461 MiB | 93 MiB | 2,242 MiB | 15,348 |
+| caddy-single | 15,000 | 100.0% | 73.0% | 6.0% | 34.5% | 1,247 MiB | 134 MiB | 885 MiB | 11,541 |
+| tako-single | 15,000 | 100.0% | 60.8% | 10.7% | 50.4% | 1,965 MiB | 206 MiB | 1,268 MiB | 22,794 |
+| nginx-single | 20,000 | 100.0% | 50.5% | 9.7% | 58.5% | 629 MiB | 127 MiB | 2,249 MiB | 15,559 |
+| caddy-single | 20,000 | 100.0% | 72.2% | 4.5% | 44.1% | 891 MiB | 123 MiB | 1,087 MiB | 14,927 |
+| tako-single | 20,000 | 100.0% | 56.3% | 15.5% | 46.3% | 2,134 MiB | 242 MiB | 1,590 MiB | 24,146 |
 
-Tako's proxy RSS is materially higher than nginx in every heavy row. That is a
-separate optimization target from raw RPS.
+The main remaining resource gap is proxy RSS: Tako is materially higher than
+nginx in every heavy row. That points at connection/session allocation pressure
+as a better next target than upstream keepalive alone.
 
 ## Channels And Workflows
 
-Raw channel/workflow data:
-`results/20260531T173340Z/tako-features-vm-local`  
-Channel/workflow graphs:
-`results/20260531T173340Z/tako-features-vm-local/graphs/README.md`
-
-These rows use the same released `tako-server 0.0.0-d81cc6d`, same VM-local
+These rows use the same released `tako-server 0.0.0-850a9e2`, the same VM-local
 HTTPS path, and a single Tako app instance. The endpoints are implemented with
 the JavaScript SDK:
 
 - `/channel-publish`: publishes one message to a `feed` channel.
 - `/workflow-enqueue`: enqueues one `noop` workflow payload.
 
-![Channel/workflow HTTP 200 RPS by concurrency](results/20260531T173340Z/tako-features-vm-local/graphs/throughput-200-rps.svg)
+![Channel/workflow HTTP 200 RPS by concurrency](results/20260531T195359Z/tako-features-vm-local/graphs/throughput-200-rps.svg)
 
-![Channel/workflow p99 latency by concurrency](results/20260531T173340Z/tako-features-vm-local/graphs/p99-latency-ms.svg)
+![Channel/workflow p99 latency by concurrency](results/20260531T195359Z/tako-features-vm-local/graphs/p99-latency-ms.svg)
 
-![Channel/workflow non-200 response rate](results/20260531T173340Z/tako-features-vm-local/graphs/non-200-rate.svg)
+![Channel/workflow non-200 response rate](results/20260531T195359Z/tako-features-vm-local/graphs/non-200-rate.svg)
 
-![Channel/workflow client error rate](results/20260531T173340Z/tako-features-vm-local/graphs/client-error-rate.svg)
+![Channel/workflow client error rate](results/20260531T195359Z/tako-features-vm-local/graphs/client-error-rate.svg)
 
 | case | conc | 200 rps | p50 ms | p99 ms | non-200 | client errors | status |
 |---|---:|---:|---:|---:|---:|---:|---|
-| channel-publish | 500 | 7,184 | 68 | 137 | 0.00% | 0.00% | 200:215870 |
-| workflow-enqueue | 500 | 5,785 | 87 | 165 | 0.00% | 0.00% | 200:173926 |
-| channel-publish | 1,000 | 6,920 | 145 | 259 | 0.00% | 0.00% | 200:208549 |
-| workflow-enqueue | 1,000 | 5,408 | 181 | 457 | 0.00% | 0.00% | 200:163294 |
-| channel-publish | 2,000 | 6,849 | 295 | 720 | 0.00% | 0.00% | 200:207233 |
-| workflow-enqueue | 2,000 | 5,208 | 384 | 1,288 | 0.00% | 0.00% | 200:158108 |
-| channel-publish | 4,000 | 6,294 | 614 | 2,638 | 0.00% | 0.00% | 200:192168 |
-| workflow-enqueue | 4,000 | 4,843 | 802 | 3,411 | 0.00% | 0.00% | 200:148438 |
-| channel-publish | 8,000 | 3,034 | 1,710 | 9,419 | 9.62% | 1.44% | 200:96104, 502:9752, 503:482 |
-| workflow-enqueue | 8,000 | 2,048 | 2,033 | 9,438 | 12.36% | 5.01% | 200:64252, 502:9065 |
+| channel-publish | 500 | 6,747 | 73 | 146 | 0.00% | 0.00% | 200:202780 |
+| workflow-enqueue | 500 | 5,315 | 93 | 184 | 0.00% | 0.00% | 200:159841 |
+| channel-publish | 1,000 | 6,510 | 152 | 282 | 0.00% | 0.00% | 200:196117 |
+| workflow-enqueue | 1,000 | 5,082 | 199 | 354 | 0.00% | 0.00% | 200:153310 |
+| channel-publish | 2,000 | 5,993 | 318 | 1,027 | 0.00% | 0.00% | 200:181188 |
+| workflow-enqueue | 2,000 | 4,841 | 422 | 1,586 | 0.00% | 0.00% | 200:147004 |
+| channel-publish | 4,000 | 5,508 | 658 | 3,482 | 0.00% | 0.00% | 200:168172 |
+| workflow-enqueue | 4,000 | 4,309 | 869 | 3,970 | 0.00% | 0.00% | 200:132268 |
+| channel-publish | 8,000 | 2,896 | 2,069 | 9,564 | 0.00% | 3.32% | 200:89995 |
+| workflow-enqueue | 8,000 | 2,229 | 2,509 | 9,060 | 11.24% | 0.35% | 200:76042, 502:9404, 503:228 |
 
-Channel publish and workflow enqueue are clean through c4000 in this setup.
-c8000 is failure mode for both paths. The sampler change that includes Bun app
-RSS was added after this run, so use proxy RSS and total memory graphs for this
-feature result; app RSS is not comparable in these specific feature CSVs.
+Channel publish and workflow enqueue are clean through c4000 on this VM. c8000
+is overload mode for both paths.
 
 ## Why Tako Still Trails Nginx
 
-Nginx is a static reverse proxy in this benchmark. Tako is doing product-level
+Nginx is configured here as a static reverse proxy. Tako is doing product-level
 work on the request path that nginx is not configured to do:
 
-- Request routing reads the shared route table and selects an app from the Host
-  and path on every request (`tako-server/src/proxy/service/mod.rs:121`,
-  `tako-server/src/proxy/service/mod.rs:125`).
-- Route selection returns owned `String` values for the app and matched route
-  path (`tako-server/src/routing.rs:154`). This allocates/clones per request.
-- The per-IP request limiter does a `DashMap` entry lookup and atomic
-  increment/release for every proxied request (`tako-server/src/proxy/limits.rs:19`,
-  `tako-server/src/proxy/limits.rs:33`). This is useful protection, but the
-  comparison nginx/Caddy configs do not have equivalent per-IP limiting.
+- The request filter still materializes owned path and host strings before
+  routing (`tako-server/src/proxy/service/mod.rs:122`).
+- Route lookup reads the shared route table on every request
+  (`tako-server/src/proxy/service/mod.rs:126`).
+- Source IP handling and the per-IP request limiter run for app routes
+  (`tako-server/src/proxy/service/mod.rs:128`,
+  `tako-server/src/proxy/service/mod.rs:163`).
 - The proxy checks image, channel, and static-asset handlers before falling
-  through to upstream proxying (`tako-server/src/proxy/service/mod.rs:274`,
-  `tako-server/src/proxy/service/mod.rs:289`,
-  `tako-server/src/proxy/service/mod.rs:296`).
-- Backend resolution does a `DashMap` app lookup, a round-robin atomic, and
-  healthy-instance selection (`tako-server/src/lb/mod.rs:65`). The active-set
-  change removed the old per-request health scan, but the path is still heavier
-  than nginx's static upstream selection.
-- Backend request accounting increments per-instance counters around every
-  proxied request (`tako-server/src/proxy/service/mod.rs:466`).
-- Header work is intentionally stricter: Tako sets `X-Forwarded-Proto`, sets or
-  strips `X-Forwarded-For`, and strips `Forwarded` and
-  `X-Tako-Internal-Token` (`tako-server/src/proxy/service/mod.rs:444`).
+  through to upstream proxying (`tako-server/src/proxy/service/mod.rs:276`,
+  `tako-server/src/proxy/service/mod.rs:290`,
+  `tako-server/src/proxy/service/mod.rs:297`).
+- Backend resolution still does a `DashMap` app lookup, round-robin atomic, and
+  selected-instance accounting (`tako-server/src/lb/mod.rs:80`,
+  `tako-server/src/proxy/service/mod.rs:467`).
+- Each upstream request builds a Pingora `HttpPeer` and normalizes forwarding
+  headers (`tako-server/src/proxy/service/mod.rs:425`,
+  `tako-server/src/proxy/service/mod.rs:451`).
 
-The best next targets are:
+Most likely next targets:
 
-- Replace the async route-table read on the hot path with a synchronous or
-  lock-free route snapshot.
-- Return `Arc<str>` or references from route selection to avoid cloning app and
-  route strings per request.
-- Optimize or make configurable the per-IP limiter path for trusted internal
-  benchmark routes, or configure equivalent limits in nginx/Caddy when testing
-  the protected production path.
-- Reduce proxy RSS under high concurrency by profiling connection/session
-  allocation and Pingora upstream peer construction.
-- Run `perf` or flamegraph comparisons on a larger box or with an external
-  load generator so the load generator does not share the same 2 vCPU budget.
+- Add a plain proxy fast path for apps without image/channel/static features so
+  normal HTTP requests skip those handler probes.
+- Reduce downstream connection/session RSS under high concurrency; this is the
+  biggest visible gap against nginx.
+- Avoid request path/host allocation on the hot path, likely by splitting pure
+  routing decisions from async response handling.
+- Revisit the per-IP limiter cost and compare either with equivalent nginx
+  limits or with a trusted-route mode that bypasses it.
+- Profile with `perf` or flamegraphs on a larger box or with an external load
+  generator so the load generator does not share this 2 vCPU budget.
 
 ## Test Host And Network
 
@@ -201,8 +213,8 @@ The best next targets are:
 - OS: macOS Darwin 25.5.0 arm64
 - CPU count: 10
 - Memory: 16 GiB
-- Pre-run desktop load was checked; no local process was consuming excessive
-  CPU or memory.
+- Pre-run desktop load was checked. The timed load generator ran on the VM, so
+  local desktop CPU does not materially affect the timed path.
 
 ### Server
 
@@ -229,7 +241,7 @@ TLS: same self-signed certificate for every proxy
 ## Software Versions
 
 - Tako release used for latest HTTP and feature reruns:
-  `tako-server 0.0.0-d81cc6d`
+  `tako-server 0.0.0-850a9e2`
 - nginx: `nginx/1.24.0 (Ubuntu)`
 - Caddy: `2.6.2`
 - Go on VM: `go1.26.3 linux/amd64`
@@ -239,6 +251,8 @@ Intermediate Tako releases preserved in result directories:
 - `0.0.0-f1d70e9`: metrics-disabled request path
 - `0.0.0-660a696`: default response cache disabled
 - `0.0.0-d81cc6d`: default compression module skipped
+- `0.0.0-14b8da1`: route/load-balancer hot path allocation reduction
+- `0.0.0-850a9e2`: upstream keepalive pool scaled by proxy threads
 
 ## Applications
 
@@ -284,8 +298,8 @@ returns immediately.
   `127.0.0.17`, to avoid turning Tako's default 2048 concurrent request cap per
   source IP into the benchmark bottleneck.
 - Metrics are sampled once per second from `/proc` on the VM: total CPU,
-  memory used/available, aggregate app RSS, aggregate proxy RSS, and established
-  TLS connections.
+  memory used/available, proxy/app/loadgen CPU, proxy/app/loadgen RSS, and
+  established TLS connections.
 
 This is not a pure proxy microbenchmark because the load generator, proxy, and
 app processes all share the same 2 vCPU VM. It is a useful "what can this one
@@ -299,9 +313,13 @@ Older result directories are kept for comparison and regression analysis:
 - `results/20260531T120513Z/tako-features-vm-local`: active-set feature rerun.
 - `results/20260531T153937Z/http-vm-local`: metrics-disabled release rerun.
 - `results/20260531T163148Z/http-vm-local`: response-cache-disabled rerun.
-- `results/20260531T171211Z/http-vm-local`: latest release HTTP rerun.
-- `results/20260531T173340Z/tako-features-vm-local`: latest release feature
-  rerun.
+- `results/20260531T171211Z/http-vm-local`: compression-disabled release rerun.
+- `results/20260531T173340Z/tako-features-vm-local`: compression-disabled
+  feature rerun.
+- `results/20260531T182907Z/http-vm-local`: route-hot-path release rerun before
+  the upstream keepalive fix.
+- `results/20260531T193211Z/http-vm-local`: latest clean HTTP rerun.
+- `results/20260531T195359Z/tako-features-vm-local`: latest feature rerun.
 
 ## Reproducing
 

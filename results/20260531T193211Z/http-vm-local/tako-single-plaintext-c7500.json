@@ -1,0 +1,28 @@
+{
+  "name": "tako-single-plaintext-c7500",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.550899873,
+  "concurrency": 7500,
+  "requests": 283011,
+  "errors": 0,
+  "bytes": 3679143,
+  "requests_per_sec": 9263.589654526573,
+  "bytes_per_sec": 120426.66550884546,
+  "latency_ms": {
+    "max": 9200.464731,
+    "mean": 795.667819,
+    "min": 0.515691,
+    "p50": 731.730044,
+    "p90": 1471.820587,
+    "p95": 1777.504037,
+    "p99": 6892.51103
+  },
+  "status_counts": {
+    "200": 283011
+  },
+  "started_at": "2026-05-31T19:42:43Z"
+}

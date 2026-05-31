@@ -15,9 +15,13 @@ import (
 type sample struct {
 	t           time.Time
 	cpuPct      float64
+	appCPUPct   float64
+	proxyCPUPct float64
+	loadCPUPct  float64
 	memGiB      float64
 	benchRSSGiB float64
 	proxyRSSGiB float64
+	loadRSSGiB  float64
 	conn        float64
 	loadOne     float64
 }
@@ -79,12 +83,17 @@ func readSamples(path string) ([]sample, error) {
 		memUsed := parseFloat(value(row, header, "mem_used_bytes"))
 		benchRSS := parseFloat(value(row, header, "bench_rss_bytes"))
 		proxyRSS := parseFloat(value(row, header, "proxy_rss_bytes"))
+		loadRSS := parseFloat(value(row, header, "loadgen_rss_bytes"))
 		samples = append(samples, sample{
 			t:           t,
 			cpuPct:      parseFloat(value(row, header, "cpu_pct")),
+			appCPUPct:   parseFloat(value(row, header, "app_cpu_pct")),
+			proxyCPUPct: parseFloat(value(row, header, "proxy_cpu_pct")),
+			loadCPUPct:  parseFloat(value(row, header, "loadgen_cpu_pct")),
 			memGiB:      memUsed / (1024 * 1024 * 1024),
 			benchRSSGiB: benchRSS / (1024 * 1024 * 1024),
 			proxyRSSGiB: proxyRSS / (1024 * 1024 * 1024),
+			loadRSSGiB:  loadRSS / (1024 * 1024 * 1024),
 			conn:        parseFloat(value(row, header, "conn_established")),
 			loadOne:     parseFloat(value(row, header, "load1")),
 		})
@@ -125,6 +134,7 @@ func renderSVG(title string, summary string, samples []sample) string {
 		cpuColor   = "#4ea1ff"
 		proxyColor = "#ff7b72"
 		appColor   = "#7ee787"
+		loadColor  = "#f6c177"
 		memColor   = "#a371f7"
 		connColor  = "#f6c177"
 	)
@@ -146,7 +156,10 @@ func renderSVG(title string, summary string, samples []sample) string {
 		maxMem = 1
 	}
 	maxRSS := niceCeil(math.Max(
-		maxOf(samples, func(s sample) float64 { return s.proxyRSSGiB }),
+		math.Max(
+			maxOf(samples, func(s sample) float64 { return s.proxyRSSGiB }),
+			maxOf(samples, func(s sample) float64 { return s.loadRSSGiB }),
+		),
 		maxOf(samples, func(s sample) float64 { return s.benchRSSGiB }),
 	))
 	if maxRSS < 0.25 {
@@ -164,7 +177,44 @@ func renderSVG(title string, summary string, samples []sample) string {
 	if summary != "" {
 		fmt.Fprintf(&b, `<text x="24" y="54" fill="%s" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">%s</text>`, muted, html.EscapeString(summary))
 	}
-	drawPanel(&b, "CPU (% total)", cpuTop, panelH, 0, maxCPU, cpuColor, samples, func(s sample) float64 { return s.cpuPct }, start, total, left, plotWidth, grid, text, muted)
+	drawMultiPanel(
+		&b,
+		"CPU (% total VM)",
+		cpuTop,
+		panelH,
+		0,
+		maxCPU,
+		[]series{
+			{
+				label: "total",
+				color: cpuColor,
+				get:   func(s sample) float64 { return s.cpuPct },
+			},
+			{
+				label: "proxy",
+				color: proxyColor,
+				get:   func(s sample) float64 { return s.proxyCPUPct },
+			},
+			{
+				label: "app",
+				color: appColor,
+				get:   func(s sample) float64 { return s.appCPUPct },
+			},
+			{
+				label: "loadgen",
+				color: loadColor,
+				get:   func(s sample) float64 { return s.loadCPUPct },
+			},
+		},
+		samples,
+		start,
+		total,
+		left,
+		plotWidth,
+		grid,
+		text,
+		muted,
+	)
 	drawMultiPanel(
 		&b,
 		"Process RSS (GiB)",
@@ -182,6 +232,11 @@ func renderSVG(title string, summary string, samples []sample) string {
 				label: "app",
 				color: appColor,
 				get:   func(s sample) float64 { return s.benchRSSGiB },
+			},
+			{
+				label: "loadgen",
+				color: loadColor,
+				get:   func(s sample) float64 { return s.loadRSSGiB },
 			},
 		},
 		samples,
