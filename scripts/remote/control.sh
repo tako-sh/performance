@@ -67,7 +67,8 @@ start_apps() {
 }
 
 wait_https() {
-  local url="https://bench.test:18443/plaintext"
+  local path="${1:-plaintext}"
+  local url="https://bench.test:18443/$path"
   for _ in $(seq 1 100); do
     if curl -fksS --resolve "bench.test:18443:$BENCH_IP" "$url" >/dev/null 2>&1; then
       return 0
@@ -118,6 +119,7 @@ deploy_tako() {
   local release="$2"
   local count="$3"
   local prepare="${4:-no}"
+  local wait_path="${5:-plaintext}"
   if [[ "$prepare" == "yes" ]]; then
     jq -n --arg app "$app" --arg path "$release" \
       '{command: "prepare_release", app: $app, path: $path}' | tako_cmd >/tmp/tako-prepare-response.json
@@ -144,7 +146,7 @@ deploy_tako() {
   jq -n --arg app "$app" --argjson instances "$count" \
     '{command: "scale", app: $app, instances: $instances}' | tako_cmd >/tmp/tako-scale-response.json
   jq -e '.status == "ok"' /tmp/tako-scale-response.json >/dev/null
-  wait_https
+  wait_https "$wait_path"
 }
 
 deploy_http_tako() {
@@ -208,7 +210,7 @@ case "${1:-}" in
     stop_all
     start_tako_server
     delete_tako_app "$TAKO_APP"
-    deploy_tako "$TAKO_FEATURE_APP" "$TAKO_FEATURE_RELEASE" 1 yes
+    deploy_tako "$TAKO_FEATURE_APP" "$TAKO_FEATURE_RELEASE" 1 yes status
     ;;
   *)
     echo "usage: $0 stop|nginx-single|nginx-lb|caddy-single|caddy-lb|tako-single|tako-lb|tako-features" >&2

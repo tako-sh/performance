@@ -24,6 +24,7 @@ func main() {
 	in := flag.String("in", "", "input metrics CSV")
 	out := flag.String("out", "", "output SVG")
 	title := flag.String("title", "", "chart title")
+	summary := flag.String("summary", "", "chart summary")
 	flag.Parse()
 
 	if *in == "" || *out == "" {
@@ -42,7 +43,7 @@ func main() {
 	if *title == "" {
 		*title = strings.TrimSuffix(strings.TrimSuffix(*in, "-metrics.csv"), ".csv")
 	}
-	if err := os.WriteFile(*out, []byte(renderSVG(*title, samples)), 0o644); err != nil {
+	if err := os.WriteFile(*out, []byte(renderSVG(*title, *summary, samples)), 0o644); err != nil {
 		fmt.Fprintf(os.Stderr, "write svg: %v\n", err)
 		os.Exit(1)
 	}
@@ -98,12 +99,12 @@ func parseFloat(s string) float64 {
 	return v
 }
 
-func renderSVG(title string, samples []sample) string {
+func renderSVG(title string, summary string, samples []sample) string {
 	const (
 		width      = 960.0
 		left       = 70.0
 		right      = 28.0
-		top        = 62.0
+		top        = 82.0
 		panelGap   = 58.0
 		panelH     = 150.0
 		plotWidth  = width - left - right
@@ -120,9 +121,9 @@ func renderSVG(title string, samples []sample) string {
 	)
 
 	showConn := maxOf(samples, func(s sample) float64 { return s.conn }) > 0
-	height := 360.0
+	height := memTop + panelH + 50
 	if showConn {
-		height = 520.0
+		height = connTop + panelH + 50
 	}
 	start := samples[0].t
 	end := samples[len(samples)-1].t
@@ -144,6 +145,9 @@ func renderSVG(title string, samples []sample) string {
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="%.0f" height="%.0f" viewBox="0 0 %.0f %.0f">`, width, height, width, height)
 	fmt.Fprintf(&b, `<rect width="100%%" height="100%%" fill="%s"/>`, background)
 	fmt.Fprintf(&b, `<text x="24" y="34" fill="%s" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700">%s</text>`, text, html.EscapeString(title))
+	if summary != "" {
+		fmt.Fprintf(&b, `<text x="24" y="54" fill="%s" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">%s</text>`, muted, html.EscapeString(summary))
+	}
 	drawPanel(&b, "CPU (% total)", cpuTop, panelH, 0, maxCPU, cpuColor, samples, func(s sample) float64 { return s.cpuPct }, start, total, left, plotWidth, grid, text, muted)
 	drawPanel(&b, "Memory used (GiB)", memTop, panelH, 0, maxMem, memColor, samples, func(s sample) float64 { return s.memGiB }, start, total, left, plotWidth, grid, text, muted)
 	if showConn {

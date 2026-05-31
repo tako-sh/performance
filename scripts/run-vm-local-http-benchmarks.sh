@@ -77,4 +77,5 @@ done
 
 stop_remote
 trap - EXIT
+./scripts/render-metrics-graphs.sh "$out_dir" >/dev/null
 echo "$out_dir"
