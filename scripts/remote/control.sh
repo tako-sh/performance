@@ -5,6 +5,7 @@ ROOT=/opt/tako-performance
 TAKO_DATA="$ROOT/tako-data"
 TAKO_SOCKET="$ROOT/run/tako.sock"
 TAKO_SERVER_BIN="${TAKO_SERVER_BIN:-/usr/local/bin/tako-server}"
+CADDY_BIN="${CADDY_BIN:-$ROOT/bin/caddy}"
 TAKO_APP=bench-http/production
 TAKO_FEATURE_APP=bench-features/production
 TAKO_VERSION=baseline-001
@@ -206,7 +207,7 @@ case "${1:-}" in
   caddy-single)
     stop_all
     start_apps 1
-    sudo_high_nofile caddy run --config "$ROOT/configs/single.Caddyfile" --adapter caddyfile \
+    sudo_high_nofile "$CADDY_BIN" run --config "$ROOT/configs/single.Caddyfile" --adapter caddyfile \
       > "$ROOT/logs/caddy.log" 2>&1 &
     echo $! > "$ROOT/run/caddy.pid"
     wait_https
@@ -214,7 +215,7 @@ case "${1:-}" in
   caddy-lb)
     stop_all
     start_apps 4
-    sudo_high_nofile caddy run --config "$ROOT/configs/lb.Caddyfile" --adapter caddyfile \
+    sudo_high_nofile "$CADDY_BIN" run --config "$ROOT/configs/lb.Caddyfile" --adapter caddyfile \
       > "$ROOT/logs/caddy.log" 2>&1 &
     echo $! > "$ROOT/run/caddy.pid"
     wait_https

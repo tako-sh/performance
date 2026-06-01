@@ -29,6 +29,14 @@ cp "$ROOT/certs/bench.test.crt" "$TAKO_DATA/certs/$ROUTE/fullchain.pem"
 cp "$ROOT/certs/bench.test.key" "$TAKO_DATA/certs/$ROUTE/privkey.pem"
 
 go build -o "$ROOT/bin/benchapp" ./cmd/benchapp
+
+if [[ ! -x "$ROOT/bin/caddy" ]]; then
+  go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+  "$(go env GOPATH)/bin/xcaddy" build \
+    --output "$ROOT/bin/caddy" \
+    --with github.com/mholt/caddy-ratelimit
+fi
+
 cp "$ROOT/bin/benchapp" "$TAKO_DATA/apps/$APP_ID/releases/$VERSION/benchapp"
 cat > "$TAKO_DATA/apps/$APP_ID/releases/$VERSION/app.json" <<JSON
 {

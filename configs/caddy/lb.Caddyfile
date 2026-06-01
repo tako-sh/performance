@@ -5,5 +5,12 @@
 
 https://bench.test:18443 {
     tls /opt/tako-performance/certs/bench.test.crt /opt/tako-performance/certs/bench.test.key
+    rate_limit {
+        zone per_ip {
+            key {remote_host}
+            events {$CADDY_RATE_LIMIT_EVENTS:65535}
+            window {$CADDY_RATE_LIMIT_WINDOW:1s}
+        }
+    }
     reverse_proxy 127.0.0.1:9101 127.0.0.1:9102 127.0.0.1:9103 127.0.0.1:9104
 }

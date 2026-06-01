@@ -25,7 +25,8 @@ ssh "$vm" '{
   free -h
   df -h /
   nginx -v 2>&1 || true
-  caddy version 2>&1 || true
+  /opt/tako-performance/bin/caddy version 2>&1 || caddy version 2>&1 || true
+  /opt/tako-performance/bin/caddy list-modules 2>&1 | grep -E "http.handlers.rate_limit|standard" || true
   /usr/local/bin/tako-server --version 2>&1 || true
   go version 2>&1 || true
 }' > "$out_dir/vm.txt"

@@ -255,8 +255,8 @@ Most likely next targets:
   biggest visible gap against nginx.
 - Avoid request path/host allocation on the hot path, likely by splitting pure
   routing decisions from async response handling.
-- Revisit the per-IP limiter cost and compare either with equivalent nginx
-  limits or with a trusted-route mode that bypasses it.
+- Re-run the latest HTTP table after the nginx/Caddy limiter config update so
+  limiter overhead is represented consistently across proxies.
 - Profile with `perf` or flamegraphs on a larger box or with an external load
   generator so the load generator does not share this 2 vCPU budget.
 
@@ -353,6 +353,12 @@ returns immediately.
 - High-concurrency runs use 16 loopback source IPs, `127.0.0.2` through
   `127.0.0.17`, to avoid turning Tako's default 2048 concurrent request cap per
   source IP into the benchmark bottleneck.
+- Proxy configs now include comparable per-client limiter work where the proxy
+  supports it. Tako enforces 2048 concurrent requests per derived client IP.
+  nginx uses `limit_conn` with the same 2048 per-IP cap and returns `429` when
+  exceeded. Caddy uses `github.com/mholt/caddy-ratelimit` with a high per-IP
+  request-rate ceiling by default, because the Caddy module is rate/window based
+  rather than an exact concurrent-request limiter.
 - Metrics are sampled once per second from `/proc` on the VM: total CPU,
   memory used/available, proxy/app/loadgen CPU, proxy/app/loadgen RSS, and
   established TLS connections.
