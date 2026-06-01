@@ -8,6 +8,7 @@ remote_root=/opt/tako-performance/source
 
 mkdir -p "$out_dir"
 
+ssh "$bench_vm" "cd $remote_root && ./scripts/remote/setup.sh >/dev/null"
 ssh "$bench_vm" "cd $remote_root && mkdir -p .bin '$out_dir' && go build -o .bin/loadgen ./cmd/loadgen"
 
 concurrency_list="${CONCURRENCY_LIST:-1000 2500 5000 10000}"
