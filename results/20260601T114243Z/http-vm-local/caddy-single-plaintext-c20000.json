@@ -1,0 +1,39 @@
+{
+  "name": "caddy-single-plaintext-c20000",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 45.584321298,
+  "concurrency": 20000,
+  "requests": 66664,
+  "errors": 1925,
+  "bytes": 866632,
+  "requests_per_sec": 1462.4326545128329,
+  "bytes_per_sec": 19011.624508666828,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 33512.471151,
+    "mean": 9928.32869,
+    "min": 3394.206916,
+    "p50": 9185.223912,
+    "p90": 12524.839881,
+    "p95": 14277.962248,
+    "p99": 26300.031089
+  },
+  "status_counts": {
+    "200": 66664
+  },
+  "error_kinds": {
+    "timeout": 1925
+  },
+  "error_samples": {
+    "timeout": [
+      "Get \"https://bench.test:18443/plaintext\": dial tcp 127.0.0.15:0-\u003e127.0.0.1:18443: i/o timeout",
+      "Get \"https://bench.test:18443/plaintext\": dial tcp 127.0.0.8:0-\u003e127.0.0.1:18443: i/o timeout",
+      "Get \"https://bench.test:18443/plaintext\": dial tcp 127.0.0.17:0-\u003e127.0.0.1:18443: i/o timeout"
+    ]
+  },
+  "started_at": "2026-06-01T12:01:09Z"
+}

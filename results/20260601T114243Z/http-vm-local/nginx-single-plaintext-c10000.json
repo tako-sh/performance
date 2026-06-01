@@ -1,0 +1,37 @@
+{
+  "name": "nginx-single-plaintext-c10000",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.183668955999998,
+  "concurrency": 10000,
+  "requests": 446471,
+  "errors": 1,
+  "bytes": 5804123,
+  "requests_per_sec": 14791.806809531325,
+  "bytes_per_sec": 192293.4885239072,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 5198.220896,
+    "mean": 667.463775,
+    "min": 2.697713,
+    "p50": 535.018751,
+    "p90": 838.033332,
+    "p95": 988.117172,
+    "p99": 4588.594541
+  },
+  "status_counts": {
+    "200": 446471
+  },
+  "error_kinds": {
+    "eof": 1
+  },
+  "error_samples": {
+    "eof": [
+      "Get \"https://bench.test:18443/plaintext\": EOF"
+    ]
+  },
+  "started_at": "2026-06-01T11:54:03Z"
+}
