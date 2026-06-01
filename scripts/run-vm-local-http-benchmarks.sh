@@ -22,6 +22,18 @@ bench_host="${BENCH_HOST:-bench.test}"
 endpoints="${ENDPOINTS:-plaintext}"
 modes="${MODES:-single}"
 proxies="${PROXIES:-nginx caddy tako}"
+tako_server_bin="${TAKO_SERVER_BIN:-}"
+cooldown_seconds="${COOLDOWN_SECONDS:-0}"
+
+remote_control() {
+  local command="$1"
+  local env_prefix="BENCH_IP=127.0.0.1"
+  if [[ -n "$tako_server_bin" ]]; then
+    env_prefix="$env_prefix TAKO_SERVER_BIN='$tako_server_bin'"
+  fi
+
+  ssh "$bench_vm" "cd $remote_root && $env_prefix ./scripts/remote/control.sh $command"
+}
 
 stop_metrics() {
   ssh "$bench_vm" 'if [[ -f /tmp/tako-performance-metrics.pid ]]; then pid="$(cat /tmp/tako-performance-metrics.pid 2>/dev/null || true)"; if [[ -n "$pid" ]]; then kill -- "-$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true; fi; rm -f /tmp/tako-performance-metrics.pid; fi' >/dev/null 2>&1 || true
@@ -29,7 +41,7 @@ stop_metrics() {
 
 stop_remote() {
   stop_metrics
-  ssh "$bench_vm" "cd $remote_root && ./scripts/remote/control.sh stop" >/dev/null 2>&1 || true
+  remote_control stop >/dev/null 2>&1 || true
 }
 
 trap stop_remote EXIT
@@ -62,12 +74,16 @@ run_case() {
   local remote_case="$proxy-$mode"
   local name="$proxy-$mode-$endpoint-c$concurrency"
 
-  ssh "$bench_vm" "cd $remote_root && BENCH_IP=127.0.0.1 ./scripts/remote/control.sh $remote_case"
+  remote_control "$remote_case"
   sleep 2
   ssh "$bench_vm" "cd $remote_root && SAMPLE_CONNECTIONS='$metrics_connections' ./scripts/remote/start-metrics.sh '$out_dir/$name-metrics.csv' '$metrics_interval'"
   remote_loadgen "$name" "$endpoint" "$concurrency"
   stop_metrics
   rsync -az "$bench_vm:$remote_root/$out_dir/$name.json" "$bench_vm:$remote_root/$out_dir/$name-metrics.csv" "$out_dir/"
+  remote_control stop >/dev/null
+  if [[ "$cooldown_seconds" != "0" ]]; then
+    sleep "$cooldown_seconds"
+  fi
 }
 
 for concurrency in $concurrency_list; do

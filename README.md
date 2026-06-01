@@ -22,9 +22,19 @@ intentionally omits exact hostnames, IP addresses, and private network details.
 ```bash
 BENCH_VM=<ssh-host> ./scripts/sync-to-vm.sh
 BENCH_VM=<ssh-host> BENCH_IP=<target-ip> CONCURRENCY_LIST="100 500" ./scripts/run-http-benchmarks.sh
-BENCH_VM=<ssh-host> SOURCE_IPS="127.0.0.2,127.0.0.3" CONCURRENCY_LIST="1000 2500 5000" REQUEST_TIMEOUT=60s ./scripts/run-vm-local-http-benchmarks.sh
+BENCH_VM=<ssh-host> \
+TAKO_SERVER_BIN=/opt/tako-performance/bin/<tako-server-release> \
+SOURCE_IPS="127.0.0.2,127.0.0.3" \
+PROXIES="nginx tako caddy" \
+CONCURRENCY_LIST="1000 2500 5000" \
+REQUEST_TIMEOUT=60s \
+COOLDOWN_SECONDS=10 \
+./scripts/run-vm-local-http-benchmarks.sh
 ./scripts/render-metrics-graphs.sh results/<timestamp>/http-vm-local
-BENCH_VM=<ssh-host> BENCH_IP=<target-ip> TAKO_SERVER_BIN=/opt/tako-performance/bin/tako-server-patched ./scripts/run-tako-feature-benchmarks.sh
+BENCH_VM=<ssh-host> \
+TAKO_SERVER_BIN=/opt/tako-performance/bin/<tako-server-release> \
+COOLDOWN_SECONDS=10 \
+./scripts/run-vm-local-tako-feature-benchmarks.sh
 ```
 
 HTTP scripts default to `MODES=single`. Use `MODES="single lb"` only on a

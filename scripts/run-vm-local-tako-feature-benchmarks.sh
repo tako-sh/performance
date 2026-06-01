@@ -20,6 +20,12 @@ metrics_connections="${METRICS_CONNECTIONS:-0}"
 source_ips="${SOURCE_IPS:-}"
 bench_host="${BENCH_HOST:-bench.test}"
 tako_server_bin="${TAKO_SERVER_BIN:-/usr/local/bin/tako-server}"
+cooldown_seconds="${COOLDOWN_SECONDS:-0}"
+
+remote_control() {
+  local command="$1"
+  ssh "$bench_vm" "cd $remote_root && TAKO_SERVER_BIN='$tako_server_bin' BENCH_IP=127.0.0.1 ./scripts/remote/control.sh $command"
+}
 
 stop_metrics() {
   ssh "$bench_vm" 'if [[ -f /tmp/tako-performance-metrics.pid ]]; then pid="$(cat /tmp/tako-performance-metrics.pid 2>/dev/null || true)"; if [[ -n "$pid" ]]; then kill -- "-$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true; fi; rm -f /tmp/tako-performance-metrics.pid; fi' >/dev/null 2>&1 || true
@@ -27,7 +33,7 @@ stop_metrics() {
 
 stop_remote() {
   stop_metrics
-  ssh "$bench_vm" "cd $remote_root && ./scripts/remote/control.sh stop" >/dev/null 2>&1 || true
+  remote_control stop >/dev/null 2>&1 || true
 }
 
 trap stop_remote EXIT
@@ -60,12 +66,16 @@ run_case() {
   local concurrency="$2"
   local name="tako-feature-$endpoint-c$concurrency"
 
-  ssh "$bench_vm" "cd $remote_root && TAKO_SERVER_BIN='$tako_server_bin' BENCH_IP=127.0.0.1 ./scripts/remote/control.sh tako-features"
+  remote_control tako-features
   sleep 2
   ssh "$bench_vm" "cd $remote_root && SAMPLE_CONNECTIONS='$metrics_connections' ./scripts/remote/start-metrics.sh '$out_dir/$name-metrics.csv' '$metrics_interval'"
   remote_loadgen "$name" "$endpoint" "$concurrency"
   stop_metrics
   rsync -az "$bench_vm:$remote_root/$out_dir/$name.json" "$bench_vm:$remote_root/$out_dir/$name-metrics.csv" "$out_dir/"
+  remote_control stop >/dev/null
+  if [[ "$cooldown_seconds" != "0" ]]; then
+    sleep "$cooldown_seconds"
+  fi
 }
 
 for concurrency in $concurrency_list; do

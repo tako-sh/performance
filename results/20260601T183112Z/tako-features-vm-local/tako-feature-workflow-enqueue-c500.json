@@ -1,0 +1,29 @@
+{
+  "name": "tako-feature-workflow-enqueue-c500",
+  "method": "POST",
+  "url": "https://bench.test:18443/workflow-enqueue",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.090596372,
+  "concurrency": 500,
+  "requests": 171196,
+  "errors": 0,
+  "bytes": 6847840,
+  "requests_per_sec": 5689.3521777887345,
+  "bytes_per_sec": 227574.0871115494,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 417.262811,
+    "mean": 87.659668,
+    "min": 5.189071,
+    "p50": 87.639441,
+    "p90": 117.842407,
+    "p95": 132.430577,
+    "p99": 166.65401
+  },
+  "status_counts": {
+    "200": 171196
+  },
+  "started_at": "2026-06-01T18:32:43Z"
+}

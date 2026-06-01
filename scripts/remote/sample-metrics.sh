@@ -4,10 +4,11 @@ set -euo pipefail
 out="${1:?usage: sample-metrics.sh OUT.csv [INTERVAL_SECONDS]}"
 interval="${2:-1}"
 sample_connections="${SAMPLE_CONNECTIONS:-0}"
+root=/opt/tako-performance
 
 mkdir -p "$(dirname "$out")"
 app_pattern='/opt/tako-performance/.*/benchapp|/opt/tako-performance/bin/benchapp|/opt/tako-performance/tako-data/.*/bun'
-proxy_pattern='tako-server|nginx: worker|nginx: master|caddy run'
+proxy_pattern='tako-server|caddy run --config /opt/tako-performance/configs/'
 loadgen_pattern='(^| )(\./)?\.bin/loadgen|/opt/tako-performance/source/.bin/loadgen|/opt/tako-performance/.*/loadgen'
 
 printf 'timestamp,cpu_pct,mem_used_bytes,mem_available_bytes,load1,load5,load15,bench_rss_bytes,proxy_rss_bytes,conn_established,app_cpu_pct,proxy_cpu_pct,loadgen_cpu_pct,loadgen_rss_bytes\n' > "$out"
@@ -29,17 +30,61 @@ read_mem() {
   ' /proc/meminfo
 }
 
-sum_rss() {
+pids_matching() {
   local pattern="$1"
-  local sum_kib=0
-  local cmdline_file pid_dir pid cmdline rss_kib
+  local cmdline_file pid_dir pid cmdline
   for cmdline_file in /proc/[0-9]*/cmdline; do
     pid_dir="${cmdline_file%/cmdline}"
     pid="${pid_dir##*/}"
-    [[ -r "$cmdline_file" && -r "/proc/$pid/status" ]] || continue
+    [[ -r "$cmdline_file" ]] || continue
     cmdline="$(tr '\0' ' ' < "$cmdline_file" 2>/dev/null || true)"
     [[ -n "$cmdline" ]] || continue
     [[ "$cmdline" =~ $pattern ]] || continue
+    echo "$pid"
+  done
+}
+
+benchmark_nginx_pids() {
+  local master_pattern="nginx: master process nginx -c $root/configs/nginx-active.conf -p $root/nginx"
+  local masters
+  masters="$(pids_matching "$master_pattern" | tr '\n' ' ')"
+  [[ -n "$masters" ]] || return 0
+
+  local pid
+  for pid in $masters; do
+    echo "$pid"
+  done
+
+  local stat_file stat rest fields ppid
+  for stat_file in /proc/[0-9]*/stat; do
+    [[ -r "$stat_file" ]] || continue
+    stat="$(< "$stat_file")"
+    rest="${stat##*) }"
+    fields=($rest)
+    [[ "${#fields[@]}" -gt 2 ]] || continue
+    ppid="${fields[1]}"
+    for pid in $masters; do
+      if [[ "$ppid" == "$pid" ]]; then
+        local child="${stat_file%/stat}"
+        child="${child#/proc/}"
+        echo "$child"
+      fi
+    done
+  done
+}
+
+proxy_pids() {
+  {
+    pids_matching "$proxy_pattern"
+    benchmark_nginx_pids
+  } | sort -n -u
+}
+
+sum_rss_pids() {
+  local sum_kib=0
+  local pid rss_kib
+  for pid in "$@"; do
+    [[ -r "/proc/$pid/status" ]] || continue
     rss_kib="$(awk '/^VmRSS:/ { print $2 }' "/proc/$pid/status" 2>/dev/null || true)"
     [[ -n "$rss_kib" ]] || rss_kib=0
     sum_kib=$((sum_kib + rss_kib))
@@ -47,18 +92,25 @@ sum_rss() {
   echo $((sum_kib * 1024))
 }
 
-sum_jiffies() {
+sum_rss() {
   local pattern="$1"
+  local -a pids
+  mapfile -t pids < <(pids_matching "$pattern")
+  sum_rss_pids "${pids[@]}"
+}
+
+sum_proxy_rss() {
+  local -a pids
+  mapfile -t pids < <(proxy_pids)
+  sum_rss_pids "${pids[@]}"
+}
+
+sum_jiffies_pids() {
   local sum=0
-  local cmdline_file pid_dir pid cmdline stat rest
+  local pid stat rest
   local fields
-  for cmdline_file in /proc/[0-9]*/cmdline; do
-    pid_dir="${cmdline_file%/cmdline}"
-    pid="${pid_dir##*/}"
-    [[ -r "$cmdline_file" && -r "/proc/$pid/stat" ]] || continue
-    cmdline="$(tr '\0' ' ' < "$cmdline_file" 2>/dev/null || true)"
-    [[ -n "$cmdline" ]] || continue
-    [[ "$cmdline" =~ $pattern ]] || continue
+  for pid in "$@"; do
+    [[ -r "/proc/$pid/stat" ]] || continue
     stat="$(< "/proc/$pid/stat")"
     rest="${stat##*) }"
     fields=($rest)
@@ -67,6 +119,19 @@ sum_jiffies() {
     fi
   done
   echo "$sum"
+}
+
+sum_jiffies() {
+  local pattern="$1"
+  local -a pids
+  mapfile -t pids < <(pids_matching "$pattern")
+  sum_jiffies_pids "${pids[@]}"
+}
+
+sum_proxy_jiffies() {
+  local -a pids
+  mapfile -t pids < <(proxy_pids)
+  sum_jiffies_pids "${pids[@]}"
 }
 
 proc_cpu_pct() {
@@ -80,7 +145,7 @@ proc_cpu_pct() {
 
 read prev_total prev_idle < <(read_cpu)
 prev_app_jiffies="$(sum_jiffies "$app_pattern")"
-prev_proxy_jiffies="$(sum_jiffies "$proxy_pattern")"
+prev_proxy_jiffies="$(sum_proxy_jiffies)"
 prev_loadgen_jiffies="$(sum_jiffies "$loadgen_pattern")"
 while true; do
   sleep "$interval"
@@ -95,7 +160,7 @@ while true; do
   prev_idle="$idle"
 
   app_jiffies="$(sum_jiffies "$app_pattern")"
-  proxy_jiffies="$(sum_jiffies "$proxy_pattern")"
+  proxy_jiffies="$(sum_proxy_jiffies)"
   loadgen_jiffies="$(sum_jiffies "$loadgen_pattern")"
   app_cpu_pct="$(proc_cpu_pct "$((app_jiffies - prev_app_jiffies))")"
   proxy_cpu_pct="$(proc_cpu_pct "$((proxy_jiffies - prev_proxy_jiffies))")"
@@ -107,7 +172,7 @@ while true; do
   read mem_used mem_available < <(read_mem)
   read load1 load5 load15 _ < /proc/loadavg
   bench_rss="$(sum_rss "$app_pattern")"
-  proxy_rss="$(sum_rss "$proxy_pattern")"
+  proxy_rss="$(sum_proxy_rss)"
   loadgen_rss="$(sum_rss "$loadgen_pattern")"
   conn_established="0"
   if [[ "$sample_connections" == "1" ]]; then
