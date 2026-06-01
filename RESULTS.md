@@ -20,6 +20,11 @@ Latest release run:
 - Channel/workflow graphs:
   `results/20260601T120330Z/tako-features-vm-local/graphs/README.md`
 
+Note: after this benchmark report was published, a docs-only main-repo commit
+advanced the GitHub `latest` tag to `8c8c2a`. The measured server binary in
+this report is the released `tako-server 0.0.0-510c153` binary installed on the
+VM before that docs-only commit.
+
 TLDR:
 
 - Tako is faster and more stable than Caddy in this setup.
