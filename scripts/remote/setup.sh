@@ -27,6 +27,8 @@ fi
 mkdir -p "$TAKO_DATA/certs/$ROUTE"
 cp "$ROOT/certs/bench.test.crt" "$TAKO_DATA/certs/$ROUTE/fullchain.pem"
 cp "$ROOT/certs/bench.test.key" "$TAKO_DATA/certs/$ROUTE/privkey.pem"
+cat "$ROOT/certs/bench.test.crt" "$ROOT/certs/bench.test.key" > "$ROOT/certs/bench.test.pem"
+chmod 0600 "$ROOT/certs/bench.test.pem"
 
 go build -o "$ROOT/bin/benchapp" ./cmd/benchapp
 
@@ -70,6 +72,8 @@ sudo chmod 0710 "$TAKO_DATA"
 
 cp configs/nginx/*.conf "$ROOT/configs/"
 cp configs/caddy/*.Caddyfile "$ROOT/configs/"
+cp configs/haproxy/single.cfg "$ROOT/configs/haproxy-single.cfg"
+cp configs/envoy/single.yaml "$ROOT/configs/envoy-single.yaml"
 cp scripts/remote/takoctl.py "$ROOT/bin/takoctl.py"
 chmod +x "$ROOT/bin/takoctl.py"
 

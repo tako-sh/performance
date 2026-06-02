@@ -6,6 +6,15 @@ TAKO_DATA="$ROOT/tako-data"
 TAKO_SOCKET="$ROOT/run/tako.sock"
 TAKO_SERVER_BIN="${TAKO_SERVER_BIN:-/usr/local/bin/tako-server}"
 CADDY_BIN="${CADDY_BIN:-$ROOT/bin/caddy}"
+PINGORA_FIXED_PROXY_BIN="${PINGORA_FIXED_PROXY_BIN:-$ROOT/bin/pingora-fixed-proxy-rps}"
+HAPROXY_BIN="${HAPROXY_BIN:-haproxy}"
+if [[ -z "${ENVOY_BIN:-}" ]]; then
+  if [[ -x "$ROOT/bin/envoy-v1.38" ]]; then
+    ENVOY_BIN="$ROOT/bin/envoy-v1.38"
+  else
+    ENVOY_BIN=envoy
+  fi
+fi
 TAKO_APP=bench-http/production
 TAKO_FEATURE_APP=bench-features/production
 TAKO_VERSION=baseline-001
@@ -61,6 +70,9 @@ wait_port_free() {
 stop_all() {
   stop_pidfile "$ROOT/run/tako-server.pid"
   stop_pidfile "$ROOT/run/caddy.pid"
+  stop_pidfile "$ROOT/run/pingora-fixed-proxy.pid"
+  stop_pidfile "$ROOT/run/haproxy.pid"
+  stop_pidfile "$ROOT/run/envoy.pid"
   if [[ -f "$ROOT/run/nginx.pid" ]]; then
     sudo -n nginx -s quit -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx" 2>/dev/null || true
     nginx -s quit -c "$ROOT/configs/nginx-active.conf" -p "$ROOT/nginx" 2>/dev/null || true
@@ -72,6 +84,9 @@ stop_all() {
     stop_pidfile "$file"
   done
   sudo -n pkill -f "caddy run --config $ROOT/configs/" 2>/dev/null || true
+  sudo -n pkill -f "$PINGORA_FIXED_PROXY_BIN" 2>/dev/null || true
+  sudo -n pkill -f "$HAPROXY_BIN -f $ROOT/configs/haproxy-active.cfg" 2>/dev/null || true
+  sudo -n pkill -f "$ENVOY_BIN -c $ROOT/configs/envoy-single.yaml" 2>/dev/null || true
   sudo -n pkill -f "$TAKO_SERVER_BIN --data-dir $TAKO_DATA" 2>/dev/null || true
   pkill -f "$ROOT/bin/benchapp" 2>/dev/null || true
   pkill -f "$TAKO_DATA/apps/.*/benchapp" 2>/dev/null || true
@@ -108,7 +123,12 @@ tako_cmd() {
 }
 
 start_tako_server() {
-  sudo_high_nofile "$TAKO_SERVER_BIN" \
+  local env_args=()
+  if [[ -n "${TAKO_MAX_REQUESTS_PER_IP:-}" ]]; then
+    env_args+=("TAKO_MAX_REQUESTS_PER_IP=$TAKO_MAX_REQUESTS_PER_IP")
+  fi
+
+  sudo_high_nofile env "${env_args[@]}" "$TAKO_SERVER_BIN" \
     --data-dir "$TAKO_DATA" \
     --socket "$TAKO_SOCKET" \
     --http-port 18080 \
@@ -220,6 +240,32 @@ case "${1:-}" in
     echo $! > "$ROOT/run/caddy.pid"
     wait_https
     ;;
+  haproxy-single)
+    stop_all
+    local_threads="$(nproc)"
+    sed "s/__THREADS__/$local_threads/g" "$ROOT/configs/haproxy-single.cfg" > "$ROOT/configs/haproxy-active.cfg"
+    start_apps 1
+    sudo_high_nofile "$HAPROXY_BIN" -f "$ROOT/configs/haproxy-active.cfg" -p "$ROOT/run/haproxy.pid" -D \
+      > "$ROOT/logs/haproxy.log" 2>&1
+    wait_https
+    ;;
+  envoy-single)
+    stop_all
+    start_apps 1
+    sudo_high_nofile "$ENVOY_BIN" -c "$ROOT/configs/envoy-single.yaml" --concurrency "$(nproc)" --log-level warn \
+      > "$ROOT/logs/envoy.log" 2>&1 &
+    echo $! > "$ROOT/run/envoy.pid"
+    wait_https
+    ;;
+  pingora-single)
+    stop_all
+    start_apps 1
+    sudo_high_nofile "$PINGORA_FIXED_PROXY_BIN" 18443 9101 \
+      "$ROOT/certs/bench.test.crt" "$ROOT/certs/bench.test.key" \
+      > "$ROOT/logs/pingora-fixed-proxy.log" 2>&1 &
+    echo $! > "$ROOT/run/pingora-fixed-proxy.pid"
+    wait_https
+    ;;
   tako-single)
     stop_all
     start_tako_server
@@ -237,7 +283,7 @@ case "${1:-}" in
     deploy_tako "$TAKO_FEATURE_APP" "$TAKO_FEATURE_RELEASE" 1 yes status
     ;;
   *)
-    echo "usage: $0 stop|nginx-single|nginx-lb|caddy-single|caddy-lb|tako-single|tako-lb|tako-features" >&2
+    echo "usage: $0 stop|nginx-single|nginx-lb|caddy-single|caddy-lb|haproxy-single|envoy-single|pingora-single|tako-single|tako-lb|tako-features" >&2
     exit 2
     ;;
 esac

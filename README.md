@@ -1,6 +1,6 @@
 # Tako Performance
 
-Repeatable benchmarks for Tako, Caddy, and nginx.
+Repeatable benchmarks for Tako, nginx, Caddy, HAProxy, and Envoy.
 
 See [RESULTS.md](RESULTS.md) for the baseline, high-load follow-up, raw result
 links, findings, and profiling targets.
@@ -25,7 +25,7 @@ BENCH_VM=<ssh-host> BENCH_IP=<target-ip> CONCURRENCY_LIST="100 500" ./scripts/ru
 BENCH_VM=<ssh-host> \
 TAKO_SERVER_BIN=/opt/tako-performance/bin/<tako-server-release> \
 SOURCE_IPS="127.0.0.2,127.0.0.3" \
-PROXIES="nginx tako caddy" \
+PROXIES="nginx haproxy envoy tako caddy" \
 CONCURRENCY_LIST="1000 2500 5000" \
 REQUEST_TIMEOUT=60s \
 COOLDOWN_SECONDS=10 \
@@ -41,3 +41,8 @@ HTTP scripts default to `MODES=single`. Use `MODES="single lb"` only on a
 larger testbed where four upstream app processes have enough CPU capacity.
 HTTP scripts also default to `REQUEST_TIMEOUT=60s` so high-concurrency rows
 measure overload latency instead of a short client timeout.
+
+HAProxy and Envoy cases require the matching system binaries on the benchmark
+VM. All proxy cases use the same local app, HTTPS route, certificate, and
+high-water request/connection protection where the proxy exposes a comparable
+knob.

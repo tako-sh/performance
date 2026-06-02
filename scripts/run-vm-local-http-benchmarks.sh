@@ -23,6 +23,7 @@ endpoints="${ENDPOINTS:-plaintext}"
 modes="${MODES:-single}"
 proxies="${PROXIES:-nginx caddy tako}"
 tako_server_bin="${TAKO_SERVER_BIN:-}"
+tako_max_requests_per_ip="${TAKO_MAX_REQUESTS_PER_IP:-}"
 cooldown_seconds="${COOLDOWN_SECONDS:-0}"
 
 remote_control() {
@@ -30,6 +31,9 @@ remote_control() {
   local env_prefix="BENCH_IP=127.0.0.1"
   if [[ -n "$tako_server_bin" ]]; then
     env_prefix="$env_prefix TAKO_SERVER_BIN='$tako_server_bin'"
+  fi
+  if [[ -n "$tako_max_requests_per_ip" ]]; then
+    env_prefix="$env_prefix TAKO_MAX_REQUESTS_PER_IP='$tako_max_requests_per_ip'"
   fi
 
   ssh "$bench_vm" "cd $remote_root && $env_prefix ./scripts/remote/control.sh $command"
@@ -45,6 +49,15 @@ stop_remote() {
 }
 
 trap stop_remote EXIT
+
+fetch_remote_file() {
+  local remote_path="$1"
+  local local_path="$2"
+  if rsync -az "$bench_vm:$remote_root/$remote_path" "$local_path"; then
+    return 0
+  fi
+  ssh "$bench_vm" "cd $remote_root && cat '$remote_path'" > "$local_path"
+}
 
 remote_loadgen() {
   local name="$1"
@@ -73,17 +86,20 @@ run_case() {
   local concurrency="$4"
   local remote_case="$proxy-$mode"
   local name="$proxy-$mode-$endpoint-c$concurrency"
+  local status=0
 
   remote_control "$remote_case"
   sleep 2
   ssh "$bench_vm" "cd $remote_root && SAMPLE_CONNECTIONS='$metrics_connections' ./scripts/remote/start-metrics.sh '$out_dir/$name-metrics.csv' '$metrics_interval'"
-  remote_loadgen "$name" "$endpoint" "$concurrency"
+  remote_loadgen "$name" "$endpoint" "$concurrency" || status=$?
   stop_metrics
-  rsync -az "$bench_vm:$remote_root/$out_dir/$name.json" "$bench_vm:$remote_root/$out_dir/$name-metrics.csv" "$out_dir/"
+  fetch_remote_file "$out_dir/$name.json" "$out_dir/$name.json" || status=$?
+  fetch_remote_file "$out_dir/$name-metrics.csv" "$out_dir/$name-metrics.csv" || status=$?
   remote_control stop >/dev/null
   if [[ "$cooldown_seconds" != "0" ]]; then
     sleep "$cooldown_seconds"
   fi
+  return "$status"
 }
 
 for concurrency in $concurrency_list; do

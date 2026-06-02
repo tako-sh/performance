@@ -114,7 +114,7 @@ func groupName(name string) (string, bool) {
 	}
 	endpoint := strings.Join(parts[2:], "-")
 	switch proxy {
-	case "nginx", "caddy", "tako":
+	case "nginx", "haproxy", "envoy", "caddy", "tako", "pingora":
 	default:
 		return "", false
 	}
@@ -275,13 +275,15 @@ func sortedGroupNames(groups map[string][]point) []string {
 func groupOrder(name string) int {
 	order := map[string]int{
 		"nginx single":     1,
-		"nginx lb":         2,
+		"haproxy single":   2,
 		"tako single":      3,
-		"tako lb":          4,
-		"caddy single":     5,
-		"caddy lb":         6,
-		"channel publish":  7,
-		"workflow enqueue": 8,
+		"envoy single":     4,
+		"nginx lb":         5,
+		"tako lb":          6,
+		"caddy single":     7,
+		"caddy lb":         8,
+		"channel publish":  9,
+		"workflow enqueue": 10,
 	}
 	if v, ok := order[name]; ok {
 		return v
@@ -292,6 +294,8 @@ func groupOrder(name string) int {
 func groupColor(name string) string {
 	colors := map[string]string{
 		"nginx single":     "#4ea1ff",
+		"haproxy single":   "#ff7b72",
+		"envoy single":     "#a371f7",
 		"nginx lb":         "#85bfff",
 		"tako single":      "#7ee787",
 		"tako lb":          "#3fb950",

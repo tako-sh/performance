@@ -1,0 +1,39 @@
+{
+  "name": "envoy-single-plaintext-c5000",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 66.031966356,
+  "concurrency": 5000,
+  "requests": 312643,
+  "errors": 872,
+  "bytes": 4064359,
+  "requests_per_sec": 4734.72194231562,
+  "bytes_per_sec": 61551.38525010306,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 3321.048405,
+    "mean": 397.496819,
+    "min": 4.994157,
+    "p50": 351.549862,
+    "p90": 482.894526,
+    "p95": 527.792283,
+    "p99": 3103.968301
+  },
+  "status_counts": {
+    "200": 312643
+  },
+  "error_kinds": {
+    "timeout": 872
+  },
+  "error_samples": {
+    "timeout": [
+      "Get \"https://bench.test:18443/plaintext\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)",
+      "Get \"https://bench.test:18443/plaintext\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)",
+      "Get \"https://bench.test:18443/plaintext\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
+    ]
+  },
+  "started_at": "2026-06-02T05:34:36Z"
+}

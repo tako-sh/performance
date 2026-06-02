@@ -8,7 +8,7 @@ root=/opt/tako-performance
 
 mkdir -p "$(dirname "$out")"
 app_pattern='/opt/tako-performance/.*/benchapp|/opt/tako-performance/bin/benchapp|/opt/tako-performance/tako-data/.*/bun'
-proxy_pattern='tako-server|caddy run --config /opt/tako-performance/configs/'
+proxy_pattern='tako-server|caddy run --config /opt/tako-performance/configs/|pingora-fixed-proxy-rps|haproxy -f /opt/tako-performance/configs/haproxy-active.cfg|([^ ]*/)?envoy[^ ]* -c /opt/tako-performance/configs/envoy-single.yaml'
 loadgen_pattern='(^| )(\./)?\.bin/loadgen|/opt/tako-performance/source/.bin/loadgen|/opt/tako-performance/.*/loadgen'
 
 printf 'timestamp,cpu_pct,mem_used_bytes,mem_available_bytes,load1,load5,load15,bench_rss_bytes,proxy_rss_bytes,conn_established,app_cpu_pct,proxy_cpu_pct,loadgen_cpu_pct,loadgen_rss_bytes\n' > "$out"

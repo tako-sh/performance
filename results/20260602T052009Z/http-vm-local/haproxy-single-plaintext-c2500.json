@@ -1,0 +1,29 @@
+{
+  "name": "haproxy-single-plaintext-c2500",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.072491261,
+  "concurrency": 2500,
+  "requests": 549833,
+  "errors": 0,
+  "bytes": 7147829,
+  "requests_per_sec": 18283.58665825135,
+  "bytes_per_sec": 237686.6265572676,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 2471.959303,
+    "mean": 134.263606,
+    "min": 1.39872,
+    "p50": 118.944175,
+    "p90": 184.637498,
+    "p95": 209.216516,
+    "p99": 278.32115
+  },
+  "status_counts": {
+    "200": 549833
+  },
+  "started_at": "2026-06-02T05:27:03Z"
+}
