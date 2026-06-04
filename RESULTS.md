@@ -1,6 +1,6 @@
 # Tako Proxy Performance Results
 
-Date: 2026-06-02 UTC final matrix
+Date: 2026-06-04 UTC feature rerun
 
 This is the public single-VM performance report for Tako against nginx,
 HAProxy, Envoy, and Caddy. It intentionally omits exact hostnames, public IPs,
@@ -11,14 +11,15 @@ on the same benchmark VM, with TLS enabled for every proxy.
 
 ## Executive Summary
 
-Latest release run:
+Latest release HTTP run and current master feature rerun:
 
 - Tako release: `tako-server 0.0.0-09b3dc6`
 - HTTP data: `results/20260602T052009Z/http-vm-local`
 - HTTP graphs: `results/20260602T052009Z/http-vm-local/graphs/README.md`
-- Channel/workflow data: `results/20260602T061100Z/tako-features-vm-local`
+- Feature rerun build: `tako-server 0.0.0-958986f`
+- Channel/workflow data: `results/20260604T055839Z/tako-features-vm-local`
 - Channel/workflow graphs:
-  `results/20260602T061100Z/tako-features-vm-local/graphs/README.md`
+  `results/20260604T055839Z/tako-features-vm-local/graphs/README.md`
 
 TLDR:
 
@@ -39,9 +40,9 @@ TLDR:
   relevant, but do not treat it as a Tako-specific leak: follow-up controls show
   most of the keepalive RSS is generic Pingora/TLS reverse-proxy connection
   state.
-- Channels/workflows are clean through c4000 on this VM. At c8000 they are
-  overloaded: channel publish returns 5.86% non-200 responses and workflow
-  enqueue returns 21.34%.
+- The current master feature rerun is clean through c8000 on this VM: channel
+  publish reaches 4.6k 200 RPS at c8000 and workflow enqueue reaches 4.0k,
+  with 0 non-200 responses and 0 client errors.
 - This VM does not produce 60k-100k clean TLS RPS. In the heavy rows the load
   generator, proxy, and app share the same 2 vCPU budget and CPU reaches
   saturation.
@@ -140,9 +141,9 @@ Pingora/TLS connection-state cost rather than a Tako routing/LB leak.
 
 ## Channels And Workflows
 
-These rows use the same released `tako-server 0.0.0-09b3dc6`, the same VM-local
-HTTPS path, 16 loopback source IPs, and a single Tako app instance. The
-endpoints are implemented with the JavaScript SDK:
+These rows use `tako-server 0.0.0-958986f` from current master, the same
+VM-local HTTPS path, 16 loopback source IPs, and a single Tako app instance.
+The endpoints are implemented with the JavaScript SDK:
 
 - `/channel-publish`: publishes one message to a `feed` channel.
 - `/workflow-enqueue`: enqueues one `noop` workflow payload.
@@ -150,41 +151,41 @@ endpoints are implemented with the JavaScript SDK:
 The workflow handler performs one persisted `ctx.run("ack", ...)` step and
 returns immediately.
 
-![Channel/workflow HTTP 200 RPS by concurrency](results/20260602T061100Z/tako-features-vm-local/graphs/throughput-200-rps.svg)
+![Channel/workflow HTTP 200 RPS by concurrency](results/20260604T055839Z/tako-features-vm-local/graphs/throughput-200-rps.svg)
 
-![Channel/workflow p99 latency by concurrency](results/20260602T061100Z/tako-features-vm-local/graphs/p99-latency-ms.svg)
+![Channel/workflow p99 latency by concurrency](results/20260604T055839Z/tako-features-vm-local/graphs/p99-latency-ms.svg)
 
-![Channel/workflow non-200 response rate](results/20260602T061100Z/tako-features-vm-local/graphs/non-200-rate.svg)
+![Channel/workflow non-200 response rate](results/20260604T055839Z/tako-features-vm-local/graphs/non-200-rate.svg)
 
-![Channel/workflow client error rate](results/20260602T061100Z/tako-features-vm-local/graphs/client-error-rate.svg)
+![Channel/workflow client error rate](results/20260604T055839Z/tako-features-vm-local/graphs/client-error-rate.svg)
 
 | endpoint | conc | 200 rps | p50 | p99 | non-200 | client errors | status |
 |---|---:|---:|---:|---:|---:|---:|---|
-| channel-publish | 500 | 7,205 | 68 ms | 127 ms | 0.00% | 0 (0.00%) | 200:216655 |
-| workflow-enqueue | 500 | 5,690 | 87 ms | 171 ms | 0.00% | 0 (0.00%) | 200:171053 |
-| channel-publish | 1,000 | 6,839 | 143 ms | 261 ms | 0.00% | 0 (0.00%) | 200:205950 |
-| workflow-enqueue | 1,000 | 5,387 | 184 ms | 387 ms | 0.00% | 0 (0.00%) | 200:162418 |
-| channel-publish | 2,000 | 6,369 | 308 ms | 800 ms | 0.00% | 0 (0.00%) | 200:192610 |
-| workflow-enqueue | 2,000 | 5,200 | 390 ms | 1,216 ms | 0.00% | 0 (0.00%) | 200:157641 |
-| channel-publish | 4,000 | 5,941 | 636 ms | 2,761 ms | 0.00% | 0 (0.00%) | 200:181547 |
-| workflow-enqueue | 4,000 | 4,758 | 817 ms | 3,589 ms | 0.00% | 0 (0.00%) | 200:145965 |
-| channel-publish | 8,000 | 4,116 | 1,257 ms | 6,723 ms | 5.86% | 0 (0.00%) | 200:133270, 502:8271, 503:21 |
-| workflow-enqueue | 8,000 | 1,873 | 2,578 ms | 8,409 ms | 21.34% | 0 (0.00%) | 200:62548, 502:16781, 503:191 |
+| channel-publish | 500 | 7,773 | 65 ms | 94 ms | 0.00% | 0 (0.00%) | 200:233529 |
+| workflow-enqueue | 500 | 5,555 | 90 ms | 126 ms | 0.00% | 0 (0.00%) | 200:167120 |
+| channel-publish | 1,000 | 6,589 | 146 ms | 213 ms | 0.00% | 0 (0.00%) | 200:198536 |
+| workflow-enqueue | 1,000 | 5,239 | 187 ms | 243 ms | 0.00% | 0 (0.00%) | 200:158061 |
+| channel-publish | 2,000 | 6,375 | 297 ms | 896 ms | 0.00% | 0 (0.00%) | 200:192869 |
+| workflow-enqueue | 2,000 | 5,049 | 378 ms | 1,305 ms | 0.00% | 0 (0.00%) | 200:153080 |
+| channel-publish | 4,000 | 5,818 | 618 ms | 3,311 ms | 0.00% | 0 (0.00%) | 200:177961 |
+| workflow-enqueue | 4,000 | 4,709 | 772 ms | 3,466 ms | 0.00% | 0 (0.00%) | 200:144652 |
+| channel-publish | 8,000 | 4,595 | 1,417 ms | 6,355 ms | 0.00% | 0 (0.00%) | 200:143792 |
+| workflow-enqueue | 8,000 | 4,001 | 1,640 ms | 7,693 ms | 0.00% | 0 (0.00%) | 200:126129 |
 
 ### Feature Resource Highlights
 
 | endpoint | conc | max CPU | proxy CPU | app CPU | loadgen CPU | proxy RSS | app RSS | loadgen RSS | max TLS conns |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| channel-publish | 4,000 | 97.9% | 50.2% | 29.6% | 37.3% | 700 MiB | 171 MiB | 319 MiB | 4,000 |
-| workflow-enqueue | 4,000 | 97.4% | 50.1% | 25.1% | 30.3% | 672 MiB | 217 MiB | 313 MiB | 4,000 |
-| channel-publish | 8,000 | 99.0% | 54.1% | 29.0% | 40.4% | 1,230 MiB | 205 MiB | 639 MiB | 8,086 |
-| workflow-enqueue | 8,000 | 99.5% | 57.1% | 23.4% | 44.3% | 1,226 MiB | 271 MiB | 613 MiB | 8,145 |
+| channel-publish | 4,000 | 91.8% | 61.6% | 16.0% | 36.7% | 679 MiB | 217 MiB | 308 MiB | 4,000 |
+| workflow-enqueue | 4,000 | 95.8% | 43.1% | 13.8% | 31.7% | 636 MiB | 213 MiB | 315 MiB | 4,191 |
+| channel-publish | 8,000 | 99.8% | 63.7% | 18.3% | 33.0% | 1,168 MiB | 348 MiB | 561 MiB | 8,124 |
+| workflow-enqueue | 8,000 | 99.5% | 60.8% | 18.8% | 46.4% | 1,143 MiB | 287 MiB | 560 MiB | 8,038 |
 
-Judgement: channels/workflows are good through c4000 on this small VM, but not
-excellent at overload. Both endpoints persist state, so the proxy, app, Bun
-runtime, SQLite-backed feature store, and load generator compete inside the
-same 2 vCPU budget. The c8000 workflow row needs better overload behavior
-before it can be called excellent.
+Judgement: the current master feature path is clean through c8000 on this small
+VM. Both endpoints persist state, so the proxy, app, Bun runtime,
+SQLite-backed feature store, workflow dispatcher, and load generator still
+compete inside the same 2 vCPU budget. The c8000 rows show saturation through
+tail latency and RSS, not response failures.
 
 ## What Changed
 
@@ -251,8 +252,8 @@ Recommended next steps:
   peer/header state without changing behavior.
 - Add a larger or multi-node load-balanced benchmark when a suitable testbed is
   available.
-- Add explicit overload/backpressure behavior for channel/workflow c8000+
-  instead of letting the app return many 502/503 responses.
+- Keep profiling channel/workflow c8000+ tail latency and RSS now that the
+  current master run stays clean at that load.
 
 ## Test Host And Network
 
@@ -287,7 +288,8 @@ TLS: same self-signed certificate for every proxy
 
 ## Software Versions
 
-- Tako: `tako-server 0.0.0-09b3dc6`
+- Tako HTTP matrix: `tako-server 0.0.0-09b3dc6`
+- Tako feature rerun: `tako-server 0.0.0-958986f`
 - nginx: `nginx/1.24.0 (Ubuntu)`
 - HAProxy: `2.8.16-0ubuntu0.24.04.2`
 - Envoy: `1.38.0`, extracted from the official Envoy image and run directly
