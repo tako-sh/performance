@@ -143,10 +143,10 @@ Raw data: `results/20260605T071808Z/http-vm-local`
 
 This focused rerun uses the same five public proxies at c5000, c10000, and
 c20000. Memory is process PSS from `/proc/<pid>/smaps_rollup`, so shared mapped
-pages are not double-counted. The c20000 200% column stays beside Memory because
+pages are not double-counted. The c20000 200 column stays beside Memory because
 Envoy and Caddy are degraded at the largest row.
 
-| proxy | c5000 Memory | c10000 Memory | c20000 Memory | c20000 200% | private memory at c20000 |
+| proxy | c5000 Memory | c10000 Memory | c20000 Memory | c20000 200 | private memory at c20000 |
 |---|---:|---:|---:|---:|---:|
 | nginx | 159 MiB | 159 MiB | 451 MiB | 99.43% | 445 MiB |
 | HAProxy | 248 MiB | 406 MiB | 624 MiB | 100% | 624 MiB |
