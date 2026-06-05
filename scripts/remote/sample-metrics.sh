@@ -11,7 +11,7 @@ app_pattern='/opt/tako-performance/.*/benchapp|/opt/tako-performance/bin/benchap
 proxy_pattern='tako-server|caddy run --config /opt/tako-performance/configs/|pingora-fixed-proxy-rps|haproxy -f /opt/tako-performance/configs/haproxy-active.cfg|([^ ]*/)?envoy[^ ]* -c /opt/tako-performance/configs/envoy-single.yaml'
 loadgen_pattern='(^| )(\./)?\.bin/loadgen|/opt/tako-performance/source/.bin/loadgen|/opt/tako-performance/.*/loadgen'
 
-printf 'timestamp,cpu_pct,mem_used_bytes,mem_available_bytes,load1,load5,load15,bench_rss_bytes,proxy_rss_bytes,conn_established,app_cpu_pct,proxy_cpu_pct,loadgen_cpu_pct,loadgen_rss_bytes\n' > "$out"
+printf 'timestamp,cpu_pct,mem_used_bytes,mem_available_bytes,load1,load5,load15,bench_rss_bytes,proxy_rss_bytes,proxy_pss_bytes,proxy_private_bytes,conn_established,app_cpu_pct,proxy_cpu_pct,loadgen_cpu_pct,loadgen_rss_bytes\n' > "$out"
 
 read_cpu() {
   awk '/^cpu / {
@@ -105,6 +105,52 @@ sum_proxy_rss() {
   sum_rss_pids "${pids[@]}"
 }
 
+sum_smaps_pids() {
+  local field="$1"
+  shift
+  local sum_kib=0
+  local pid value_kib
+  for pid in "$@"; do
+    [[ -e "/proc/$pid/smaps_rollup" ]] || continue
+    value_kib="$(awk -v field="$field" '$1 == field ":" { print $2 }' "/proc/$pid/smaps_rollup" 2>/dev/null || sudo -n awk -v field="$field" '$1 == field ":" { print $2 }' "/proc/$pid/smaps_rollup" 2>/dev/null || true)"
+    [[ -n "$value_kib" ]] || value_kib=0
+    sum_kib=$((sum_kib + value_kib))
+  done
+  echo $((sum_kib * 1024))
+}
+
+sum_private_pids() {
+  local sum_kib=0
+  local pid private_kib
+  for pid in "$@"; do
+    [[ -e "/proc/$pid/smaps_rollup" ]] || continue
+    private_kib="$(awk '
+      /^Private_Clean:/ { private += $2 }
+      /^Private_Dirty:/ { private += $2 }
+      END { print private + 0 }
+    ' "/proc/$pid/smaps_rollup" 2>/dev/null || sudo -n awk '
+      /^Private_Clean:/ { private += $2 }
+      /^Private_Dirty:/ { private += $2 }
+      END { print private + 0 }
+    ' "/proc/$pid/smaps_rollup" 2>/dev/null || true)"
+    [[ -n "$private_kib" ]] || private_kib=0
+    sum_kib=$((sum_kib + private_kib))
+  done
+  echo $((sum_kib * 1024))
+}
+
+sum_proxy_pss() {
+  local -a pids
+  mapfile -t pids < <(proxy_pids)
+  sum_smaps_pids Pss "${pids[@]}"
+}
+
+sum_proxy_private() {
+  local -a pids
+  mapfile -t pids < <(proxy_pids)
+  sum_private_pids "${pids[@]}"
+}
+
 sum_jiffies_pids() {
   local sum=0
   local pid stat rest
@@ -173,13 +219,15 @@ while true; do
   read load1 load5 load15 _ < /proc/loadavg
   bench_rss="$(sum_rss "$app_pattern")"
   proxy_rss="$(sum_proxy_rss)"
+  proxy_pss="$(sum_proxy_pss)"
+  proxy_private="$(sum_proxy_private)"
   loadgen_rss="$(sum_rss "$loadgen_pattern")"
   conn_established="0"
   if [[ "$sample_connections" == "1" ]]; then
     conn_established="$(ss -tan state established '( sport = :18443 )' 2>/dev/null | tail -n +2 | wc -l | tr -d ' ')"
   fi
 
-  printf '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' \
+  printf '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' \
     "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
     "$cpu_pct" \
     "$mem_used" \
@@ -189,6 +237,8 @@ while true; do
     "$load15" \
     "$bench_rss" \
     "$proxy_rss" \
+    "$proxy_pss" \
+    "$proxy_private" \
     "$conn_established" \
     "$app_cpu_pct" \
     "$proxy_cpu_pct" \

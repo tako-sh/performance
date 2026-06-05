@@ -1,0 +1,30 @@
+{
+  "name": "envoy-single-plaintext-c10000",
+  "method": "GET",
+  "url": "https://bench.test:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.48244274,
+  "concurrency": 10000,
+  "requests": 286154,
+  "errors": 0,
+  "bytes": 5673980,
+  "requests_per_sec": 9387.502256323438,
+  "bytes_per_sec": 186139.28182843525,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 8320.734527,
+    "mean": 1051.392105,
+    "min": 249.317782,
+    "p50": 804.732921,
+    "p90": 1235.921819,
+    "p95": 2097.463806,
+    "p99": 6859.716764
+  },
+  "status_counts": {
+    "200": 261103,
+    "503": 25051
+  },
+  "started_at": "2026-06-05T07:29:50Z"
+}

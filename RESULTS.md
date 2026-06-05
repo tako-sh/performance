@@ -35,11 +35,9 @@ TLDR:
 - Tako p99 latency is worse than nginx at every high-load row. It is also worse
   than HAProxy at c5000-c10000, then roughly comparable to HAProxy at c15000
   and c20000.
-- Tako sampled proxy RSS is the highest in the heavy rows, peaking around
-  2.7 GiB at c20000. Keep RSS in the report because it is operationally
-  relevant, but do not treat it as a Tako-specific leak: follow-up controls show
-  most of the keepalive RSS is generic Pingora/TLS reverse-proxy connection
-  state.
+- A focused five-proxy Memory rerun using process PSS shows Tako at 511 MiB
+  c5000, 911 MiB c10000, and 1.7 GiB c20000 while returning 100% 200. Caddy is
+  1.5 GiB at c20000 but only 94.14% 200; Envoy is 1.0 GiB but only 51.41% 200.
 - The current master feature rerun is clean through c8000 on this VM: channel
   publish reaches 4.6k 200 RPS at c8000 and workflow enqueue reaches 4.0k,
   with 0 non-200 responses and 0 client errors.
@@ -51,8 +49,9 @@ TLDR:
 
 Judgement: this is a good stability result for Tako versus Caddy and Envoy, but
 not a strong nginx/HAProxy parity result. The biggest remaining issues are raw
-RPS and p99 latency versus nginx/HAProxy. RSS should stay visible in graphs and
-tables with the Pingora attribution caveat.
+RPS and p99 latency versus nginx/HAProxy. Memory is materially lower when
+measured as process PSS rather than RSS, but Tako still carries a higher
+connection-state cost than nginx and HAProxy at the largest row.
 
 ## Headline HTTP Results
 
@@ -106,31 +105,30 @@ tables with the Pingora attribution caveat.
 
 Every row below is from the same HTTP result directory. `max CPU` is total VM
 CPU, where 100% means both vCPUs are busy. Process CPU is the sampled share of
-total VM CPU. RSS values are peak sampled resident memory for the benchmark
-processes only.
+total VM CPU. Memory is broken out separately below using PSS/private sampling.
 
-| proxy | conc | max CPU | proxy CPU | app CPU | loadgen CPU | proxy RSS | app RSS | loadgen RSS | max TLS conns |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| nginx | 5,000 | 100.0% | 49.5% | 24.3% | 39.5% | 220 MiB | 101 MiB | 390 MiB | 5,023 |
-| haproxy | 5,000 | 100.0% | 45.4% | 19.3% | 45.5% | 265 MiB | 50 MiB | 398 MiB | 5,000 |
-| tako | 5,000 | 99.7% | 49.5% | 19.9% | 41.1% | 748 MiB | 118 MiB | 385 MiB | 5,035 |
-| envoy | 5,000 | 99.3% | 67.9% | 14.4% | 32.6% | 336 MiB | 133 MiB | 396 MiB | 5,008 |
-| caddy | 5,000 | 99.2% | 70.5% | 16.8% | 26.8% | 623 MiB | 132 MiB | 373 MiB | 5,000 |
-| nginx | 10,000 | 100.0% | 47.4% | 18.8% | 54.2% | 221 MiB | 58 MiB | 722 MiB | 9,491 |
-| haproxy | 10,000 | 100.0% | 51.4% | 19.4% | 46.3% | 476 MiB | 49 MiB | 754 MiB | 10,000 |
-| tako | 10,000 | 99.9% | 61.5% | 19.2% | 36.5% | 1,321 MiB | 217 MiB | 699 MiB | 10,059 |
-| envoy | 10,000 | 100.0% | 66.1% | 13.2% | 48.2% | 560 MiB | 133 MiB | 742 MiB | 10,076 |
-| caddy | 10,000 | 99.7% | 80.0% | 7.8% | 41.6% | 1,235 MiB | 133 MiB | 670 MiB | 10,000 |
-| nginx | 15,000 | 100.0% | 55.4% | 19.4% | 39.8% | 389 MiB | 119 MiB | 1,021 MiB | 12,940 |
-| haproxy | 15,000 | 100.0% | 51.7% | 18.5% | 49.8% | 580 MiB | 47 MiB | 992 MiB | 15,115 |
-| tako | 15,000 | 99.9% | 60.5% | 18.9% | 37.7% | 1,964 MiB | 298 MiB | 1,004 MiB | 15,280 |
-| envoy | 15,000 | 99.9% | 92.2% | 7.1% | 43.4% | 779 MiB | 132 MiB | 1,003 MiB | 15,107 |
-| caddy | 15,000 | 99.9% | 78.6% | 6.1% | 52.7% | 1,391 MiB | 127 MiB | 882 MiB | 15,000 |
-| nginx | 20,000 | 100.0% | 40.8% | 18.0% | 41.2% | 262 MiB | 94 MiB | 1,146 MiB | 14,168 |
-| haproxy | 20,000 | 100.0% | 54.5% | 17.4% | 49.6% | 896 MiB | 46 MiB | 1,306 MiB | 20,012 |
-| tako | 20,000 | 99.9% | 60.1% | 18.6% | 44.0% | 2,723 MiB | 392 MiB | 1,325 MiB | 20,396 |
-| envoy | 20,000 | 99.9% | 99.4% | 7.0% | 72.6% | 999 MiB | 132 MiB | 1,364 MiB | 20,175 |
-| caddy | 20,000 | 100.0% | 76.1% | 7.8% | 27.1% | 1,534 MiB | 133 MiB | 1,043 MiB | 20,000 |
+| proxy | conc | max CPU | proxy CPU | app CPU | loadgen CPU | max TLS conns |
+|---|---:|---:|---:|---:|---:|---:|
+| nginx | 5,000 | 100.0% | 49.5% | 24.3% | 39.5% | 5,023 |
+| haproxy | 5,000 | 100.0% | 45.4% | 19.3% | 45.5% | 5,000 |
+| tako | 5,000 | 99.7% | 49.5% | 19.9% | 41.1% | 5,035 |
+| envoy | 5,000 | 99.3% | 67.9% | 14.4% | 32.6% | 5,008 |
+| caddy | 5,000 | 99.2% | 70.5% | 16.8% | 26.8% | 5,000 |
+| nginx | 10,000 | 100.0% | 47.4% | 18.8% | 54.2% | 9,491 |
+| haproxy | 10,000 | 100.0% | 51.4% | 19.4% | 46.3% | 10,000 |
+| tako | 10,000 | 99.9% | 61.5% | 19.2% | 36.5% | 10,059 |
+| envoy | 10,000 | 100.0% | 66.1% | 13.2% | 48.2% | 10,076 |
+| caddy | 10,000 | 99.7% | 80.0% | 7.8% | 41.6% | 10,000 |
+| nginx | 15,000 | 100.0% | 55.4% | 19.4% | 39.8% | 12,940 |
+| haproxy | 15,000 | 100.0% | 51.7% | 18.5% | 49.8% | 15,115 |
+| tako | 15,000 | 99.9% | 60.5% | 18.9% | 37.7% | 15,280 |
+| envoy | 15,000 | 99.9% | 92.2% | 7.1% | 43.4% | 15,107 |
+| caddy | 15,000 | 99.9% | 78.6% | 6.1% | 52.7% | 15,000 |
+| nginx | 20,000 | 100.0% | 40.8% | 18.0% | 41.2% | 14,168 |
+| haproxy | 20,000 | 100.0% | 54.5% | 17.4% | 49.6% | 20,012 |
+| tako | 20,000 | 99.9% | 60.1% | 18.6% | 44.0% | 20,396 |
+| envoy | 20,000 | 99.9% | 99.4% | 7.0% | 72.6% | 20,175 |
+| caddy | 20,000 | 100.0% | 76.1% | 7.8% | 27.1% | 20,000 |
 
 CPU is not the main differentiator in the heavy rows because all proxies can
 saturate the VM. The important user-visible gaps are clean throughput, tail
@@ -138,6 +136,29 @@ latency under saturation, and memory per active downstream connection. A 5k
 keepalive control measured full Tako only about 14 MiB above a comparable
 fixed-upstream Pingora reverse proxy, so the RSS gap should be read mostly as a
 Pingora/TLS connection-state cost rather than a Tako routing/LB leak.
+
+## Memory Comparison
+
+Raw data: `results/20260605T071808Z/http-vm-local`
+
+This focused rerun uses the same five public proxies at c5000, c10000, and
+c20000. Memory is process PSS from `/proc/<pid>/smaps_rollup`, so shared mapped
+pages are not double-counted. The c20000 200% column stays beside Memory because
+Envoy and Caddy are degraded at the largest row.
+
+| proxy | c5000 Memory | c10000 Memory | c20000 Memory | c20000 200% | private memory at c20000 |
+|---|---:|---:|---:|---:|---:|
+| nginx | 159 MiB | 159 MiB | 451 MiB | 99.43% | 445 MiB |
+| HAProxy | 248 MiB | 406 MiB | 624 MiB | 100% | 624 MiB |
+| Tako | 511 MiB | 911 MiB | 1.7 GiB | 100% | 1.6 GiB |
+| Envoy | 323 MiB | 554 MiB | 1.0 GiB | 51.41% | 1.0 GiB |
+| Caddy | 621 MiB | 1.2 GiB | 1.5 GiB | 94.14% | 1.5 GiB |
+
+Conclusion: the old c20000 resident-memory readout overstated Tako's footprint
+by about 1 GiB. With PSS, Tako is still higher than nginx and HAProxy at
+c20000, but it is 1.7 GiB while staying at 100% 200. Caddy is close on Memory
+at c20000, but that row is not equivalent capacity because 5.86% of attempted
+outcomes are client timeouts.
 
 ## Channels And Workflows
 
@@ -174,18 +195,18 @@ returns immediately.
 
 ### Feature Resource Highlights
 
-| endpoint | conc | max CPU | proxy CPU | app CPU | loadgen CPU | proxy RSS | app RSS | loadgen RSS | max TLS conns |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| channel-publish | 4,000 | 91.8% | 61.6% | 16.0% | 36.7% | 679 MiB | 217 MiB | 308 MiB | 4,000 |
-| workflow-enqueue | 4,000 | 95.8% | 43.1% | 13.8% | 31.7% | 636 MiB | 213 MiB | 315 MiB | 4,191 |
-| channel-publish | 8,000 | 99.8% | 63.7% | 18.3% | 33.0% | 1,168 MiB | 348 MiB | 561 MiB | 8,124 |
-| workflow-enqueue | 8,000 | 99.5% | 60.8% | 18.8% | 46.4% | 1,143 MiB | 287 MiB | 560 MiB | 8,038 |
+| endpoint | conc | max CPU | proxy CPU | app CPU | loadgen CPU | max TLS conns |
+|---|---:|---:|---:|---:|---:|---:|
+| channel-publish | 4,000 | 91.8% | 61.6% | 16.0% | 36.7% | 4,000 |
+| workflow-enqueue | 4,000 | 95.8% | 43.1% | 13.8% | 31.7% | 4,191 |
+| channel-publish | 8,000 | 99.8% | 63.7% | 18.3% | 33.0% | 8,124 |
+| workflow-enqueue | 8,000 | 99.5% | 60.8% | 18.8% | 46.4% | 8,038 |
 
 Judgement: the current master feature path is clean through c8000 on this small
 VM. Both endpoints persist state, so the proxy, app, Bun runtime,
 SQLite-backed feature store, workflow dispatcher, and load generator still
 compete inside the same 2 vCPU budget. The c8000 rows show saturation through
-tail latency and RSS, not response failures.
+tail latency, not response failures.
 
 ## What Changed
 
@@ -252,7 +273,7 @@ Recommended next steps:
   peer/header state without changing behavior.
 - Add a larger or multi-node load-balanced benchmark when a suitable testbed is
   available.
-- Keep profiling channel/workflow c8000+ tail latency and RSS now that the
+- Keep profiling channel/workflow c8000+ tail latency and Memory now that the
   current master run stays clean at that load.
 
 ## Test Host And Network
@@ -351,7 +372,7 @@ returns immediately.
   with a high per-IP request-rate ceiling. Envoy uses a high local rate limit
   and raised cluster circuit-breaker thresholds for the benchmark.
 - Metrics are sampled once per second from `/proc` on the VM: total CPU, memory
-  used/available, proxy/app/loadgen CPU, proxy/app/loadgen RSS, and established
+  used/available, proxy/app/loadgen CPU, proxy/app/loadgen Memory, and established
   TLS connections.
 - Before each row, the harness stops the previous proxy and app processes. The
   final HTTP run uses `PROXIES='nginx haproxy envoy tako caddy'` and
