@@ -202,6 +202,7 @@ func run(client *http.Client, cfg runConfig) result {
 				if readErr != nil || closeErr != nil {
 					recordError(&mu, errorKinds, errorSamples, "read_response", firstErr(readErr, closeErr))
 					atomic.AddInt64(&errors, 1)
+					continue
 				}
 				atomic.AddInt64(&requests, 1)
 				atomic.AddInt64(&responseBytes, n)
@@ -236,7 +237,7 @@ func run(client *http.Client, cfg runConfig) result {
 		StatusCounts:  statusCounts,
 		ErrorKinds:    errorKinds,
 		ErrorSamples:  errorSamples,
-		StartedAt:     startedAt.UTC().Format(time.RFC3339),
+		StartedAt:     startedAt.UTC().Format(time.RFC3339Nano),
 	}
 	if len(res.ErrorKinds) == 0 {
 		res.ErrorKinds = nil

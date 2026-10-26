@@ -10,7 +10,7 @@ cp build/{build.txt,runtime-image.txt} results/full-suite/
 cpus="$(python3 -c 'import os; print(",".join(map(str, sorted(os.sched_getaffinity(0))[:2])))')"
 args=(--group "$group" --repetition "$repetition")
 if [[ "$group" == smoke ]]; then
-  args+=(--warmup 1 --duration 2 --cooldown 1)
+  args+=(--warmup 1 --duration 3 --cooldown 1)
 fi
 docker run --rm --privileged --cgroupns=private --cpus=2 --cpuset-cpus="$cpus" --memory=8g --memory-swap=8g \
   --mount "type=bind,src=$PWD/build,dst=/build,readonly" \

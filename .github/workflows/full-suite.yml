@@ -117,7 +117,11 @@ jobs:
         if: always()
         with:
           name: full-suite-smoke-${{ github.sha }}
-          path: results/full-suite/
+          path: |
+            results/full-suite/**/*.json
+            results/full-suite/build.txt
+            results/full-suite/runtime-image.txt
+            results/full-suite/network.txt
           retention-days: 7
 
   compare:

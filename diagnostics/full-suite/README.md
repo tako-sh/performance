@@ -40,11 +40,13 @@ Feature repetitions run separately. Preserve every raw repetition; report the
 mean and spread rather than selecting the best run. Different hosts may differ
 in speed, so compare proxies within each matched repetition as well.
 
-The original `cmd/loadgen` implementation is unchanged. RPS uses actual elapsed
+The original `cmd/loadgen` workload is preserved. Two accounting corrections
+record subsecond start timestamps and count truncated response bodies only as
+client errors, rather than also counting their HTTP status as a completed
+response. A regression test covers truncated responses. RPS uses actual elapsed
 time including drain. Latency ends when response headers arrive; response bytes
 are then drained before another request. Resource samples are filtered by the
-load generator's measurement timestamps (its seconds-resolution start timestamp
-introduces less than one second of boundary uncertainty). CPU percentages use
+load generator's measurement timestamps. CPU percentages use
 the shared two-CPU budget as 100%. PSS excludes kernel socket memory.
 
 Build artifacts live seven days, measurements fourteen days. Commit sanitized

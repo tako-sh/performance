@@ -127,7 +127,7 @@ def start_tako(case_dir, name, feature):
         if feature:
             subprocess.run(['tar', '-xf', '/build/features.tar', '-C', str(release)], check=True)
             manifest = dict(protocol_version=0, runtime='bun', runtime_version='1.4.4',
-                            main='index.ts', app_dir='src', idle_timeout=300,
+                            main='src/index.ts', idle_timeout=300,
                             env_vars={'TAKO_BUILD': name})
         else:
             shutil.copy('/build/benchapp', release / 'benchapp')
@@ -162,8 +162,6 @@ def start_proxy(case_dir, proxy, port):
 
 def summarize_samples(samples, result):
     start = datetime.fromisoformat(result['started_at'].replace('Z', '+00:00')).timestamp()
-    # The original load generator records RFC3339 seconds; bounds have <1 s
-    # uncertainty. Keep raw timestamps and explicitly report this limitation.
     measured = [s for s in samples if start <= s['timestamp'] <= start + result['duration_sec']]
     if len(measured) < 2:
         raise RuntimeError('insufficient measurement samples')
@@ -198,11 +196,13 @@ def case(args, proxy, endpoint, concurrency, index):
         ready(server, 'status' if feature else 'plaintext')
         # Validate the feature's actual operation before timed load begins.
         if feature:
-            response = subprocess.check_output(['curl', '--http1.1', '--silent', '--fail', '--max-time', '30',
+            response = subprocess.run(['curl', '--http1.1', '--silent', '--show-error', '--fail-with-body', '--max-time', '30',
                 '--cacert', '/certs/cert.pem', '--noproxy', '*', '--resolve', 'bench.test:18443:127.0.0.1',
                 '-X', 'POST', '-H', 'Content-Type: application/json', '--data', 'ok',
-                f'https://bench.test:18443/{endpoint}'])
-            payload = json.loads(response)
+                f'https://bench.test:18443/{endpoint}'], capture_output=True)
+            if response.returncode:
+                raise RuntimeError(f'feature preflight failed: {response.stdout.decode()} {response.stderr.decode()}')
+            payload = json.loads(response.stdout)
             if payload.get('ok') is not True or not payload.get('id'):
                 raise RuntimeError(f'feature correctness check failed: {payload}')
         argv = ['/build/loadgen', '-name', name, '-url', f'https://127.0.0.1:18443/{endpoint}',
@@ -227,7 +227,7 @@ def case(args, proxy, endpoint, concurrency, index):
         if load.returncode:
             raise RuntimeError(f'load generator exited {load.returncode}')
         result = json.loads((case_dir / 'load.json').read_text())
-        if not result['requests'] or sum(result['status_counts'].values()) != result['requests']:
+        if result['requests'] + result['errors'] <= 0 or sum(result['status_counts'].values()) != result['requests']:
             raise RuntimeError('invalid load result counts')
         if not feature and result['errors'] == 0 and set(result['status_counts']) == {'200'}:
             if result['bytes'] != 13 * result['requests']:
@@ -284,7 +284,8 @@ def main():
         os=platform.freedesktop_os_release(), cpu_model=next(line.split(':', 1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')),
         affinity=sorted(os.sched_getaffinity(0)), cpu_max=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),
         memory_max=Path('/sys/fs/cgroup/memory.max').read_text().strip(), swap_max=Path('/sys/fs/cgroup/memory.swap.max').read_text().strip(),
-        versions=versions, binaries={p.name: hashlib.file_digest(p.open('rb'), 'sha256').hexdigest() for p in Path('/build').iterdir() if p.is_file()},
+        versions=versions, packages=subprocess.check_output(['dpkg-query', '-W', '-f', '${Package} ${Version}\n'], text=True).splitlines(),
+        binaries={p.name: hashlib.file_digest(p.open('rb'), 'sha256').hexdigest() for p in Path('/build').iterdir() if p.is_file()},
         proxy_binaries={name: hashlib.file_digest(Path(shutil.which(name)).open('rb'), 'sha256').hexdigest() for name in ['nginx', 'haproxy', 'envoy']},
         runner_sha256=hashlib.file_digest(Path(__file__).open('rb'), 'sha256').hexdigest())
     write_json(OUT / 'metadata.json', metadata)
