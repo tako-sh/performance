@@ -1,0 +1,81 @@
+name: Full-server memory comparison
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - diagnostics/full-memory/**
+      - .github/workflows/memory.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: memory-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  memory:
+    # Standard Linux runners are free for this public performance repository.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      TAKO_REVISION: f0ed5d938a4f26f4c775336c8f16aa572fe20dae
+      OPENSSL_NO_VENDOR: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.3'
+          cache-dependency-path: diagnostics/full-memory/caddy/go.sum
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - name: Apply benchmark-only listener patch and test
+        working-directory: tako-source
+        run: |
+          git apply ../diagnostics/full-memory/tako-l4-buffer.patch
+          cargo test --locked -p tako-server proxy:: -j 2
+      - name: Build pinned binaries
+        run: |
+          mkdir -p build results/full-memory
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 2
+          cp tako-source/target/release/tako-server build/
+          CGO_ENABLED=0 go build -trimpath -o build/benchapp ./cmd/benchapp
+          CGO_ENABLED=0 go build -trimpath -o build/loadgen ./cmd/loadgen
+          (cd diagnostics/full-memory/caddy && CGO_ENABLED=0 go build -mod=readonly -trimpath -o ../../../build/caddy .)
+          chmod 755 build/*
+          {
+            echo "tako_revision=$TAKO_REVISION"
+            echo "performance_revision=$(git rev-parse HEAD)"
+            rustc --version
+            go version
+            sha256sum diagnostics/full-memory/tako-l4-buffer.patch
+          } > results/full-memory/build.txt
+      - name: Build isolated runner
+        run: docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Compare buffers and Caddy on 2 CPUs and 8 GiB
+        run: |
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/full-memory,dst=/results" \
+            tako-memory-runner
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-memory-${{ github.sha }}
+          path: |
+            results/full-memory/**/*.json
+            results/full-memory/build.txt
+          retention-days: 14
