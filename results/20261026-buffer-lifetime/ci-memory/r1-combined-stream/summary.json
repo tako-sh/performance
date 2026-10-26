@@ -1,0 +1,38 @@
+{
+  "name": "r1-combined-stream",
+  "variant": "combined",
+  "workload": "stream",
+  "repetition": 1,
+  "settings": {
+    "mode": "stream",
+    "workers": 2000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 63494,
+    "rss_kib": 66816,
+    "private_kib": 60180,
+    "cpu_seconds": 0.09
+  },
+  "load": {
+    "requests": 2000,
+    "errors": 0,
+    "duration_seconds": 13.734288382,
+    "requests_per_second": 0,
+    "payload_bytes": 262144000,
+    "latency_ms": {},
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "stream",
+    "error_samples": null
+  },
+  "peak_pss_kib": 348442,
+  "samples": 54,
+  "phase_median_pss_kib": 334294,
+  "phase_cpu_seconds": 0.040000000000000036,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.735815480000042
+}

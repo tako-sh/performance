@@ -1,0 +1,45 @@
+{
+  "name": "r3-idle-h2-upload",
+  "variant": "idle",
+  "workload": "h2-upload",
+  "repetition": 3,
+  "settings": {
+    "mode": "upload",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 66248,
+    "rss_kib": 69564,
+    "private_kib": 62940,
+    "cpu_seconds": 0.11
+  },
+  "load": {
+    "requests": 2182,
+    "errors": 0,
+    "duration_seconds": 15.09568652,
+    "requests_per_second": 144.5446020033013,
+    "payload_bytes": 2287992832,
+    "latency_ms": {
+      "p50": 214.871971,
+      "p95": 290.269025,
+      "p99": 308.77274
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "upload",
+    "error_samples": null
+  },
+  "peak_pss_kib": 86558,
+  "samples": 72,
+  "measured_cpu_seconds": 12.84,
+  "cpu_microseconds_per_success": 5884.509624197984,
+  "cpu_seconds_per_gib": 6.025737855178735,
+  "phase_median_pss_kib": 78332.0,
+  "phase_cpu_seconds": 12.530000000000001,
+  "phase_client_cpu_seconds": 11.239999999999998,
+  "phase_sample_seconds": 14.738923941999929
+}

@@ -50,6 +50,13 @@ PSS during that holding phase and verifies the established-connection count.
 This measures retained connection memory without saturating the upstream. It
 does not measure maximum throughput. Both modes run twice in reverse order in CI.
 
+Count unique socket identities (endpoints plus inode), not raw `/proc/net/tcp*`
+rows. The kernel's non-atomic table walk can repeat rows during unrelated socket
+churn. A controlled 20,000-socket reproduction produced 20,001–20,020 rows while
+always containing exactly 20,000 unique sockets. The counter regression tests
+run with `python3 diagnostics/full-memory/test_connections.py`. Keep original
+failed count validations in historical artifacts rather than rewriting them.
+
 The optional workflow-dispatch `stress` input runs 20,000 continuously active
 workers as well. Local runs overloaded the upstream and triggered health checks;
 those failing cases remain explicitly unsuccessful and are not capacity wins.

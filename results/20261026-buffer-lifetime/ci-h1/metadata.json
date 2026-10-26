@@ -1,0 +1,30 @@
+{
+  "arguments": {
+    "group": "h1",
+    "scenarios": null,
+    "variants": "baseline,idle,body,combined,caddy",
+    "repetitions": 3,
+    "smoke": false
+  },
+  "kernel": "6.17.0-1022-azure",
+  "architecture": "x86_64",
+  "cpu_max": "200000 100000",
+  "memory_max": "8589934592",
+  "swap_max": "0",
+  "network_limits": {
+    "net.ipv4.ip_local_port_range": "10240\t65535",
+    "net.ipv4.ip_local_reserved_ports": "18080,18443",
+    "net.core.somaxconn": "65535",
+    "net.ipv4.tcp_max_syn_backlog": "65535"
+  },
+  "runner_sha256": "0a0bef9656a0f474cda5e9a4093c9e977e2b2c977c8b8aeb22a5179afd8e248c",
+  "binaries": {
+    "build.txt": "71209cce4ed537ee46ad17066d4f305299d25029d2ddb102cacff1c4492d9d7b",
+    "buffer-load": "139063abde7678e6dcc2e74e9d0d453fddfd616882cc4ef234ec0da2b87490cf",
+    "tako-candidate": "bf09a0745e099104d8000e1a86bad97dd1b25f684429cbcafffd3df57cdc2c96",
+    "hold-connections": "8aa70a69e3700818b06ff3361204020aad92f2e9c2e3cf5179b9df1da9e6cd9b",
+    "benchapp": "a499728de9dcda9be991dc95d160aa9a4c42ed407f61653113352b411f6a7718",
+    "tako-server": "d8fc84577ecf8117d7c8571fafabc96fdde3afeffc295c673e1050fe33d8a7a0",
+    "caddy": "99cf2b1fac42c3dc10b70c11798f9cc8caa7f9b2c111957d7613f028103126a5"
+  }
+}

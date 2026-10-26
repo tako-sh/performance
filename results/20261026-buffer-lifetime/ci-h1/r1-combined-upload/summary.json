@@ -1,0 +1,45 @@
+{
+  "name": "r1-combined-upload",
+  "variant": "combined",
+  "workload": "upload",
+  "repetition": 1,
+  "settings": {
+    "mode": "upload",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65026,
+    "rss_kib": 68408,
+    "private_kib": 61652,
+    "cpu_seconds": 0.09
+  },
+  "load": {
+    "requests": 10031,
+    "errors": 0,
+    "duration_seconds": 15.055748951,
+    "requests_per_second": 666.257124281668,
+    "payload_bytes": 10518265856,
+    "latency_ms": {
+      "p50": 39.078481,
+      "p95": 82.760617,
+      "p99": 90.670429
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "upload",
+    "error_samples": null
+  },
+  "peak_pss_kib": 93506,
+  "samples": 68,
+  "measured_cpu_seconds": 13.579999999999998,
+  "cpu_microseconds_per_success": 1353.8032100488483,
+  "cpu_seconds_per_gib": 1.3862944870900207,
+  "phase_median_pss_kib": 82978,
+  "phase_cpu_seconds": 13.3,
+  "phase_client_cpu_seconds": 9.51,
+  "phase_sample_seconds": 14.801404534000028
+}

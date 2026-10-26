@@ -1,0 +1,45 @@
+{
+  "name": "r2-baseline-upload",
+  "variant": "baseline",
+  "workload": "upload",
+  "repetition": 2,
+  "settings": {
+    "mode": "upload",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64566,
+    "rss_kib": 67952,
+    "private_kib": 61188,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 9506,
+    "errors": 0,
+    "duration_seconds": 15.05171845,
+    "requests_per_second": 631.5557942156432,
+    "payload_bytes": 9967763456,
+    "latency_ms": {
+      "p50": 52.958422,
+      "p95": 86.024237,
+      "p99": 93.585952
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "upload",
+    "error_samples": null
+  },
+  "peak_pss_kib": 93530,
+  "samples": 66,
+  "measured_cpu_seconds": 13.61,
+  "cpu_microseconds_per_success": 1431.7273301073008,
+  "cpu_seconds_per_gib": 1.466088786029876,
+  "phase_median_pss_kib": 82148.0,
+  "phase_cpu_seconds": 13.290000000000001,
+  "phase_client_cpu_seconds": 9.27,
+  "phase_sample_seconds": 14.696274323000125
+}

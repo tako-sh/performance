@@ -49,13 +49,16 @@ def memory(pid):
 
 
 def established_connections():
-    count = 0
+    sockets = set()
     for table in ('tcp', 'tcp6'):
         for line in Path(f'/proc/net/{table}').read_text().splitlines()[1:]:
             fields = line.split()
             if fields[1].endswith(f':{18443:04X}') and fields[3] == '01':
-                count += 1
-    return count
+                # /proc's TCP walk is not atomic: concurrent socket churn can
+                # repeat rows. Include endpoints so inode-zero sockets remain
+                # distinct, and count each observed socket only once.
+                sockets.add((fields[1], fields[2], fields[9]))
+    return len(sockets)
 
 
 def stop(proc):

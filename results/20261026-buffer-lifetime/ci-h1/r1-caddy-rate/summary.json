@@ -1,0 +1,45 @@
+{
+  "name": "r1-caddy-rate",
+  "variant": "caddy",
+  "workload": "rate",
+  "repetition": 1,
+  "settings": {
+    "mode": "small",
+    "workers": 128,
+    "duration": 15,
+    "protocol": "h1",
+    "rate": 1000
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 56688,
+    "rss_kib": 56696,
+    "private_kib": 56688,
+    "cpu_seconds": 0.02
+  },
+  "load": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.000186996,
+    "requests_per_second": 999.9875337554092,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.781916,
+      "p95": 1.309026,
+      "p99": 1.380327
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 110024,
+  "samples": 72,
+  "measured_cpu_seconds": 3.76,
+  "cpu_microseconds_per_success": 250.66666666666666,
+  "phase_median_pss_kib": 109912,
+  "phase_cpu_seconds": 3.6700000000000004,
+  "phase_client_cpu_seconds": 2.92,
+  "phase_sample_seconds": 14.598574557999996
+}
