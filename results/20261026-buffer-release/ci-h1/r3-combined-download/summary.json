@@ -1,0 +1,45 @@
+{
+  "name": "r3-combined-download",
+  "variant": "combined",
+  "workload": "download",
+  "repetition": 3,
+  "settings": {
+    "mode": "download",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64664,
+    "rss_kib": 67988,
+    "private_kib": 61348,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 15216,
+    "errors": 0,
+    "duration_seconds": 15.050723729,
+    "requests_per_second": 1010.9812839552388,
+    "payload_bytes": 15955132416,
+    "latency_ms": {
+      "p50": 19.35971,
+      "p95": 69.667788,
+      "p99": 74.86043
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "download",
+    "error_samples": null
+  },
+  "peak_pss_kib": 140540,
+  "samples": 66,
+  "measured_cpu_seconds": 15.760000000000002,
+  "cpu_microseconds_per_success": 1035.7518401682441,
+  "cpu_seconds_per_gib": 1.060609884332282,
+  "phase_median_pss_kib": 106960,
+  "phase_cpu_seconds": 15.350000000000001,
+  "phase_client_cpu_seconds": 9.27,
+  "phase_sample_seconds": 14.693291754000029
+}

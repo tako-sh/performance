@@ -1,5 +1,14 @@
 # Tako Performance
 
+The [26 October production validation](results/20261026-buffer-release/README.md)
+measures the buffer reclamation merged into Tako master: **55.2% less retained
+memory with 20,000 held TLS connections**, and **42.0% less for uploads followed
+by streaming responses**, preserving 64 KiB transfer reads. All 188 complete
+correctness cases passed. The report includes longer paired and matched-rate
+checks, their uncertainty, and existing Caddy bulk-transfer advantages.
+Reproduce the pinned [production workflow](.github/workflows/buffer-release.yml)
+using the [validation guide](diagnostics/release-validation/README.md).
+
 The [full-server memory comparison](diagnostics/full-memory/README.md) runs Tako's
 64/32/16 KiB socket-buffer experiment and a Caddy control in the dedicated
 [GitHub Actions workflow](.github/workflows/memory.yml).

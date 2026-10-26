@@ -1,0 +1,38 @@
+{
+  "name": "r3-baseline-stream",
+  "variant": "baseline",
+  "workload": "stream",
+  "repetition": 3,
+  "settings": {
+    "mode": "stream",
+    "workers": 2000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65386,
+    "rss_kib": 68672,
+    "private_kib": 62108,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 2000,
+    "errors": 0,
+    "duration_seconds": 12.33719126,
+    "requests_per_second": 0,
+    "payload_bytes": 262144000,
+    "latency_ms": {},
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "stream",
+    "error_samples": null
+  },
+  "peak_pss_kib": 598926,
+  "samples": 49,
+  "phase_median_pss_kib": 598922,
+  "phase_cpu_seconds": 0.020000000000000018,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.724368387000027
+}

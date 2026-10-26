@@ -1,0 +1,45 @@
+{
+  "name": "r3-baseline-chunked",
+  "variant": "baseline",
+  "workload": "chunked",
+  "repetition": 3,
+  "settings": {
+    "mode": "chunked",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65208,
+    "rss_kib": 68536,
+    "private_kib": 61888,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 13456,
+    "errors": 0,
+    "duration_seconds": 15.007042473,
+    "requests_per_second": 896.6456931277054,
+    "payload_bytes": 14109638656,
+    "latency_ms": {
+      "p50": 24.371086,
+      "p95": 72.958632,
+      "p99": 79.207206
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "chunked",
+    "error_samples": null
+  },
+  "peak_pss_kib": 91924,
+  "samples": 68,
+  "measured_cpu_seconds": 14.320000000000002,
+  "cpu_microseconds_per_success": 1064.2092746730084,
+  "cpu_seconds_per_gib": 1.0897502972651607,
+  "phase_median_pss_kib": 84696,
+  "phase_cpu_seconds": 14.04,
+  "phase_client_cpu_seconds": 8.809999999999999,
+  "phase_sample_seconds": 14.749797253999986
+}

@@ -1,0 +1,44 @@
+{
+  "name": "r7-baseline-small",
+  "variant": "baseline",
+  "workload": "small",
+  "repetition": 7,
+  "settings": {
+    "mode": "small",
+    "workers": 64,
+    "duration": 60,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64230,
+    "rss_kib": 67560,
+    "private_kib": 60908,
+    "cpu_seconds": 0.11
+  },
+  "load": {
+    "requests": 361835,
+    "errors": 0,
+    "duration_seconds": 60.042358223,
+    "requests_per_second": 6026.3289235930515,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 5.853717,
+      "p95": 51.980033,
+      "p99": 55.795437
+    },
+    "handshakes": 320,
+    "handshake_total_ms": 4041.029489,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 80690,
+  "samples": 228,
+  "measured_cpu_seconds": 63.089999999999996,
+  "cpu_microseconds_per_success": 174.36124200257024,
+  "phase_median_pss_kib": 77190.0,
+  "phase_cpu_seconds": 62.39,
+  "phase_client_cpu_seconds": 29.39,
+  "phase_sample_seconds": 59.58563479600002
+}

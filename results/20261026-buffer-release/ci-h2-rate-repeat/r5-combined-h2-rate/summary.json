@@ -1,0 +1,45 @@
+{
+  "name": "r5-combined-h2-rate",
+  "variant": "combined",
+  "workload": "h2-rate",
+  "repetition": 5,
+  "settings": {
+    "mode": "small",
+    "workers": 128,
+    "duration": 60,
+    "protocol": "h2",
+    "rate": 1000
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64912,
+    "rss_kib": 68172,
+    "private_kib": 61660,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 60000,
+    "errors": 0,
+    "duration_seconds": 59.9994728,
+    "requests_per_second": 1000.0087867438729,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.794919,
+      "p95": 1.314078,
+      "p99": 1.414778
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 69396,
+  "samples": 251,
+  "measured_cpu_seconds": 13.700000000000001,
+  "cpu_microseconds_per_success": 228.33333333333337,
+  "phase_median_pss_kib": 68106.0,
+  "phase_cpu_seconds": 13.6,
+  "phase_client_cpu_seconds": 11.200000000000001,
+  "phase_sample_seconds": 59.60017983499995
+}

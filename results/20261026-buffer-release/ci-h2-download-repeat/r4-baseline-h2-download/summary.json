@@ -1,0 +1,45 @@
+{
+  "name": "r4-baseline-h2-download",
+  "variant": "baseline",
+  "workload": "h2-download",
+  "repetition": 4,
+  "settings": {
+    "mode": "download",
+    "workers": 32,
+    "duration": 60,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 66922,
+    "rss_kib": 70232,
+    "private_kib": 63620,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 34284,
+    "errors": 0,
+    "duration_seconds": 60.041473001,
+    "requests_per_second": 571.0053116023485,
+    "payload_bytes": 35949379584,
+    "latency_ms": {
+      "p50": 62.172459,
+      "p95": 83.271707,
+      "p99": 92.207036
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "download",
+    "error_samples": null
+  },
+  "peak_pss_kib": 109994,
+  "samples": 243,
+  "measured_cpu_seconds": 56.370000000000005,
+  "cpu_microseconds_per_success": 1644.2072103605183,
+  "cpu_seconds_per_gib": 1.6836681834091707,
+  "phase_median_pss_kib": 99856.0,
+  "phase_cpu_seconds": 55.99,
+  "phase_client_cpu_seconds": 50.36,
+  "phase_sample_seconds": 59.63976100699995
+}

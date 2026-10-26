@@ -1,0 +1,45 @@
+{
+  "name": "r2-baseline-h2-rate",
+  "variant": "baseline",
+  "workload": "h2-rate",
+  "repetition": 2,
+  "settings": {
+    "mode": "small",
+    "workers": 128,
+    "duration": 60,
+    "protocol": "h2",
+    "rate": 1000
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64974,
+    "rss_kib": 68280,
+    "private_kib": 61676,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 60000,
+    "errors": 0,
+    "duration_seconds": 60.000266905,
+    "requests_per_second": 999.9955516031217,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.790676,
+      "p95": 1.307301,
+      "p99": 1.406516
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 70094,
+  "samples": 251,
+  "measured_cpu_seconds": 13.65,
+  "cpu_microseconds_per_success": 227.5,
+  "phase_median_pss_kib": 69004.0,
+  "phase_cpu_seconds": 13.549999999999999,
+  "phase_client_cpu_seconds": 11.16,
+  "phase_sample_seconds": 59.590677708999976
+}
