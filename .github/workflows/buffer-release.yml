@@ -1,0 +1,149 @@
+name: Buffer release validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - diagnostics/release-validation/**
+      - .github/workflows/buffer-release.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: buffer-release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BASELINE_REVISION: 738e023e721cb6bfe63cda184b8e78ad7bf8d1c6
+  CANDIDATE_REVISION: 35c4234595be4e66fc86339c2a37a298653a4c63
+  OPENSSL_NO_VENDOR: '1'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.BASELINE_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.3'
+          cache-dependency-path: diagnostics/full-memory/caddy/go.sum
+      - name: Toolchains and libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tako-source/target
+          key: buffer-release-${{ runner.os }}-rust-1.99.1-${{ env.BASELINE_REVISION }}-${{ env.CANDIDATE_REVISION }}
+          restore-keys: |
+            buffer-release-${{ runner.os }}-rust-1.99.1-${{ env.BASELINE_REVISION }}-
+            tls-${{ runner.os }}-rust-1.99.1-
+            buffers-${{ runner.os }}-rust-1.99.1-
+      - name: Validate harness
+        run: |
+          go test ./cmd/benchapp ./diagnostics/buffer-lifetime/load
+          python3 diagnostics/full-memory/test_connections.py
+          python3 -m py_compile diagnostics/buffer-lifetime/*.py diagnostics/release-validation/*.py
+          bash -n diagnostics/buffer-lifetime/entrypoint.sh diagnostics/release-validation/entrypoint.sh
+      - name: Build unchanged master control
+        run: |
+          mkdir -p build
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-server
+      - name: Build and test production candidate
+        env:
+          CARGO_TARGET_DIR: ${{ github.workspace }}/tako-source/target
+        run: |
+          git -C tako-source fetch --depth=1 origin "$CANDIDATE_REVISION"
+          git -C tako-source checkout --detach "$CANDIDATE_REVISION"
+          cargo test --manifest-path tako-source/vendor/pingora-core/Cargo.toml --locked --no-default-features --features openssl --lib protocols:: -j 4
+          cargo test --manifest-path tako-source/vendor/pingora-core/Cargo.toml --locked --no-default-features --features openssl --lib listeners:: -j 4
+          cargo test --manifest-path tako-source/Cargo.toml --locked -p tako-server proxy:: -j 4
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-candidate
+          CGO_ENABLED=0 go build -trimpath -o build/benchapp ./cmd/benchapp
+          CGO_ENABLED=0 go build -trimpath -o build/buffer-load ./diagnostics/buffer-lifetime/load
+          CGO_ENABLED=0 go build -trimpath -o build/hold-connections ./diagnostics/full-memory/hold
+          (cd diagnostics/full-memory/caddy && CGO_ENABLED=0 go build -mod=readonly -trimpath -o ../../../build/caddy .)
+          chmod 755 build/*
+          {
+            echo "baseline_revision=$BASELINE_REVISION"
+            echo "candidate_revision=$CANDIDATE_REVISION"
+            echo "performance_revision=$(git rev-parse HEAD)"
+            rustc --version
+            go version
+            sha256sum build/{tako-server,tako-candidate,benchapp,buffer-load,hold-connections,caddy}
+          } > build/build.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: buffer-release-binaries
+          path: build/
+          retention-days: 7
+
+  compare:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [memory, h1, h2, small-repeat]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.CANDIDATE_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: buffer-release-binaries
+          path: build
+      - name: Build isolated runner
+        run: |
+          chmod 755 build/*
+          docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Compare current master and production candidate
+        env:
+          GROUP: ${{ matrix.group }}
+        run: |
+          mkdir -p results/buffer-release
+          cp build/build.txt results/buffer-release/
+          args=(--group "$GROUP" --repetitions 3 --variants baseline,combined,caddy)
+          if [[ "$GROUP" == small-repeat ]]; then
+            args=(--scenarios small --repetitions 8 --duration 60 --variants baseline,combined)
+          fi
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g --entrypoint bash \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/buffer-release,dst=/results" \
+            tako-memory-runner /perf/diagnostics/release-validation/entrypoint.sh "${args[@]}"
+      - name: Summarize
+        if: always()
+        run: |
+          if test -f results/buffer-release/summary.json; then
+            python3 diagnostics/buffer-lifetime/summarize.py results/buffer-release >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: buffer-release-${{ matrix.group }}-${{ github.sha }}
+          path: |
+            results/buffer-release/**/*.json
+            results/buffer-release/build.txt
+          retention-days: 14
