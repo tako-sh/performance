@@ -19,7 +19,7 @@ for group in ['memory','h1','h2','small-repeat','h2-download-repeat','h2-rate-re
    else:
     fields=[f"{s.mean(c['load']['requests_per_second'] for c in cases):,.2f}",*[f"{s.mean(c['load']['latency_ms'][q] for c in cases):,.3f}" for q in ['p95','p99']],f"{s.mean(c['cpu_microseconds_per_success'] for c in cases):,.2f}"]
    lines.append(f"| {group} | {workload} | {variant} | {len(cases)}/{len(cases)} | {memory:,.2f} | {' | '.join(fields)} |")
-(root/'details.md').write_text('\n'.join(lines)+'\n')
+(root/'details.md').write_text('\n'.join(lines).rstrip()+'\n')
 lines=['# Longer paired measurements', '', 'All measurements are 60 seconds after three seconds of warmup. Order alternates between baseline/candidate and candidate/baseline. No repetitions are excluded. Different groups use different runner hosts.', '']
 for group in ['small-repeat','h2-download-repeat','h2-rate-repeat','chunked-repeat','chunked-rate-repeat']:
  path=root/('ci-'+group)/'summary.json'
@@ -33,4 +33,4 @@ for group in ['small-repeat','h2-download-repeat','h2-rate-repeat','chunked-repe
   fields=[str(rep),f'{br:,.2f}',f'{cr:,.2f}',f'{100*(cr/br-1):+.2f}%',f"{b['cpu_microseconds_per_success']:.2f}",f"{c['cpu_microseconds_per_success']:.2f}",*[f"{case['load']['latency_ms'][q]:.3f}" for q in ['p95','p99'] for case in [b,c]]]
   lines.append('| '+' | '.join(fields)+' |')
  lines += ['']
-(root/'paired-details.md').write_text('\n'.join(lines)+'\n')
+(root/'paired-details.md').write_text('\n'.join(lines).rstrip()+'\n')
