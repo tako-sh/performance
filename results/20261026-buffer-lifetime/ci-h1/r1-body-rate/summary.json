@@ -1,0 +1,45 @@
+{
+  "name": "r1-body-rate",
+  "variant": "body",
+  "workload": "rate",
+  "repetition": 1,
+  "settings": {
+    "mode": "small",
+    "workers": 128,
+    "duration": 15,
+    "protocol": "h1",
+    "rate": 1000
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65098,
+    "rss_kib": 68480,
+    "private_kib": 61724,
+    "cpu_seconds": 0.09
+  },
+  "load": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 14.999707913,
+    "requests_per_second": 1000.019472845851,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.699,
+      "p95": 1.293074,
+      "p99": 1.347326
+    },
+    "handshakes": 15,
+    "handshake_total_ms": 14.519275,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 67534,
+  "samples": 72,
+  "measured_cpu_seconds": 2.78,
+  "cpu_microseconds_per_success": 185.33333333333334,
+  "phase_median_pss_kib": 66466,
+  "phase_cpu_seconds": 2.7199999999999998,
+  "phase_client_cpu_seconds": 2.9499999999999997,
+  "phase_sample_seconds": 14.628126608000002
+}

@@ -1,0 +1,45 @@
+{
+  "name": "r1-caddy-chunked",
+  "variant": "caddy",
+  "workload": "chunked",
+  "repetition": 1,
+  "settings": {
+    "mode": "chunked",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 53728,
+    "rss_kib": 53736,
+    "private_kib": 53728,
+    "cpu_seconds": 0.02
+  },
+  "load": {
+    "requests": 10786,
+    "errors": 0,
+    "duration_seconds": 15.012408126,
+    "requests_per_second": 718.4723403115933,
+    "payload_bytes": 11309940736,
+    "latency_ms": {
+      "p50": 31.563861,
+      "p95": 84.172697,
+      "p99": 222.806419
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "chunked",
+    "error_samples": null
+  },
+  "peak_pss_kib": 118136,
+  "samples": 70,
+  "measured_cpu_seconds": 15.419999999999998,
+  "cpu_microseconds_per_success": 1429.6310031522341,
+  "cpu_seconds_per_gib": 1.4639421472278877,
+  "phase_median_pss_kib": 117852.0,
+  "phase_cpu_seconds": 14.980000000000002,
+  "phase_client_cpu_seconds": 8.71,
+  "phase_sample_seconds": 14.601508181999975
+}

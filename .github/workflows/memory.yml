@@ -60,6 +60,7 @@ jobs:
           cargo test --locked -p tako-server proxy:: -j 4
       - name: Build pinned binaries
         run: |
+          python3 diagnostics/full-memory/test_connections.py
           mkdir -p build results/full-memory
           cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
           cp tako-source/target/release/tako-server build/

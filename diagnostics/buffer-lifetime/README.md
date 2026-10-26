@@ -5,6 +5,9 @@ same pinned baseline as the earlier fixed-buffer investigation. Production Tako
 is unchanged. The [workflow](../../.github/workflows/buffers.yml) lives in this
 performance repository and uses free standard GitHub runners.
 
+See the [measured results](../../results/20261026-buffer-lifetime/README.md) for
+memory savings, the incomplete performance acceptance and retained failures.
+
 ## Candidates
 
 - **baseline:** unchanged Tako source and Pingora dependency, built before the

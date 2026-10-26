@@ -1,0 +1,40 @@
+{
+  "name": "r2-idle-held",
+  "variant": "idle",
+  "workload": "held",
+  "repetition": 2,
+  "settings": {
+    "mode": "held",
+    "workers": 20000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 63754,
+    "rss_kib": 67060,
+    "private_kib": 60456,
+    "cpu_seconds": 0.11
+  },
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 96.897332209,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "peak_pss_kib": 1041846,
+  "samples": 313,
+  "phase_median_pss_kib": 1041590.0,
+  "phase_cpu_seconds": 0.04000000000000625,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.749088265999944,
+  "held_connections": [
+    20000
+  ]
+}

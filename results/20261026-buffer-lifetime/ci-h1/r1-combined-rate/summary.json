@@ -1,0 +1,45 @@
+{
+  "name": "r1-combined-rate",
+  "variant": "combined",
+  "workload": "rate",
+  "repetition": 1,
+  "settings": {
+    "mode": "small",
+    "workers": 128,
+    "duration": 15,
+    "protocol": "h1",
+    "rate": 1000
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64890,
+    "rss_kib": 68124,
+    "private_kib": 61664,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.00009136,
+    "requests_per_second": 999.9939093704293,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.69571,
+      "p95": 1.291783,
+      "p99": 1.362182
+    },
+    "handshakes": 15,
+    "handshake_total_ms": 14.171721,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 67242,
+  "samples": 72,
+  "measured_cpu_seconds": 2.78,
+  "cpu_microseconds_per_success": 185.33333333333334,
+  "phase_median_pss_kib": 66542,
+  "phase_cpu_seconds": 2.7199999999999998,
+  "phase_client_cpu_seconds": 2.93,
+  "phase_sample_seconds": 14.627714880999974
+}

@@ -7,6 +7,8 @@ The [full-server memory comparison](diagnostics/full-memory/README.md) runs Tako
 The [buffer lifetime experiments](diagnostics/buffer-lifetime/README.md) test idle
 socket-buffer release and completed request-body release against unchanged Tako
 and Caddy, including HTTP/2, bulk transfers, and streaming responses.
+The [26 October investigation](results/20261026-buffer-lifetime/README.md) records
+the memory savings, performance limitations and socket-count correction.
 
 Repeatable benchmarks for Tako, nginx, Caddy, HAProxy, and Envoy.
 
