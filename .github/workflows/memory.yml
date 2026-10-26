@@ -1,0 +1,134 @@
+name: Full-server memory comparison
+
+on:
+  workflow_dispatch:
+    inputs:
+      stress:
+        description: Also run the 20k-worker saturation test (may fail health checks)
+        type: boolean
+        default: false
+  pull_request:
+    paths:
+      - diagnostics/full-memory/**
+      - .github/workflows/memory.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: memory-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  memory:
+    # Standard Linux runners are free for this public performance repository.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      TAKO_REVISION: f0ed5d938a4f26f4c775336c8f16aa572fe20dae
+      OPENSSL_NO_VENDOR: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.3'
+          cache-dependency-path: diagnostics/full-memory/caddy/go.sum
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - uses: actions/cache/restore@v4
+        id: cargo-cache
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tako-source/target
+          key: memory-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-${{ hashFiles('diagnostics/full-memory/tako-l4-buffer.patch') }}
+      - name: Apply benchmark-only listener patch and test
+        working-directory: tako-source
+        run: |
+          git apply ../diagnostics/full-memory/tako-l4-buffer.patch
+          cargo test --locked -p tako-server proxy:: -j 4
+      - name: Build pinned binaries
+        run: |
+          python3 diagnostics/full-memory/test_connections.py
+          mkdir -p build results/full-memory
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/
+          CGO_ENABLED=0 go build -trimpath -o build/benchapp ./cmd/benchapp
+          CGO_ENABLED=0 go build -trimpath -o build/loadgen ./cmd/loadgen
+          CGO_ENABLED=0 go build -trimpath -o build/hold-connections ./diagnostics/full-memory/hold
+          (cd diagnostics/full-memory/caddy && CGO_ENABLED=0 go build -mod=readonly -trimpath -o ../../../build/caddy .)
+          chmod 755 build/*
+          {
+            echo "tako_revision=$TAKO_REVISION"
+            echo "performance_revision=$(git rev-parse HEAD)"
+            rustc --version
+            go version
+            sha256sum diagnostics/full-memory/tako-l4-buffer.patch
+          } > results/full-memory/build.txt
+      - uses: actions/cache/save@v4
+        if: steps.cargo-cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tako-source/target
+          key: ${{ steps.cargo-cache.outputs.cache-primary-key }}
+      - name: Build isolated runner
+        run: docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Compare active traffic at 5k workers
+        id: active
+        run: |
+          mkdir -p results/full-memory/active
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/full-memory/active,dst=/results" \
+            tako-memory-runner --concurrency 5000
+      - name: Compare 20k exercised connections held open
+        if: ${{ !cancelled() && (steps.active.outcome == 'success' || steps.active.outcome == 'failure') }}
+        run: |
+          mkdir -p results/full-memory/held
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/full-memory/held,dst=/results" \
+            tako-memory-runner --mode held --concurrency 20000
+      - name: Optional 20k-worker saturation test
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.stress }}
+        run: |
+          mkdir -p results/full-memory/stress
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/full-memory/stress,dst=/results" \
+            tako-memory-runner --concurrency 20000
+      - name: Summarize completed cases
+        if: always()
+        run: |
+          for run in results/full-memory/active results/full-memory/held results/full-memory/stress; do
+            if test -f "$run/summary.json"; then
+              python3 diagnostics/full-memory/summarize.py "$run" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-memory-${{ github.sha }}
+          path: |
+            results/full-memory/**/*.json
+            results/full-memory/build.txt
+          retention-days: 14

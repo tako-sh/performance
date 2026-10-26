@@ -1,0 +1,41 @@
+{
+  "name": "r3-body-held",
+  "variant": "body",
+  "workload": "held",
+  "repetition": 3,
+  "settings": {
+    "mode": "held",
+    "workers": 20000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64760,
+    "rss_kib": 68088,
+    "private_kib": 61440,
+    "cpu_seconds": 0.1
+  },
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 96.37108405,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "peak_pss_kib": 2321424,
+  "samples": 312,
+  "phase_median_pss_kib": 2321424.0,
+  "phase_cpu_seconds": 0.030000000000001137,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.847515354000052,
+  "held_connections": [
+    20000,
+    20000
+  ]
+}

@@ -1,0 +1,353 @@
+[
+  {
+    "name": "r1-tako-64-c20000",
+    "mode": "held",
+    "variant": "tako-64",
+    "concurrency": 20000,
+    "repetition": 1,
+    "baseline": {
+      "pss_kib": 52954,
+      "rss_kib": 56428,
+      "private_kib": 49488,
+      "cpu_seconds": 0.03
+    },
+    "after_close": {
+      "pss_kib": 2312390,
+      "rss_kib": 2315864,
+      "private_kib": 2308924,
+      "cpu_seconds": 26.2
+    },
+    "peak": {
+      "pss_kib": 2313650,
+      "rss_kib": 2317124,
+      "private_kib": 2310184
+    },
+    "process_cpu_seconds": 26.169999999999998,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 34.502976153,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 2312966.0,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-tako-32-c20000",
+    "mode": "held",
+    "variant": "tako-32",
+    "concurrency": 20000,
+    "repetition": 1,
+    "baseline": {
+      "pss_kib": 53046,
+      "rss_kib": 56520,
+      "private_kib": 49580,
+      "cpu_seconds": 0.04
+    },
+    "after_close": {
+      "pss_kib": 1672826,
+      "rss_kib": 1676300,
+      "private_kib": 1669360,
+      "cpu_seconds": 24.12
+    },
+    "peak": {
+      "pss_kib": 1672958,
+      "rss_kib": 1676432,
+      "private_kib": 1669492
+    },
+    "process_cpu_seconds": 24.080000000000002,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 33.273442624,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 1672958.0,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-tako-16-c20000",
+    "mode": "held",
+    "variant": "tako-16",
+    "concurrency": 20000,
+    "repetition": 1,
+    "baseline": {
+      "pss_kib": 52018,
+      "rss_kib": 55584,
+      "private_kib": 48460,
+      "cpu_seconds": 0.05
+    },
+    "after_close": {
+      "pss_kib": 1351162,
+      "rss_kib": 1354728,
+      "private_kib": 1347604,
+      "cpu_seconds": 24.22
+    },
+    "peak": {
+      "pss_kib": 1352134,
+      "rss_kib": 1355700,
+      "private_kib": 1348576
+    },
+    "process_cpu_seconds": 24.16,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 33.082785031,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 1352058,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-caddy-c20000",
+    "mode": "held",
+    "variant": "caddy",
+    "concurrency": 20000,
+    "repetition": 1,
+    "baseline": {
+      "pss_kib": 50568,
+      "rss_kib": 50576,
+      "private_kib": 50568,
+      "cpu_seconds": 0.02
+    },
+    "after_close": {
+      "pss_kib": 1051672,
+      "rss_kib": 1051680,
+      "private_kib": 1051672,
+      "cpu_seconds": 42.82
+    },
+    "peak": {
+      "pss_kib": 1065020,
+      "rss_kib": 1065028,
+      "private_kib": 1065020
+    },
+    "process_cpu_seconds": 42.8,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 44.422163094,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 1051668,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r2-caddy-c20000",
+    "mode": "held",
+    "variant": "caddy",
+    "concurrency": 20000,
+    "repetition": 2,
+    "baseline": {
+      "pss_kib": 50988,
+      "rss_kib": 50996,
+      "private_kib": 50988,
+      "cpu_seconds": 0.03
+    },
+    "after_close": {
+      "pss_kib": 1059620,
+      "rss_kib": 1059628,
+      "private_kib": 1059620,
+      "cpu_seconds": 46.17
+    },
+    "peak": {
+      "pss_kib": 1121628,
+      "rss_kib": 1121636,
+      "private_kib": 1121628
+    },
+    "process_cpu_seconds": 46.14,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 46.608243392,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": false,
+    "held_pss_kib": 1059580,
+    "held_connections": [
+      20000,
+      289
+    ]
+  },
+  {
+    "name": "r2-tako-16-c20000",
+    "mode": "held",
+    "variant": "tako-16",
+    "concurrency": 20000,
+    "repetition": 2,
+    "baseline": {
+      "pss_kib": 53454,
+      "rss_kib": 56956,
+      "private_kib": 49960,
+      "cpu_seconds": 0.04
+    },
+    "after_close": {
+      "pss_kib": 1351662,
+      "rss_kib": 1355164,
+      "private_kib": 1348168,
+      "cpu_seconds": 26.6
+    },
+    "peak": {
+      "pss_kib": 1351662,
+      "rss_kib": 1355164,
+      "private_kib": 1348168
+    },
+    "process_cpu_seconds": 26.560000000000002,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 35.081642141,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 1350570,
+    "held_connections": [
+      20000
+    ]
+  },
+  {
+    "name": "r2-tako-32-c20000",
+    "mode": "held",
+    "variant": "tako-32",
+    "concurrency": 20000,
+    "repetition": 2,
+    "baseline": {
+      "pss_kib": 52640,
+      "rss_kib": 56144,
+      "private_kib": 49144,
+      "cpu_seconds": 0.04
+    },
+    "after_close": {
+      "pss_kib": 1671852,
+      "rss_kib": 1675356,
+      "private_kib": 1668356,
+      "cpu_seconds": 22.95
+    },
+    "peak": {
+      "pss_kib": 1674156,
+      "rss_kib": 1677660,
+      "private_kib": 1670660
+    },
+    "process_cpu_seconds": 22.900000000000002,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 32.139935175,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 1673708.0,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r2-tako-64-c20000",
+    "mode": "held",
+    "variant": "tako-64",
+    "concurrency": 20000,
+    "repetition": 2,
+    "baseline": {
+      "pss_kib": 51294,
+      "rss_kib": 54768,
+      "private_kib": 47828,
+      "cpu_seconds": 0.04
+    },
+    "after_close": {
+      "pss_kib": 2307930,
+      "rss_kib": 2311404,
+      "private_kib": 2304464,
+      "cpu_seconds": 25.73
+    },
+    "peak": {
+      "pss_kib": 2311018,
+      "rss_kib": 2314492,
+      "private_kib": 2307552
+    },
+    "process_cpu_seconds": 25.69,
+    "samples_include_warmup": true,
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 34.424993137,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "success": true,
+    "held_pss_kib": 2310122.0,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  }
+]

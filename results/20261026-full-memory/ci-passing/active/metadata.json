@@ -1,0 +1,31 @@
+{
+  "kernel": "6.17.0-1022-azure",
+  "architecture": "x86_64",
+  "runner_sha256": "5a602ad0cab609d42c1a21a18a4b3bf5de3aa37935bff7ad3c857b53803e42ec",
+  "cpu_max": "200000 100000",
+  "memory_max": "8589934592",
+  "swap_max": "0",
+  "network_limits": {
+    "net.ipv4.ip_local_port_range": "10240\t65535",
+    "net.ipv4.ip_local_reserved_ports": "18080,18443",
+    "net.ipv4.tcp_tw_reuse": "2",
+    "net.core.somaxconn": "65535",
+    "net.ipv4.tcp_max_syn_backlog": "65535"
+  },
+  "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+  "binaries": {
+    "hold-connections": "bbf80f00ec931ecaea5f7cfad25eee57131aec5acbda1dec527e236865ed52af",
+    "loadgen": "6e56b351e1aa1e2f74610246502801047d7b59a75e840eb1b7333a61823fadd4",
+    "benchapp": "71c58e4475669231a1c9e3cab1a02611367f4f40149c66d29af780665e0cf9fb",
+    "tako-server": "1694334ae1d4b203c0171f631142d0e7a30f508b954b3f49d2f14d338b36e3f5",
+    "caddy": "d56606b0a78a7911450231828e6cb3acbf2d6e31f96d258a398719bb408d6e8f"
+  },
+  "arguments": {
+    "mode": "active",
+    "concurrency": "5000",
+    "variants": "tako-64,tako-32,tako-16,caddy",
+    "repetitions": 2,
+    "warmup": 5,
+    "duration": 20
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "tako_revision": "f0ed5d938a4f26f4c775336c8f16aa572fe20dae",
+  "performance_revision": "cd1ce9e6125c991ca5138e8bfb1f8b86a72accc8",
+  "tako_patch_sha256": "1f7021e9740c44b42ddfa9970aeb85c3ea7495e4f3ae93e4621afedae5412389",
+  "rust": "1.99.1",
+  "go": "1.26.3",
+  "build_openssl": "3.5.7",
+  "libvips": "pyvips-binary 8.18.7",
+  "note": "Local full-server experiment. Native library bundle differs from the CI distribution build. Initial series intentionally stopped after detecting source-port exhaustion; complete cases only."
+}

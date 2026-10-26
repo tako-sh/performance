@@ -1,0 +1,44 @@
+{
+  "name": "r1-caddy-c20000",
+  "mode": "held",
+  "variant": "caddy",
+  "concurrency": 20000,
+  "repetition": 1,
+  "baseline": {
+    "pss_kib": 50568,
+    "rss_kib": 50576,
+    "private_kib": 50568,
+    "cpu_seconds": 0.02
+  },
+  "after_close": {
+    "pss_kib": 1051672,
+    "rss_kib": 1051680,
+    "private_kib": 1051672,
+    "cpu_seconds": 42.82
+  },
+  "peak": {
+    "pss_kib": 1065020,
+    "rss_kib": 1065028,
+    "private_kib": 1065020
+  },
+  "process_cpu_seconds": 42.8,
+  "samples_include_warmup": true,
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 44.422163094,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "success": true,
+  "held_pss_kib": 1051668,
+  "held_connections": [
+    20000,
+    20000
+  ]
+}

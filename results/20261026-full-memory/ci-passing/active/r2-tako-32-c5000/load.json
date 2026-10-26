@@ -1,0 +1,29 @@
+{
+  "name": "r2-tako-32-c5000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 20.694390364,
+  "concurrency": 5000,
+  "requests": 78109,
+  "errors": 0,
+  "bytes": 1015417,
+  "requests_per_sec": 3774.4044944604198,
+  "bytes_per_sec": 49067.25842798546,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 8679.191163,
+    "mean": 1290.217196,
+    "min": 9.585459,
+    "p50": 939.49749,
+    "p90": 2011.76974,
+    "p95": 4761.530206,
+    "p99": 7514.172794
+  },
+  "status_counts": {
+    "200": 78109
+  },
+  "started_at": "2026-10-26T06:22:03Z"
+}

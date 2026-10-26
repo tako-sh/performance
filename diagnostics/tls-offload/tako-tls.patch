@@ -1,0 +1,43 @@
+diff --git a/tako-server/src/proxy/server.rs b/tako-server/src/proxy/server.rs
+index b59cadcb..2bb65c44 100644
+--- a/tako-server/src/proxy/server.rs
++++ b/tako-server/src/proxy/server.rs
+@@ -310,6 +310,7 @@ pub(crate) fn create_tls_settings(
+             })?;
+ 
+         tls_settings.enable_h2();
++        configure_benchmark_tls_offload(&mut tls_settings);
+ 
+         tracing::info!(
+             cert_path = %cert.cert_path.display(),
+@@ -328,6 +329,7 @@ pub(crate) fn create_tls_settings(
+         })?;
+ 
+         tls_settings.enable_h2();
++        configure_benchmark_tls_offload(&mut tls_settings);
+ 
+         tracing::info!("TLS enabled with SNI-based certificate selection");
+ 
+@@ -355,6 +357,7 @@ pub(crate) fn create_tls_settings(
+             })?;
+ 
+         tls_settings.enable_h2();
++        configure_benchmark_tls_offload(&mut tls_settings);
+ 
+         tracing::info!(
+             cert_path = %default_cert.display(),
+@@ -401,3 +404,14 @@ mod tests {
+         assert_eq!(conf.max_retries, 1);
+     }
+ }
++
++// Benchmark-only setting; this patch is kept in the performance repository.
++fn configure_benchmark_tls_offload(settings: &mut TlsSettings) {
++    let threads = match std::env::var("TAKO_BENCH_TLS_OFFLOAD").as_deref() {
++        Err(_) | Ok("0") => return,
++        Ok("1") => 1,
++        Ok("2") => 2,
++        _ => panic!("invalid benchmark TLS offload thread count"),
++    };
++    settings.set_offload_threadpool(1, threads);
++}

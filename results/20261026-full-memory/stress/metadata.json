@@ -1,0 +1,27 @@
+{
+  "kernel": "6.18.55",
+  "architecture": "x86_64",
+  "cpu_max": "200000 100000",
+  "memory_max": "8589934592",
+  "swap_max": "0",
+  "network_limits": {
+    "net.ipv4.ip_local_port_range": "10240\t65535",
+    "net.ipv4.tcp_tw_reuse": "2",
+    "net.core.somaxconn": "65535",
+    "net.ipv4.tcp_max_syn_backlog": "65535"
+  },
+  "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+  "binaries": {
+    "loadgen": "724f6a5f547a3167d7cf63f43075b4dcb9cd772835a58acf22204dd0e574a481",
+    "caddy": "48c9811f8319d4f12dc05bf15cff106ec9c208c5af1e63317388c5375ef9f8d9",
+    "tako-server": "7888aef9aeec3092af8beffa609bb95abc952fd593e3b1584d7ca546a6fabee9",
+    "benchapp": "2304cfe6c0ec7d4772569324a72816d3be1ea1cb4de54a350da947f2d0d2ecaf"
+  },
+  "arguments": {
+    "concurrency": "20000",
+    "variants": "tako-64,tako-32,tako-16,caddy",
+    "repetitions": 2,
+    "warmup": 5,
+    "duration": 20
+  }
+}

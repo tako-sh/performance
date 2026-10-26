@@ -1,0 +1,8 @@
+[package]
+name = "buffer-lifetime-prototype"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+tokio = { version = "=1.53.1", features = ["io-util", "macros", "rt", "sync"] }

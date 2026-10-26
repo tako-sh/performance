@@ -1,0 +1,45 @@
+{
+  "name": "r2-combined-churn",
+  "variant": "combined",
+  "workload": "churn",
+  "repetition": 2,
+  "settings": {
+    "mode": "small",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1",
+    "churn": true
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65038,
+    "rss_kib": 68272,
+    "private_kib": 61812,
+    "cpu_seconds": 0.09
+  },
+  "load": {
+    "requests": 18130,
+    "errors": 0,
+    "duration_seconds": 15.010914901,
+    "requests_per_second": 1207.7878077099892,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 17.214435,
+      "p95": 59.284417,
+      "p99": 62.88259
+    },
+    "handshakes": 18130,
+    "handshake_total_ms": 220251.927318,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 71674,
+  "samples": 69,
+  "measured_cpu_seconds": 17.71,
+  "cpu_microseconds_per_success": 976.8339768339769,
+  "phase_median_pss_kib": 71092.0,
+  "phase_cpu_seconds": 17.09,
+  "phase_client_cpu_seconds": 9.91,
+  "phase_sample_seconds": 14.549362493999979
+}

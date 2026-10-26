@@ -1,0 +1,23 @@
+{
+  "arguments": {
+    "repetitions": 4,
+    "duration": 15,
+    "rates": "0,1500,2500",
+    "variants": "baseline,offload1,offload2,caddy",
+    "smoke": false
+  },
+  "kernel": "6.17.0-1022-azure",
+  "architecture": "x86_64",
+  "cpu_max": "200000 100000",
+  "memory_max": "8589934592",
+  "swap_max": "0",
+  "runner_sha256": "4ca22f8c6feff2c51db2c564ef11c4a3a89d9ddb794d587c147f70ec504bb60b",
+  "binaries": {
+    "build.txt": "27b8ffe79a8f3b3c1f369c597337b389a8f9ee77154f6f648431243040c3d9b1",
+    "buffer-load": "1181b88f77f76ea833958def80038ff80383d9dcf24b873842c1f25cd62affaa",
+    "tako-candidate": "ce671ee08bcdc83bdeb9f11c8c660e1341c918031b7787addb3cfcab7f909b88",
+    "benchapp": "da8241605ed30fe77ed345dea931b0f6e17b98830cf0f036bf8a1b2e2fe6f4b4",
+    "tako-server": "7a8412a2f252cc7a971a38f2ae2c46eb56260179f570355f3b3a697e3708aa37",
+    "caddy": "9c3f90d027ebe6c82dd190b52df1aa06c22cc6bc3048a4e31191f750ccf885cf"
+  }
+}

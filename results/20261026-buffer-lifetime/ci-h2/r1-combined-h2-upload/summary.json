@@ -1,0 +1,45 @@
+{
+  "name": "r1-combined-h2-upload",
+  "variant": "combined",
+  "workload": "h2-upload",
+  "repetition": 1,
+  "settings": {
+    "mode": "upload",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64618,
+    "rss_kib": 67864,
+    "private_kib": 61380,
+    "cpu_seconds": 0.09
+  },
+  "load": {
+    "requests": 2226,
+    "errors": 0,
+    "duration_seconds": 15.103700937,
+    "requests_per_second": 147.38109614888492,
+    "payload_bytes": 2334130176,
+    "latency_ms": {
+      "p50": 211.173481,
+      "p95": 283.153399,
+      "p99": 302.914713
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "upload",
+    "error_samples": null
+  },
+  "peak_pss_kib": 84590,
+  "samples": 72,
+  "measured_cpu_seconds": 12.88,
+  "cpu_microseconds_per_success": 5786.163522012579,
+  "cpu_seconds_per_gib": 5.92503144654088,
+  "phase_median_pss_kib": 79390.0,
+  "phase_cpu_seconds": 12.46,
+  "phase_client_cpu_seconds": 11.26,
+  "phase_sample_seconds": 14.642624030000036
+}

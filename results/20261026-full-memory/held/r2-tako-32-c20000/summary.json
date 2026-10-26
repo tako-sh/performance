@@ -1,0 +1,44 @@
+{
+  "name": "r2-tako-32-c20000",
+  "mode": "held",
+  "variant": "tako-32",
+  "concurrency": 20000,
+  "repetition": 2,
+  "baseline": {
+    "pss_kib": 52640,
+    "rss_kib": 56144,
+    "private_kib": 49144,
+    "cpu_seconds": 0.04
+  },
+  "after_close": {
+    "pss_kib": 1671852,
+    "rss_kib": 1675356,
+    "private_kib": 1668356,
+    "cpu_seconds": 22.95
+  },
+  "peak": {
+    "pss_kib": 1674156,
+    "rss_kib": 1677660,
+    "private_kib": 1670660
+  },
+  "process_cpu_seconds": 22.900000000000002,
+  "samples_include_warmup": true,
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 32.139935175,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "success": true,
+  "held_pss_kib": 1673708.0,
+  "held_connections": [
+    20000,
+    20000
+  ]
+}

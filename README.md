@@ -1,5 +1,19 @@
 # Tako Performance
 
+The [full-server memory comparison](diagnostics/full-memory/README.md) runs Tako's
+64/32/16 KiB socket-buffer experiment and a Caddy control in the dedicated
+[GitHub Actions workflow](.github/workflows/memory.yml).
+
+The [buffer lifetime experiments](diagnostics/buffer-lifetime/README.md) test idle
+socket-buffer release and completed request-body release against unchanged Tako
+and Caddy, including HTTP/2, bulk transfers, and streaming responses.
+The [26 October investigation](results/20261026-buffer-lifetime/README.md) records
+the memory savings, performance limitations and socket-count correction.
+
+The [TLS offload investigation](results/20261026-tls-offload/README.md) compares
+established-request latency, completed handshake throughput and memory after
+profiling found handshake interference.
+
 Repeatable benchmarks for Tako, nginx, Caddy, HAProxy, and Envoy.
 
 See [RESULTS.md](RESULTS.md) for the baseline, high-load follow-up, raw result

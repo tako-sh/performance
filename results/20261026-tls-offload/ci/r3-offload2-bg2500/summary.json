@@ -1,0 +1,46 @@
+{
+  "name": "r3-offload2-bg2500",
+  "variant": "offload2",
+  "background_rate": 2500,
+  "repetition": 3,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.037053471,
+    "requests_per_second": 997.535855606854,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 14.446188,
+      "p95": 55.126881,
+      "p99": 64.176481
+    },
+    "handshakes": 105,
+    "handshake_total_ms": 7930.477257,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": {
+    "requests": 37500,
+    "errors": 0,
+    "duration_seconds": 52.871674041,
+    "requests_per_second": 709.2644725211492,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 20671.166473,
+      "p95": 36180.785037,
+      "p99": 37528.141859
+    },
+    "handshakes": 37500,
+    "handshake_total_ms": 1665494.633519,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "success": true,
+  "peak_pss_kib": 93464,
+  "median_pss_kib": 91892,
+  "threads": 14,
+  "measured_cpu_seconds": 69.07000000000001,
+  "cpu_microseconds_per_total_request": 1315.6190476190477
+}

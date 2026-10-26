@@ -1,0 +1,45 @@
+{
+  "name": "r1-idle-h2-download",
+  "variant": "idle",
+  "workload": "h2-download",
+  "repetition": 1,
+  "settings": {
+    "mode": "download",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 64130,
+    "rss_kib": 67376,
+    "private_kib": 60892,
+    "cpu_seconds": 0.09
+  },
+  "load": {
+    "requests": 12755,
+    "errors": 0,
+    "duration_seconds": 15.049178102,
+    "requests_per_second": 847.5545915896158,
+    "payload_bytes": 13374586880,
+    "latency_ms": {
+      "p50": 26.062009,
+      "p95": 71.455689,
+      "p99": 77.40085
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "download",
+    "error_samples": null
+  },
+  "peak_pss_kib": 158218,
+  "samples": 66,
+  "measured_cpu_seconds": 15.76,
+  "cpu_microseconds_per_success": 1235.5938847510781,
+  "cpu_seconds_per_gib": 1.265248137985104,
+  "phase_median_pss_kib": 132784.0,
+  "phase_cpu_seconds": 15.48,
+  "phase_client_cpu_seconds": 9.600000000000001,
+  "phase_sample_seconds": 14.785745669999983
+}

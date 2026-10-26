@@ -1,0 +1,1185 @@
+[
+  {
+    "name": "r1-baseline-held",
+    "variant": "baseline",
+    "workload": "held",
+    "repetition": 1,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 66326,
+      "rss_kib": 69636,
+      "private_kib": 63024,
+      "cpu_seconds": 0.06
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 95.745077007,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 2328930,
+    "samples": 316,
+    "phase_median_pss_kib": 2328930.0,
+    "phase_cpu_seconds": 0.04999999999999716,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.854299337000015,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-idle-held",
+    "variant": "idle",
+    "workload": "held",
+    "repetition": 1,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63662,
+      "rss_kib": 66992,
+      "private_kib": 60340,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 97.875046566,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1038582,
+    "samples": 309,
+    "phase_median_pss_kib": 1038546.0,
+    "phase_cpu_seconds": 0.04000000000000625,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.85787641799999,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-body-held",
+    "variant": "body",
+    "workload": "held",
+    "repetition": 1,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64032,
+      "rss_kib": 67328,
+      "private_kib": 60744,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 97.40549701,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 2320872,
+    "samples": 317,
+    "phase_median_pss_kib": 2320368.0,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.835705763999954,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-combined-held",
+    "variant": "combined",
+    "workload": "held",
+    "repetition": 1,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65072,
+      "rss_kib": 68356,
+      "private_kib": 61796,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 97.003388557,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1045280,
+    "samples": 312,
+    "phase_median_pss_kib": 1043220.0,
+    "phase_cpu_seconds": 0.04999999999999716,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.874287581000033,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-caddy-held",
+    "variant": "caddy",
+    "workload": "held",
+    "repetition": 1,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54464,
+      "rss_kib": 54472,
+      "private_kib": 54464,
+      "cpu_seconds": 0.04
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 98.801039159,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1069824,
+    "samples": 348,
+    "phase_median_pss_kib": 1069824,
+    "phase_cpu_seconds": 0.0,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.969843889000003,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r1-baseline-stream",
+    "variant": "baseline",
+    "workload": "stream",
+    "repetition": 1,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63474,
+      "rss_kib": 66800,
+      "private_kib": 60156,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.751675716,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 587982,
+    "samples": 54,
+    "phase_median_pss_kib": 580562,
+    "phase_cpu_seconds": 0.02999999999999936,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.759535368000002
+  },
+  {
+    "name": "r1-idle-stream",
+    "variant": "idle",
+    "workload": "stream",
+    "repetition": 1,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63742,
+      "rss_kib": 67012,
+      "private_kib": 60480,
+      "cpu_seconds": 0.09
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.715970712,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 454962,
+    "samples": 54,
+    "phase_median_pss_kib": 453844,
+    "phase_cpu_seconds": 0.03000000000000025,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.724288953000041
+  },
+  {
+    "name": "r1-body-stream",
+    "variant": "body",
+    "workload": "stream",
+    "repetition": 1,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63806,
+      "rss_kib": 67152,
+      "private_kib": 60468,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.775202451,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 469102,
+    "samples": 54,
+    "phase_median_pss_kib": 465518,
+    "phase_cpu_seconds": 0.040000000000000036,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.736351027999945
+  },
+  {
+    "name": "r1-combined-stream",
+    "variant": "combined",
+    "workload": "stream",
+    "repetition": 1,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63494,
+      "rss_kib": 66816,
+      "private_kib": 60180,
+      "cpu_seconds": 0.09
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.734288382,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 348442,
+    "samples": 54,
+    "phase_median_pss_kib": 334294,
+    "phase_cpu_seconds": 0.040000000000000036,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.735815480000042
+  },
+  {
+    "name": "r1-caddy-stream",
+    "variant": "caddy",
+    "workload": "stream",
+    "repetition": 1,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 55040,
+      "rss_kib": 55048,
+      "private_kib": 55040,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 14.191671912,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 472940,
+    "samples": 56,
+    "phase_median_pss_kib": 472940,
+    "phase_cpu_seconds": 0.0,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.694133462000082
+  },
+  {
+    "name": "r2-caddy-held",
+    "variant": "caddy",
+    "workload": "held",
+    "repetition": 2,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54572,
+      "rss_kib": 54580,
+      "private_kib": 54572,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 95.478667669,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1074092,
+    "samples": 340,
+    "phase_median_pss_kib": 1074088.0,
+    "phase_cpu_seconds": 0.0,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.74222339000005,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r2-combined-held",
+    "variant": "combined",
+    "workload": "held",
+    "repetition": 2,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63994,
+      "rss_kib": 67312,
+      "private_kib": 60684,
+      "cpu_seconds": 0.09
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 96.03730989,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1039562,
+    "samples": 315,
+    "phase_median_pss_kib": 1038422.0,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.698194529000034,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r2-body-held",
+    "variant": "body",
+    "workload": "held",
+    "repetition": 2,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64296,
+      "rss_kib": 67612,
+      "private_kib": 60988,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 96.569923267,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 2322284,
+    "samples": 310,
+    "phase_median_pss_kib": 2321856.0,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.865872408999962,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r2-idle-held",
+    "variant": "idle",
+    "workload": "held",
+    "repetition": 2,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63754,
+      "rss_kib": 67060,
+      "private_kib": 60456,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 96.897332209,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1041846,
+    "samples": 313,
+    "phase_median_pss_kib": 1041590.0,
+    "phase_cpu_seconds": 0.04000000000000625,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.749088265999944,
+    "held_connections": [
+      20000
+    ]
+  },
+  {
+    "name": "r2-baseline-held",
+    "variant": "baseline",
+    "workload": "held",
+    "repetition": 2,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63696,
+      "rss_kib": 67004,
+      "private_kib": 60396,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 98.792077261,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 2321804,
+    "samples": 316,
+    "phase_median_pss_kib": 2320876.0,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.88440669900001,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r2-caddy-stream",
+    "variant": "caddy",
+    "workload": "stream",
+    "repetition": 2,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54724,
+      "rss_kib": 54732,
+      "private_kib": 54724,
+      "cpu_seconds": 0.04
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 14.284533267,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 509560,
+    "samples": 56,
+    "phase_median_pss_kib": 509540,
+    "phase_cpu_seconds": 0.0,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.746251192000045
+  },
+  {
+    "name": "r2-combined-stream",
+    "variant": "combined",
+    "workload": "stream",
+    "repetition": 2,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64148,
+      "rss_kib": 67476,
+      "private_kib": 60828,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.913666803,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 349832,
+    "samples": 54,
+    "phase_median_pss_kib": 337542,
+    "phase_cpu_seconds": 0.040000000000000036,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.829797527999972
+  },
+  {
+    "name": "r2-body-stream",
+    "variant": "body",
+    "workload": "stream",
+    "repetition": 2,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64502,
+      "rss_kib": 67808,
+      "private_kib": 61204,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.947449125,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 471750,
+    "samples": 54,
+    "phase_median_pss_kib": 466414,
+    "phase_cpu_seconds": 0.040000000000000036,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.788329186000055
+  },
+  {
+    "name": "r2-idle-stream",
+    "variant": "idle",
+    "workload": "stream",
+    "repetition": 2,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64122,
+      "rss_kib": 67440,
+      "private_kib": 60812,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.827287426,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 471394,
+    "samples": 54,
+    "phase_median_pss_kib": 457974,
+    "phase_cpu_seconds": 0.02999999999999936,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.752366373000086
+  },
+  {
+    "name": "r2-baseline-stream",
+    "variant": "baseline",
+    "workload": "stream",
+    "repetition": 2,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64096,
+      "rss_kib": 67444,
+      "private_kib": 60756,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.818717703,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 584240,
+    "samples": 54,
+    "phase_median_pss_kib": 580120,
+    "phase_cpu_seconds": 0.03000000000000025,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.75508396500004
+  },
+  {
+    "name": "r3-baseline-held",
+    "variant": "baseline",
+    "workload": "held",
+    "repetition": 3,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64126,
+      "rss_kib": 67424,
+      "private_kib": 60836,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 94.962619557,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 2324462,
+    "samples": 312,
+    "phase_median_pss_kib": 2323214.0,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.731044596999936,
+    "held_connections": [
+      20000
+    ]
+  },
+  {
+    "name": "r3-idle-held",
+    "variant": "idle",
+    "workload": "held",
+    "repetition": 3,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": false,
+    "baseline": {
+      "pss_kib": 64770,
+      "rss_kib": 68076,
+      "private_kib": 61472,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 95.80390687,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1039022,
+    "samples": 308,
+    "phase_median_pss_kib": 1038394,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.600710258000163,
+    "held_connections": [
+      20001,
+      20000
+    ]
+  },
+  {
+    "name": "r3-body-held",
+    "variant": "body",
+    "workload": "held",
+    "repetition": 3,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64760,
+      "rss_kib": 68088,
+      "private_kib": 61440,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 96.37108405,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 2321424,
+    "samples": 312,
+    "phase_median_pss_kib": 2321424.0,
+    "phase_cpu_seconds": 0.030000000000001137,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.847515354000052,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r3-combined-held",
+    "variant": "combined",
+    "workload": "held",
+    "repetition": 3,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64216,
+      "rss_kib": 67520,
+      "private_kib": 60920,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 96.716350959,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1038928,
+    "samples": 310,
+    "phase_median_pss_kib": 1038880,
+    "phase_cpu_seconds": 0.04000000000000625,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.615227382000057,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r3-caddy-held",
+    "variant": "caddy",
+    "workload": "held",
+    "repetition": 3,
+    "settings": {
+      "mode": "held",
+      "workers": 20000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54608,
+      "rss_kib": 54616,
+      "private_kib": 54608,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "bytes": 5460000,
+      "concurrency": 20000,
+      "duration_sec": 99.821146914,
+      "errors": 0,
+      "note": "Connection-retention experiment; RPS is intentionally not measured.",
+      "requests": 420000,
+      "requests_per_sec": 0,
+      "status_counts": {
+        "200": 420000
+      }
+    },
+    "peak_pss_kib": 1088692,
+    "samples": 351,
+    "phase_median_pss_kib": 1081620.0,
+    "phase_cpu_seconds": 0.0,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.735460255999897,
+    "held_connections": [
+      20000,
+      20000
+    ]
+  },
+  {
+    "name": "r3-baseline-stream",
+    "variant": "baseline",
+    "workload": "stream",
+    "repetition": 3,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64054,
+      "rss_kib": 67376,
+      "private_kib": 60740,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.847526606,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 595366,
+    "samples": 55,
+    "phase_median_pss_kib": 586342,
+    "phase_cpu_seconds": 0.04999999999999982,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.751381202000175
+  },
+  {
+    "name": "r3-idle-stream",
+    "variant": "idle",
+    "workload": "stream",
+    "repetition": 3,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64854,
+      "rss_kib": 68172,
+      "private_kib": 61544,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.805586131,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 464002,
+    "samples": 54,
+    "phase_median_pss_kib": 455706,
+    "phase_cpu_seconds": 0.03000000000000025,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.739498874999981
+  },
+  {
+    "name": "r3-body-stream",
+    "variant": "body",
+    "workload": "stream",
+    "repetition": 3,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 63648,
+      "rss_kib": 66972,
+      "private_kib": 60332,
+      "cpu_seconds": 0.11
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.776512427,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 470832,
+    "samples": 54,
+    "phase_median_pss_kib": 463740,
+    "phase_cpu_seconds": 0.040000000000000036,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.748205965000125
+  },
+  {
+    "name": "r3-combined-stream",
+    "variant": "combined",
+    "workload": "stream",
+    "repetition": 3,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64828,
+      "rss_kib": 68112,
+      "private_kib": 61552,
+      "cpu_seconds": 0.1
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 13.869800957,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 348672,
+    "samples": 54,
+    "phase_median_pss_kib": 340008.0,
+    "phase_cpu_seconds": 0.040000000000000036,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.98843124699988
+  },
+  {
+    "name": "r3-caddy-stream",
+    "variant": "caddy",
+    "workload": "stream",
+    "repetition": 3,
+    "settings": {
+      "mode": "stream",
+      "workers": 2000,
+      "duration": 10,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 56192,
+      "rss_kib": 56200,
+      "private_kib": 56192,
+      "cpu_seconds": 0.04
+    },
+    "load": {
+      "requests": 2000,
+      "errors": 0,
+      "duration_seconds": 14.153145232,
+      "requests_per_second": 0,
+      "payload_bytes": 262144000,
+      "latency_ms": {},
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "stream",
+      "error_samples": null
+    },
+    "peak_pss_kib": 472072,
+    "samples": 56,
+    "phase_median_pss_kib": 472056,
+    "phase_cpu_seconds": 0.0,
+    "phase_client_cpu_seconds": 0.0,
+    "phase_sample_seconds": 9.701104394999902
+  }
+]

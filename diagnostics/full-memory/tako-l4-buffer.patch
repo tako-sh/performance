@@ -1,0 +1,93 @@
+diff --git a/tako-server/src/proxy/server.rs b/tako-server/src/proxy/server.rs
+index b59cadcb..a9ec9f6e 100644
+--- a/tako-server/src/proxy/server.rs
++++ b/tako-server/src/proxy/server.rs
+@@ -6,8 +6,8 @@ use crate::proxy::{
+ use crate::scaling::ColdStartManager;
+ use crate::tls::{CertManager, ChallengeTokens, SelfSignedGenerator, create_sni_callbacks};
+ use parking_lot::RwLock;
+-use pingora_core::listeners::TcpSocketOptions;
+ use pingora_core::listeners::tls::TlsSettings;
++use pingora_core::listeners::{L4BufferSettings, ListenerConfig, TcpSocketOptions};
+ use pingora_core::prelude::*;
+ use pingora_core::server::configuration::ServerConf;
+ use std::sync::Arc;
+@@ -105,6 +105,8 @@ pub(crate) fn build_server_with_acme(build: ServerBuildConfig) -> Result<Server>
+         tracing::info!("PROXY protocol enabled on public listeners");
+         server.add_service(proxy_service);
+     } else {
++        let read_size =
++            benchmark_l4_read_size(std::env::var("TAKO_BENCH_L4_READ_BYTES").ok().as_deref())?;
+         let mut proxy_service = pingora_proxy::http_proxy_service(&server.configuration, proxy);
+
+         if let Some(app) = proxy_service.app_logic_mut() {
+@@ -117,7 +119,11 @@ pub(crate) fn build_server_with_acme(build: ServerBuildConfig) -> Result<Server>
+
+         let http_endpoints = public_listener_endpoints(config.http_port);
+         for endpoint in &http_endpoints {
+-            proxy_service.add_tcp_with_settings(&endpoint.addr, endpoint.options.clone());
++            proxy_service.add_listener(
++                ListenerConfig::tcp(&endpoint.addr)
++                    .tcp_socket_options(endpoint.options.clone())
++                    .l4_buffer(L4BufferSettings::default().read(read_size)),
++            );
+         }
+
+         if config.enable_https {
+@@ -125,10 +131,11 @@ pub(crate) fn build_server_with_acme(build: ServerBuildConfig) -> Result<Server>
+             let mut added_https = false;
+             for endpoint in &https_endpoints {
+                 if let Some(tls_settings) = create_tls_settings(&config, cert_manager.clone())? {
+-                    proxy_service.add_tls_with_settings(
+-                        &endpoint.addr,
+-                        Some(endpoint.options.clone()),
+-                        tls_settings,
++                    proxy_service.add_listener(
++                        ListenerConfig::tcp(&endpoint.addr)
++                            .tcp_socket_options(endpoint.options.clone())
++                            .tls(tls_settings)
++                            .l4_buffer(L4BufferSettings::default().read(read_size)),
+                     );
+                     added_https = true;
+                 }
+@@ -153,6 +160,19 @@ pub(crate) fn build_server_with_acme(build: ServerBuildConfig) -> Result<Server>
+     Ok(server)
+ }
+
++// Benchmark-only override. This patch lives in the performance repository.
++fn benchmark_l4_read_size(value: Option<&str>) -> Result<usize> {
++    match value {
++        None | Some("65536") => Ok(65_536),
++        Some("32768") => Ok(32_768),
++        Some("16384") => Ok(16_384),
++        _ => Err(Error::explain(
++            ErrorType::InternalError,
++            "invalid benchmark L4 read size",
++        )),
++    }
++}
++
+ fn proxy_server_conf() -> Result<ServerConf> {
+     let mut conf = ServerConf::new().ok_or_else(|| {
+         Error::explain(
+@@ -369,6 +389,20 @@ pub(crate) fn create_tls_settings(
+ mod tests {
+     use super::*;
+
++    #[test]
++    fn benchmark_l4_sizes_are_explicit_and_bounded() {
++        assert_eq!(benchmark_l4_read_size(None).unwrap(), 65_536);
++        for size in ["65536", "32768", "16384"] {
++            assert_eq!(
++                benchmark_l4_read_size(Some(size)).unwrap(),
++                size.parse::<usize>().unwrap()
++            );
++        }
++        for invalid in ["", "0", "4096", "garbage"] {
++            assert!(benchmark_l4_read_size(Some(invalid)).is_err());
++        }
++    }
++
+     #[test]
+     fn proxy_server_conf_uses_available_parallelism() {
+         let conf = proxy_server_conf().expect("proxy server config");

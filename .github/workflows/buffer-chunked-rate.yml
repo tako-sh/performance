@@ -1,0 +1,76 @@
+name: Buffer matched-rate uploads
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/buffer-chunked-rate.yml
+      - diagnostics/rate-validation/**
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: buffer-chunked-rate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [chunked]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: 35c4234595be4e66fc86339c2a37a298653a4c63
+          path: tako-source
+          persist-credentials: false
+      - name: Validate rate wrapper
+        run: |
+          python3 -m py_compile diagnostics/rate-validation/run.py
+          bash -n diagnostics/rate-validation/entrypoint.sh
+      - name: Reuse the exact measured binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: buffer-release-binaries
+          run-id: 40340201528
+          github-token: ${{ github.token }}
+          path: build
+      - name: Verify binaries and build runner
+        run: |
+          grep '  build/' build/build.txt | sha256sum --check
+          chmod 755 build/*
+          docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Measure eight longer paired repetitions
+        env:
+          SCENARIO: ${{ matrix.scenario }}
+        run: |
+          mkdir -p results/buffer-chunked-rate
+          cp build/build.txt results/buffer-chunked-rate/
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g --entrypoint bash \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/buffer-chunked-rate,dst=/results" \
+            tako-memory-runner /perf/diagnostics/rate-validation/entrypoint.sh \
+              --scenarios "$SCENARIO" --repetitions 8 --duration 60 --rate 250 --variants baseline,combined
+      - name: Summarize
+        if: always()
+        run: |
+          if test -f results/buffer-chunked-rate/summary.json; then
+            python3 diagnostics/buffer-lifetime/summarize.py results/buffer-chunked-rate >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: buffer-chunked-rate-${{ matrix.scenario }}-${{ github.sha }}
+          path: |
+            results/buffer-chunked-rate/**/*.json
+            results/buffer-chunked-rate/build.txt
+          retention-days: 14

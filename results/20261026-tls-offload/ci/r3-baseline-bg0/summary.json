@@ -1,0 +1,30 @@
+{
+  "name": "r3-baseline-bg0",
+  "variant": "baseline",
+  "background_rate": 0,
+  "repetition": 3,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 14.999443373,
+    "requests_per_second": 1000.0371098437561,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.837157,
+      "p95": 1.412956,
+      "p99": 1.499711
+    },
+    "handshakes": 14,
+    "handshake_total_ms": 24.04957,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": null,
+  "success": true,
+  "peak_pss_kib": 68068,
+  "median_pss_kib": 67432,
+  "threads": 11,
+  "measured_cpu_seconds": 3.8600000000000003,
+  "cpu_microseconds_per_total_request": 257.33333333333337
+}

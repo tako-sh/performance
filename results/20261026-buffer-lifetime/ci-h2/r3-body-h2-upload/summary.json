@@ -1,0 +1,45 @@
+{
+  "name": "r3-body-h2-upload",
+  "variant": "body",
+  "workload": "h2-upload",
+  "repetition": 3,
+  "settings": {
+    "mode": "upload",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65004,
+    "rss_kib": 68288,
+    "private_kib": 61728,
+    "cpu_seconds": 0.11
+  },
+  "load": {
+    "requests": 2207,
+    "errors": 0,
+    "duration_seconds": 15.124661853,
+    "requests_per_second": 145.92061769382556,
+    "payload_bytes": 2314207232,
+    "latency_ms": {
+      "p50": 213.072776,
+      "p95": 285.198482,
+      "p99": 307.73789
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "upload",
+    "error_samples": null
+  },
+  "peak_pss_kib": 83304,
+  "samples": 73,
+  "measured_cpu_seconds": 12.91,
+  "cpu_microseconds_per_success": 5849.569551427277,
+  "cpu_seconds_per_gib": 5.9899592206615315,
+  "phase_median_pss_kib": 78826.0,
+  "phase_cpu_seconds": 12.440000000000001,
+  "phase_client_cpu_seconds": 11.16,
+  "phase_sample_seconds": 14.598797282000078
+}

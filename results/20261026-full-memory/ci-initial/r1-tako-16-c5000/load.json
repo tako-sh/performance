@@ -1,0 +1,29 @@
+{
+  "name": "r1-tako-16-c5000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 20.464266464,
+  "concurrency": 5000,
+  "requests": 132978,
+  "errors": 0,
+  "bytes": 1728714,
+  "requests_per_sec": 6498.058468595984,
+  "bytes_per_sec": 84474.7600917478,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 5511.606649,
+    "mean": 755.878552,
+    "min": 3.342843,
+    "p50": 695.866751,
+    "p90": 1384.416957,
+    "p95": 1565.065855,
+    "p99": 4156.040446
+  },
+  "status_counts": {
+    "200": 132978
+  },
+  "started_at": "2026-10-26T05:52:21Z"
+}

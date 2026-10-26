@@ -1,0 +1,41 @@
+{
+  "name": "r3-caddy-held",
+  "variant": "caddy",
+  "workload": "held",
+  "repetition": 3,
+  "settings": {
+    "mode": "held",
+    "workers": 20000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 54608,
+    "rss_kib": 54616,
+    "private_kib": 54608,
+    "cpu_seconds": 0.03
+  },
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 99.821146914,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "peak_pss_kib": 1088692,
+  "samples": 351,
+  "phase_median_pss_kib": 1081620.0,
+  "phase_cpu_seconds": 0.0,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.735460255999897,
+  "held_connections": [
+    20000,
+    20000
+  ]
+}

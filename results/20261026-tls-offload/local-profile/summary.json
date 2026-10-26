@@ -1,0 +1,92 @@
+[
+  {
+    "name": "r1-baseline-rate",
+    "variant": "baseline",
+    "workload": "rate",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 47019,
+      "rss_kib": 52444,
+      "private_kib": 43280,
+      "cpu_seconds": 0.01
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999726988,
+      "requests_per_second": 1000.0182011312751,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.676451,
+        "p95": 1.238767,
+        "p99": 1.421647
+      },
+      "handshakes": 16,
+      "handshake_total_ms": 14.446489,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 49393,
+    "samples": 72,
+    "measured_cpu_seconds": 1.6,
+    "cpu_microseconds_per_success": 106.66666666666667,
+    "phase_median_pss_kib": 48548,
+    "phase_cpu_seconds": 1.5499999999999998,
+    "phase_client_cpu_seconds": 2.62,
+    "phase_sample_seconds": 14.548065930999655
+  },
+  {
+    "name": "r2-baseline-rate",
+    "variant": "baseline",
+    "workload": "rate",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 52938,
+      "rss_kib": 58508,
+      "private_kib": 49144,
+      "cpu_seconds": 1.29
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999804965,
+      "requests_per_second": 1000.0130025023963,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.84921,
+        "p95": 41.343169,
+        "p99": 47.20809
+      },
+      "handshakes": 1,
+      "handshake_total_ms": 2.408388,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 59861,
+    "samples": 71,
+    "measured_cpu_seconds": 16.72,
+    "cpu_microseconds_per_success": 1114.6666666666665,
+    "phase_median_pss_kib": 59107.0,
+    "phase_cpu_seconds": 16.360000000000003,
+    "phase_client_cpu_seconds": 1.18,
+    "phase_sample_seconds": 14.703643386999829
+  }
+]
