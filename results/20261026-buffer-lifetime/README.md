@@ -1,5 +1,9 @@
 # Buffer lifetime investigation — 26 October 2026
 
+This is the historical prototype investigation. The subsequent
+[production validation](../20261026-buffer-release/README.md) records the merged
+implementation and longer follow-ups. Original findings below are retained.
+
 Releasing unused buffers delivers a substantial memory saving while retaining
 64 KiB socket reads. The combined prototype reduced process PSS from **2,270 to
 1,016 MiB (55.2%)** with 20,000 exercised TLS connections held open, and from

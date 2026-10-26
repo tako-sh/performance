@@ -1,0 +1,45 @@
+{
+  "name": "r3-caddy-churn",
+  "variant": "caddy",
+  "workload": "churn",
+  "repetition": 3,
+  "settings": {
+    "mode": "small",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1",
+    "churn": true
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 54664,
+    "rss_kib": 54672,
+    "private_kib": 54664,
+    "cpu_seconds": 0.02
+  },
+  "load": {
+    "requests": 16893,
+    "errors": 0,
+    "duration_seconds": 15.005963999,
+    "requests_per_second": 1125.7524009204442,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 23.165008,
+      "p95": 55.178373,
+      "p99": 64.332338
+    },
+    "handshakes": 16893,
+    "handshake_total_ms": 233498.91464,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 117436,
+  "samples": 72,
+  "measured_cpu_seconds": 21.990000000000002,
+  "cpu_microseconds_per_success": 1301.7226069969813,
+  "phase_median_pss_kib": 117320,
+  "phase_cpu_seconds": 21.41,
+  "phase_client_cpu_seconds": 6.989999999999999,
+  "phase_sample_seconds": 14.653590242999826
+}

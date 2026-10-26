@@ -1,0 +1,138 @@
+{
+  "baseline_revision": "738e023e721cb6bfe63cda184b8e78ad7bf8d1c6",
+  "candidate_revision": "35c4234595be4e66fc86339c2a37a298653a4c63",
+  "runs": [
+    {
+      "role": "primary",
+      "run_id": 40340201528,
+      "url": "https://github.com/tako-sh/performance/actions/runs/40340201528",
+      "head_revision": "63b4b55153ca071491b531b78cf9900900462490",
+      "status": "completed",
+      "conclusion": "success",
+      "artifacts": [
+        {
+          "id": 12662600002,
+          "name": "buffer-release-h1-271c306e841c813cf3c18d732d0cb3a175d4f79a",
+          "size_bytes": 184996,
+          "digest": "sha256:3b4cf0ab017f46749fc4313f6ce6ec3bcb210fd6a0bd04e63fdcfa5d97890129",
+          "created_at": "2026-10-26T15:09:04Z",
+          "measured_checkout": "271c306e841c813cf3c18d732d0cb3a175d4f79a"
+        },
+        {
+          "id": 12661580472,
+          "name": "buffer-release-h2-271c306e841c813cf3c18d732d0cb3a175d4f79a",
+          "size_bytes": 124700,
+          "digest": "sha256:d0a24c697986c91ed775f5ecfa66d8ee05aebb58ebe59e516767e70464a1f82a",
+          "created_at": "2026-10-26T15:01:23Z",
+          "measured_checkout": "271c306e841c813cf3c18d732d0cb3a175d4f79a"
+        },
+        {
+          "id": 12661127003,
+          "name": "buffer-release-memory-271c306e841c813cf3c18d732d0cb3a175d4f79a",
+          "size_bytes": 82896,
+          "digest": "sha256:6f5ee48b0d1737629a711a7e32aa6646ba485164306fbeb5c2b2a02ca7b642a4",
+          "created_at": "2026-10-26T14:59:58Z",
+          "measured_checkout": "271c306e841c813cf3c18d732d0cb3a175d4f79a"
+        },
+        {
+          "id": 12660799030,
+          "name": "buffer-release-small-repeat-271c306e841c813cf3c18d732d0cb3a175d4f79a",
+          "size_bytes": 121234,
+          "digest": "sha256:b6ebe4edcbcfc756e54987486cf12a35c27c74b4ffa602a5750fdec9dc4c2d8d",
+          "created_at": "2026-10-26T15:05:17Z",
+          "measured_checkout": "271c306e841c813cf3c18d732d0cb3a175d4f79a"
+        },
+        {
+          "id": 12659118056,
+          "name": "buffer-release-binaries",
+          "size_bytes": 77698785,
+          "digest": "sha256:1f390bfbac74d57f7e9140e98463137259c1c3e5a5e21246148f999052a3d1be",
+          "created_at": "2026-10-26T14:44:12Z",
+          "measured_checkout": null
+        }
+      ]
+    },
+    {
+      "role": "http2_followup",
+      "run_id": 40345677779,
+      "url": "https://github.com/tako-sh/performance/actions/runs/40345677779",
+      "head_revision": "48603fc7df4ef34059d333236a53bfb1e8bb4bd6",
+      "status": "completed",
+      "conclusion": "success",
+      "artifacts": [
+        {
+          "id": 12662962091,
+          "name": "buffer-followup-h2-download-8b1d3ef9b3e48cc59de5aace14219c994f82641c",
+          "size_bytes": 132421,
+          "digest": "sha256:bd9cd91af59b90fd9493454851984e04371d366e595ced1db9d442f1130ab9d0",
+          "created_at": "2026-10-26T15:25:03Z",
+          "measured_checkout": "8b1d3ef9b3e48cc59de5aace14219c994f82641c"
+        },
+        {
+          "id": 12662547459,
+          "name": "buffer-followup-h2-rate-8b1d3ef9b3e48cc59de5aace14219c994f82641c",
+          "size_bytes": 118190,
+          "digest": "sha256:30fa59d087ef596d624838aa5ed0f4b1913f9a873b3a8426dad10302663e3b25",
+          "created_at": "2026-10-26T15:25:04Z",
+          "measured_checkout": "8b1d3ef9b3e48cc59de5aace14219c994f82641c"
+        }
+      ]
+    },
+    {
+      "role": "chunked_followup",
+      "run_id": 40346965514,
+      "url": "https://github.com/tako-sh/performance/actions/runs/40346965514",
+      "head_revision": "9d35b1a1850e02363a3bc51f556fe8292f5cd72f",
+      "status": "completed",
+      "conclusion": "success",
+      "artifacts": [
+        {
+          "id": 12662679347,
+          "name": "buffer-chunked-chunked-0ab070cea8d75c74c6d3af59b534b78955b63a2f",
+          "size_bytes": 122720,
+          "digest": "sha256:d86b473df7608b8ccdabac62a919038e9b84f690e85eb929a6aa0cf2ed3b78b4",
+          "created_at": "2026-10-26T15:32:41Z",
+          "measured_checkout": "0ab070cea8d75c74c6d3af59b534b78955b63a2f"
+        }
+      ]
+    },
+    {
+      "role": "canceled_500_rate",
+      "run_id": 40351726360,
+      "url": "https://github.com/tako-sh/performance/actions/runs/40351726360",
+      "head_revision": "7071bc05ac04a8a363e3c470c30f30b1cda5a5ca",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "artifacts": [
+        {
+          "id": 12663609326,
+          "name": "buffer-chunked-rate-chunked-0365334f5fd2dfca6685edd2b08654524e1d7f75",
+          "size_bytes": 17810,
+          "digest": "sha256:e2151892567106124cc360cf7e483454c1d22cd90eb1728cce0b350b3ebb2adf",
+          "created_at": "2026-10-26T15:45:05Z",
+          "measured_checkout": "0365334f5fd2dfca6685edd2b08654524e1d7f75"
+        }
+      ]
+    },
+    {
+      "role": "matched_250_rate",
+      "run_id": 40352155109,
+      "url": "https://github.com/tako-sh/performance/actions/runs/40352155109",
+      "head_revision": "63a8b41eae6a76e452335347379c10358b6d5c0f",
+      "status": "completed",
+      "conclusion": "success",
+      "artifacts": [
+        {
+          "id": 12663884360,
+          "name": "buffer-chunked-rate-chunked-9566ecbb88672012c0b215afd0182f10ca50881f",
+          "size_bytes": 123464,
+          "digest": "sha256:bf5d042266ba7fef53a8f618e0ab3a980523d062d236ae9bf62f247f3c25200d",
+          "created_at": "2026-10-26T16:05:46Z",
+          "measured_checkout": "9566ecbb88672012c0b215afd0182f10ca50881f"
+        }
+      ]
+    }
+  ],
+  "tako_master_merge": "1a90cfd31ee3ca3a30c6feaf74acf302788726ba",
+  "performance_workflow_merge": "2f50ef441d521636f9c12709fa2fbb3132b316a0"
+}

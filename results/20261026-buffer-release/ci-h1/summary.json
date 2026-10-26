@@ -1,0 +1,2423 @@
+[
+  {
+    "name": "r1-baseline-small",
+    "variant": "baseline",
+    "workload": "small",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64784,
+      "rss_kib": 68104,
+      "private_kib": 61472,
+      "cpu_seconds": 0.04
+    },
+    "load": {
+      "requests": 230511,
+      "errors": 0,
+      "duration_seconds": 15.042555058,
+      "requests_per_second": 15323.925962791049,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.282297,
+        "p95": 5.784425,
+        "p99": 47.911895
+      },
+      "handshakes": 256,
+      "handshake_total_ms": 1571.099457,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 85340,
+    "samples": 70,
+    "measured_cpu_seconds": 15.6,
+    "cpu_microseconds_per_success": 67.67572914090867,
+    "phase_median_pss_kib": 83816,
+    "phase_cpu_seconds": 15.060000000000002,
+    "phase_client_cpu_seconds": 7.840000000000001,
+    "phase_sample_seconds": 14.603504258000001
+  },
+  {
+    "name": "r1-combined-small",
+    "variant": "combined",
+    "workload": "small",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64908,
+      "rss_kib": 68268,
+      "private_kib": 61556,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 238466,
+      "errors": 0,
+      "duration_seconds": 15.001564772,
+      "requests_per_second": 15896.075084453196,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.202131,
+        "p95": 5.599301,
+        "p99": 47.681094
+      },
+      "handshakes": 256,
+      "handshake_total_ms": 1106.874446,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 81916,
+    "samples": 70,
+    "measured_cpu_seconds": 15.31,
+    "cpu_microseconds_per_success": 64.20202460728154,
+    "phase_median_pss_kib": 81060,
+    "phase_cpu_seconds": 14.8,
+    "phase_client_cpu_seconds": 8.120000000000001,
+    "phase_sample_seconds": 14.707636981000007
+  },
+  {
+    "name": "r1-caddy-small",
+    "variant": "caddy",
+    "workload": "small",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54188,
+      "rss_kib": 54196,
+      "private_kib": 54188,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 187735,
+      "errors": 0,
+      "duration_seconds": 15.001306806,
+      "requests_per_second": 12514.576391765586,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.940475,
+        "p95": 25.545571,
+        "p99": 44.895451
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 128788,
+    "samples": 71,
+    "measured_cpu_seconds": 17.16,
+    "cpu_microseconds_per_success": 91.40543851705861,
+    "phase_median_pss_kib": 127292.0,
+    "phase_cpu_seconds": 16.700000000000003,
+    "phase_client_cpu_seconds": 6.99,
+    "phase_sample_seconds": 14.654951753999995
+  },
+  {
+    "name": "r1-baseline-rate",
+    "variant": "baseline",
+    "workload": "rate",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65010,
+      "rss_kib": 68244,
+      "private_kib": 61784,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999977969,
+      "requests_per_second": 1000.0014687354906,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.694367,
+        "p95": 1.281648,
+        "p99": 1.341886
+      },
+      "handshakes": 15,
+      "handshake_total_ms": 13.598077,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 67486,
+    "samples": 72,
+    "measured_cpu_seconds": 2.42,
+    "cpu_microseconds_per_success": 161.33333333333334,
+    "phase_median_pss_kib": 66554,
+    "phase_cpu_seconds": 2.35,
+    "phase_client_cpu_seconds": 2.4000000000000004,
+    "phase_sample_seconds": 14.66025468799998
+  },
+  {
+    "name": "r1-combined-rate",
+    "variant": "combined",
+    "workload": "rate",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64676,
+      "rss_kib": 67920,
+      "private_kib": 61440,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999451647,
+      "requests_per_second": 1000.03655820312,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.67944,
+        "p95": 1.273948,
+        "p99": 1.337228
+      },
+      "handshakes": 11,
+      "handshake_total_ms": 10.163581,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 67384,
+    "samples": 72,
+    "measured_cpu_seconds": 2.4200000000000004,
+    "cpu_microseconds_per_success": 161.33333333333337,
+    "phase_median_pss_kib": 65632,
+    "phase_cpu_seconds": 2.3600000000000003,
+    "phase_client_cpu_seconds": 2.36,
+    "phase_sample_seconds": 14.635948501000001
+  },
+  {
+    "name": "r1-caddy-rate",
+    "variant": "caddy",
+    "workload": "rate",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 53816,
+      "rss_kib": 53824,
+      "private_kib": 53816,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999300116,
+      "requests_per_second": 1000.046661110491,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.770501,
+        "p95": 1.2923,
+        "p99": 1.361796
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 105224,
+    "samples": 72,
+    "measured_cpu_seconds": 3.3199999999999994,
+    "cpu_microseconds_per_success": 221.33333333333331,
+    "phase_median_pss_kib": 104996,
+    "phase_cpu_seconds": 3.2299999999999995,
+    "phase_client_cpu_seconds": 2.5,
+    "phase_sample_seconds": 14.552999227999976
+  },
+  {
+    "name": "r1-baseline-upload",
+    "variant": "baseline",
+    "workload": "upload",
+    "repetition": 1,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64612,
+      "rss_kib": 67868,
+      "private_kib": 61364,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 13891,
+      "errors": 0,
+      "duration_seconds": 15.007008393,
+      "requests_per_second": 925.6341861232942,
+      "payload_bytes": 14565769216,
+      "latency_ms": {
+        "p50": 23.429244,
+        "p95": 72.173524,
+        "p99": 79.599492
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 93408,
+    "samples": 68,
+    "measured_cpu_seconds": 13.700000000000001,
+    "cpu_microseconds_per_success": 986.2500899863222,
+    "cpu_seconds_per_gib": 1.0099200921459939,
+    "phase_median_pss_kib": 81724,
+    "phase_cpu_seconds": 13.23,
+    "phase_client_cpu_seconds": 9.61,
+    "phase_sample_seconds": 14.498137394000025
+  },
+  {
+    "name": "r1-combined-upload",
+    "variant": "combined",
+    "workload": "upload",
+    "repetition": 1,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64076,
+      "rss_kib": 67280,
+      "private_kib": 60880,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 14160,
+      "errors": 0,
+      "duration_seconds": 15.045691472,
+      "requests_per_second": 941.1332158679268,
+      "payload_bytes": 14847836160,
+      "latency_ms": {
+        "p50": 22.990159,
+        "p95": 71.672644,
+        "p99": 78.728772
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91156,
+    "samples": 68,
+    "measured_cpu_seconds": 13.63,
+    "cpu_microseconds_per_success": 962.5706214689266,
+    "cpu_seconds_per_gib": 0.9856723163841808,
+    "phase_median_pss_kib": 81728,
+    "phase_cpu_seconds": 13.26,
+    "phase_client_cpu_seconds": 9.83,
+    "phase_sample_seconds": 14.695818400000007
+  },
+  {
+    "name": "r1-caddy-upload",
+    "variant": "caddy",
+    "workload": "upload",
+    "repetition": 1,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 53864,
+      "rss_kib": 53872,
+      "private_kib": 53864,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 15964,
+      "errors": 0,
+      "duration_seconds": 15.005731891,
+      "requests_per_second": 1063.8601379766583,
+      "payload_bytes": 16739467264,
+      "latency_ms": {
+        "p50": 17.882601,
+        "p95": 70.179282,
+        "p99": 77.710668
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 121696,
+    "samples": 69,
+    "measured_cpu_seconds": 14.519999999999998,
+    "cpu_microseconds_per_success": 909.5464795790527,
+    "cpu_seconds_per_gib": 0.93137559508895,
+    "phase_median_pss_kib": 121612,
+    "phase_cpu_seconds": 14.020000000000001,
+    "phase_client_cpu_seconds": 10.48,
+    "phase_sample_seconds": 14.543187004000004
+  },
+  {
+    "name": "r1-baseline-chunked",
+    "variant": "baseline",
+    "workload": "chunked",
+    "repetition": 1,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 67308,
+      "rss_kib": 70628,
+      "private_kib": 63996,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 14074,
+      "errors": 0,
+      "duration_seconds": 15.052711018,
+      "requests_per_second": 934.9810796985566,
+      "payload_bytes": 14757658624,
+      "latency_ms": {
+        "p50": 23.409832,
+        "p95": 71.453761,
+        "p99": 77.384213
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91944,
+    "samples": 68,
+    "measured_cpu_seconds": 14.020000000000001,
+    "cpu_microseconds_per_success": 996.1631377007249,
+    "cpu_seconds_per_gib": 1.0200710530055421,
+    "phase_median_pss_kib": 86948,
+    "phase_cpu_seconds": 13.55,
+    "phase_client_cpu_seconds": 8.92,
+    "phase_sample_seconds": 14.594055184000013
+  },
+  {
+    "name": "r1-combined-chunked",
+    "variant": "combined",
+    "workload": "chunked",
+    "repetition": 1,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65082,
+      "rss_kib": 68472,
+      "private_kib": 61700,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13787,
+      "errors": 0,
+      "duration_seconds": 15.050949483,
+      "requests_per_second": 916.0219437034436,
+      "payload_bytes": 14456717312,
+      "latency_ms": {
+        "p50": 24.284881,
+        "p95": 72.023376,
+        "p99": 78.167782
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91770,
+    "samples": 69,
+    "measured_cpu_seconds": 14.26,
+    "cpu_microseconds_per_success": 1034.3076811489084,
+    "cpu_seconds_per_gib": 1.0591310654964823,
+    "phase_median_pss_kib": 83554.0,
+    "phase_cpu_seconds": 13.780000000000001,
+    "phase_client_cpu_seconds": 8.71,
+    "phase_sample_seconds": 14.593845402
+  },
+  {
+    "name": "r1-caddy-chunked",
+    "variant": "caddy",
+    "workload": "chunked",
+    "repetition": 1,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 53948,
+      "rss_kib": 53956,
+      "private_kib": 53948,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "requests": 16204,
+      "errors": 0,
+      "duration_seconds": 15.062389421,
+      "requests_per_second": 1075.7921301256736,
+      "payload_bytes": 16991125504,
+      "latency_ms": {
+        "p50": 17.700707,
+        "p95": 70.078256,
+        "p99": 79.273536
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 118240,
+    "samples": 70,
+    "measured_cpu_seconds": 14.94,
+    "cpu_microseconds_per_success": 921.9945692421625,
+    "cpu_seconds_per_gib": 0.9441224389039743,
+    "phase_median_pss_kib": 117848.0,
+    "phase_cpu_seconds": 14.54,
+    "phase_client_cpu_seconds": 9.51,
+    "phase_sample_seconds": 14.691979097
+  },
+  {
+    "name": "r1-baseline-download",
+    "variant": "baseline",
+    "workload": "download",
+    "repetition": 1,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65004,
+      "rss_kib": 68328,
+      "private_kib": 61688,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 15686,
+      "errors": 0,
+      "duration_seconds": 15.008873788,
+      "requests_per_second": 1045.1150580359588,
+      "payload_bytes": 16447963136,
+      "latency_ms": {
+        "p50": 19.099184,
+        "p95": 68.664401,
+        "p99": 74.228127
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 136828,
+    "samples": 65,
+    "measured_cpu_seconds": 15.680000000000001,
+    "cpu_microseconds_per_success": 999.6174933061329,
+    "cpu_seconds_per_gib": 1.02360831314548,
+    "phase_median_pss_kib": 112194.0,
+    "phase_cpu_seconds": 15.13,
+    "phase_client_cpu_seconds": 9.200000000000001,
+    "phase_sample_seconds": 14.49917711400002
+  },
+  {
+    "name": "r1-combined-download",
+    "variant": "combined",
+    "workload": "download",
+    "repetition": 1,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64608,
+      "rss_kib": 67928,
+      "private_kib": 61296,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 16533,
+      "errors": 0,
+      "duration_seconds": 15.043459852,
+      "requests_per_second": 1099.0157957447514,
+      "payload_bytes": 17336107008,
+      "latency_ms": {
+        "p50": 17.778587,
+        "p95": 67.112336,
+        "p99": 71.910058
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 144500,
+    "samples": 66,
+    "measured_cpu_seconds": 15.559999999999999,
+    "cpu_microseconds_per_success": 941.1480070162704,
+    "cpu_seconds_per_gib": 0.9637355591846609,
+    "phase_median_pss_kib": 111860,
+    "phase_cpu_seconds": 15.030000000000001,
+    "phase_client_cpu_seconds": 9.469999999999999,
+    "phase_sample_seconds": 14.590243138999995
+  },
+  {
+    "name": "r1-caddy-download",
+    "variant": "caddy",
+    "workload": "download",
+    "repetition": 1,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 53976,
+      "rss_kib": 53984,
+      "private_kib": 53976,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "requests": 18091,
+      "errors": 0,
+      "duration_seconds": 15.013416022,
+      "requests_per_second": 1204.9889228067912,
+      "payload_bytes": 18969788416,
+      "latency_ms": {
+        "p50": 15.823138,
+        "p95": 68.465681,
+        "p99": 75.661068
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 115960,
+    "samples": 69,
+    "measured_cpu_seconds": 15.28,
+    "cpu_microseconds_per_success": 844.6188712619535,
+    "cpu_seconds_per_gib": 0.8648897241722403,
+    "phase_median_pss_kib": 115844.0,
+    "phase_cpu_seconds": 14.830000000000002,
+    "phase_client_cpu_seconds": 9.99,
+    "phase_sample_seconds": 14.601411490999965
+  },
+  {
+    "name": "r1-baseline-churn",
+    "variant": "baseline",
+    "workload": "churn",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64388,
+      "rss_kib": 67592,
+      "private_kib": 61192,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 22966,
+      "errors": 0,
+      "duration_seconds": 15.046916845,
+      "requests_per_second": 1526.2927439936948,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.076688,
+        "p95": 52.701466,
+        "p99": 56.137446
+      },
+      "handshakes": 22966,
+      "handshake_total_ms": 225196.541907,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 75464,
+    "samples": 71,
+    "measured_cpu_seconds": 18.939999999999998,
+    "cpu_microseconds_per_success": 824.6973787337802,
+    "phase_median_pss_kib": 74418.0,
+    "phase_cpu_seconds": 18.5,
+    "phase_client_cpu_seconds": 9.22,
+    "phase_sample_seconds": 14.70642331199997
+  },
+  {
+    "name": "r1-combined-churn",
+    "variant": "combined",
+    "workload": "churn",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64520,
+      "rss_kib": 67756,
+      "private_kib": 61292,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 23071,
+      "errors": 0,
+      "duration_seconds": 15.045167407,
+      "requests_per_second": 1533.4492050428005,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.115777,
+        "p95": 52.032396,
+        "p99": 55.620098
+      },
+      "handshakes": 23071,
+      "handshake_total_ms": 227398.40452,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 72128,
+    "samples": 71,
+    "measured_cpu_seconds": 19.05,
+    "cpu_microseconds_per_success": 825.7119327294006,
+    "phase_median_pss_kib": 71520.0,
+    "phase_cpu_seconds": 18.669999999999998,
+    "phase_client_cpu_seconds": 9.149999999999999,
+    "phase_sample_seconds": 14.74271430500005
+  },
+  {
+    "name": "r1-caddy-churn",
+    "variant": "caddy",
+    "workload": "churn",
+    "repetition": 1,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 56228,
+      "rss_kib": 56236,
+      "private_kib": 56228,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "requests": 17145,
+      "errors": 0,
+      "duration_seconds": 15.007715088,
+      "requests_per_second": 1142.4124125136777,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 22.64856,
+        "p95": 54.841456,
+        "p99": 62.214372
+      },
+      "handshakes": 17145,
+      "handshake_total_ms": 234588.465224,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 116840,
+    "samples": 72,
+    "measured_cpu_seconds": 22.08,
+    "cpu_microseconds_per_success": 1287.8390201224847,
+    "phase_median_pss_kib": 116708,
+    "phase_cpu_seconds": 21.549999999999997,
+    "phase_client_cpu_seconds": 6.960000000000001,
+    "phase_sample_seconds": 14.688760860000002
+  },
+  {
+    "name": "r2-caddy-small",
+    "variant": "caddy",
+    "workload": "small",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54424,
+      "rss_kib": 54432,
+      "private_kib": 54424,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 190167,
+      "errors": 0,
+      "duration_seconds": 15.002108632,
+      "requests_per_second": 12676.01806284534,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.84498,
+        "p95": 34.777267,
+        "p99": 44.31135
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 129072,
+    "samples": 70,
+    "measured_cpu_seconds": 17.2,
+    "cpu_microseconds_per_success": 90.44681779698897,
+    "phase_median_pss_kib": 126640,
+    "phase_cpu_seconds": 16.64,
+    "phase_client_cpu_seconds": 6.88,
+    "phase_sample_seconds": 14.546813561000022
+  },
+  {
+    "name": "r2-combined-small",
+    "variant": "combined",
+    "workload": "small",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65044,
+      "rss_kib": 68372,
+      "private_kib": 61724,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 234805,
+      "errors": 0,
+      "duration_seconds": 15.001068157,
+      "requests_per_second": 15652.552041131294,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.237633,
+        "p95": 5.719232,
+        "p99": 47.729346
+      },
+      "handshakes": 256,
+      "handshake_total_ms": 1004.519107,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 80980,
+    "samples": 69,
+    "measured_cpu_seconds": 15.709999999999999,
+    "cpu_microseconds_per_success": 66.90658205745193,
+    "phase_median_pss_kib": 77622.0,
+    "phase_cpu_seconds": 15.16,
+    "phase_client_cpu_seconds": 7.64,
+    "phase_sample_seconds": 14.604455447999953
+  },
+  {
+    "name": "r2-baseline-small",
+    "variant": "baseline",
+    "workload": "small",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65120,
+      "rss_kib": 68480,
+      "private_kib": 61768,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 237904,
+      "errors": 0,
+      "duration_seconds": 15.001388337,
+      "requests_per_second": 15858.798842852728,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.185222,
+        "p95": 5.512322,
+        "p99": 47.717619
+      },
+      "handshakes": 256,
+      "handshake_total_ms": 1438.811733,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 86436,
+    "samples": 70,
+    "measured_cpu_seconds": 15.73,
+    "cpu_microseconds_per_success": 66.11910686663528,
+    "phase_median_pss_kib": 82912,
+    "phase_cpu_seconds": 15.22,
+    "phase_client_cpu_seconds": 7.700000000000001,
+    "phase_sample_seconds": 14.654975543999967
+  },
+  {
+    "name": "r2-caddy-rate",
+    "variant": "caddy",
+    "workload": "rate",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54672,
+      "rss_kib": 54680,
+      "private_kib": 54672,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.99993993,
+      "requests_per_second": 1000.0040046827041,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.766501,
+        "p95": 1.297093,
+        "p99": 1.371512
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 103800,
+    "samples": 72,
+    "measured_cpu_seconds": 3.3499999999999996,
+    "cpu_microseconds_per_success": 223.33333333333331,
+    "phase_median_pss_kib": 103636,
+    "phase_cpu_seconds": 3.26,
+    "phase_client_cpu_seconds": 2.54,
+    "phase_sample_seconds": 14.554244344999915
+  },
+  {
+    "name": "r2-combined-rate",
+    "variant": "combined",
+    "workload": "rate",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64440,
+      "rss_kib": 67676,
+      "private_kib": 61212,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999282342,
+      "requests_per_second": 1000.0478461558117,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.694363,
+        "p95": 1.27976,
+        "p99": 1.342178
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 12.558174,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 66852,
+    "samples": 72,
+    "measured_cpu_seconds": 2.43,
+    "cpu_microseconds_per_success": 162.0,
+    "phase_median_pss_kib": 65892,
+    "phase_cpu_seconds": 2.37,
+    "phase_client_cpu_seconds": 2.38,
+    "phase_sample_seconds": 14.57807333400001
+  },
+  {
+    "name": "r2-baseline-rate",
+    "variant": "baseline",
+    "workload": "rate",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65230,
+      "rss_kib": 68464,
+      "private_kib": 62004,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999340293,
+      "requests_per_second": 1000.0439824010332,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.687598,
+        "p95": 1.279363,
+        "p99": 1.338445
+      },
+      "handshakes": 15,
+      "handshake_total_ms": 14.389776,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 67638,
+    "samples": 72,
+    "measured_cpu_seconds": 2.43,
+    "cpu_microseconds_per_success": 162.0,
+    "phase_median_pss_kib": 66698,
+    "phase_cpu_seconds": 2.37,
+    "phase_client_cpu_seconds": 2.4,
+    "phase_sample_seconds": 14.577702749000082
+  },
+  {
+    "name": "r2-caddy-upload",
+    "variant": "caddy",
+    "workload": "upload",
+    "repetition": 2,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54340,
+      "rss_kib": 54348,
+      "private_kib": 54340,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 15886,
+      "errors": 0,
+      "duration_seconds": 15.003833521,
+      "requests_per_second": 1058.7960722014998,
+      "payload_bytes": 16657678336,
+      "latency_ms": {
+        "p50": 18.645024,
+        "p95": 71.429257,
+        "p99": 79.533056
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 119924,
+    "samples": 69,
+    "measured_cpu_seconds": 14.620000000000001,
+    "cpu_microseconds_per_success": 920.3071887196274,
+    "cpu_seconds_per_gib": 0.9423945612488984,
+    "phase_median_pss_kib": 119860,
+    "phase_cpu_seconds": 14.200000000000001,
+    "phase_client_cpu_seconds": 10.440000000000001,
+    "phase_sample_seconds": 14.596379432999925
+  },
+  {
+    "name": "r2-combined-upload",
+    "variant": "combined",
+    "workload": "upload",
+    "repetition": 2,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65344,
+      "rss_kib": 68672,
+      "private_kib": 62024,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13789,
+      "errors": 0,
+      "duration_seconds": 15.042158062,
+      "requests_per_second": 916.6902743054023,
+      "payload_bytes": 14458814464,
+      "latency_ms": {
+        "p50": 23.36259,
+        "p95": 71.690788,
+        "p99": 77.559394
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 92092,
+    "samples": 68,
+    "measured_cpu_seconds": 13.7,
+    "cpu_microseconds_per_success": 993.5455798099935,
+    "cpu_seconds_per_gib": 1.0173906737254332,
+    "phase_median_pss_kib": 81176,
+    "phase_cpu_seconds": 13.32,
+    "phase_client_cpu_seconds": 9.75,
+    "phase_sample_seconds": 14.639564551000035
+  },
+  {
+    "name": "r2-baseline-upload",
+    "variant": "baseline",
+    "workload": "upload",
+    "repetition": 2,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64560,
+      "rss_kib": 67816,
+      "private_kib": 61312,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13681,
+      "errors": 0,
+      "duration_seconds": 15.050418758,
+      "requests_per_second": 909.0112521107036,
+      "payload_bytes": 14345568256,
+      "latency_ms": {
+        "p50": 23.830556,
+        "p95": 72.06292,
+        "p99": 78.153842
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91312,
+    "samples": 66,
+    "measured_cpu_seconds": 13.680000000000001,
+    "cpu_microseconds_per_success": 999.9269059279294,
+    "cpu_seconds_per_gib": 1.0239251516701997,
+    "phase_median_pss_kib": 79686.0,
+    "phase_cpu_seconds": 13.280000000000001,
+    "phase_client_cpu_seconds": 9.66,
+    "phase_sample_seconds": 14.599075990000074
+  },
+  {
+    "name": "r2-caddy-chunked",
+    "variant": "caddy",
+    "workload": "chunked",
+    "repetition": 2,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 53832,
+      "rss_kib": 53840,
+      "private_kib": 53832,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 16414,
+      "errors": 0,
+      "duration_seconds": 15.053151932,
+      "requests_per_second": 1090.4028654030328,
+      "payload_bytes": 17211326464,
+      "latency_ms": {
+        "p50": 17.518029,
+        "p95": 70.169508,
+        "p99": 78.687088
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 120384,
+    "samples": 69,
+    "measured_cpu_seconds": 14.89,
+    "cpu_microseconds_per_success": 907.152430851712,
+    "cpu_seconds_per_gib": 0.9289240891921531,
+    "phase_median_pss_kib": 120148,
+    "phase_cpu_seconds": 14.45,
+    "phase_client_cpu_seconds": 9.379999999999999,
+    "phase_sample_seconds": 14.550039317000028
+  },
+  {
+    "name": "r2-combined-chunked",
+    "variant": "combined",
+    "workload": "chunked",
+    "repetition": 2,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65500,
+      "rss_kib": 68820,
+      "private_kib": 62188,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13277,
+      "errors": 0,
+      "duration_seconds": 15.1459056,
+      "requests_per_second": 876.6065463923134,
+      "payload_bytes": 13921943552,
+      "latency_ms": {
+        "p50": 25.181183,
+        "p95": 73.211413,
+        "p99": 78.860304
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91972,
+    "samples": 69,
+    "measured_cpu_seconds": 14.09,
+    "cpu_microseconds_per_success": 1061.2337124350381,
+    "cpu_seconds_per_gib": 1.086703321533479,
+    "phase_median_pss_kib": 81278.0,
+    "phase_cpu_seconds": 13.809999999999999,
+    "phase_client_cpu_seconds": 8.879999999999999,
+    "phase_sample_seconds": 14.847531071000049
+  },
+  {
+    "name": "r2-baseline-chunked",
+    "variant": "baseline",
+    "workload": "chunked",
+    "repetition": 2,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 67168,
+      "rss_kib": 70488,
+      "private_kib": 63856,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 13964,
+      "errors": 0,
+      "duration_seconds": 15.049646534,
+      "requests_per_second": 927.8623234407985,
+      "payload_bytes": 14642315264,
+      "latency_ms": {
+        "p50": 23.393353,
+        "p95": 71.169667,
+        "p99": 77.29209
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91820,
+    "samples": 67,
+    "measured_cpu_seconds": 14.010000000000002,
+    "cpu_microseconds_per_success": 1003.2941850472645,
+    "cpu_seconds_per_gib": 1.0273732454883988,
+    "phase_median_pss_kib": 83124,
+    "phase_cpu_seconds": 13.68,
+    "phase_client_cpu_seconds": 8.86,
+    "phase_sample_seconds": 14.690955068999983
+  },
+  {
+    "name": "r2-caddy-download",
+    "variant": "caddy",
+    "workload": "download",
+    "repetition": 2,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 55836,
+      "rss_kib": 55844,
+      "private_kib": 55836,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "requests": 18160,
+      "errors": 0,
+      "duration_seconds": 15.052573564,
+      "requests_per_second": 1206.4382162151844,
+      "payload_bytes": 19042140160,
+      "latency_ms": {
+        "p50": 15.683617,
+        "p95": 68.194507,
+        "p99": 75.264207
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 115924,
+    "samples": 69,
+    "measured_cpu_seconds": 15.239999999999998,
+    "cpu_microseconds_per_success": 839.2070484581496,
+    "cpu_seconds_per_gib": 0.8593480176211453,
+    "phase_median_pss_kib": 115776.0,
+    "phase_cpu_seconds": 14.820000000000002,
+    "phase_client_cpu_seconds": 10.09,
+    "phase_sample_seconds": 14.700601839
+  },
+  {
+    "name": "r2-combined-download",
+    "variant": "combined",
+    "workload": "download",
+    "repetition": 2,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64816,
+      "rss_kib": 68128,
+      "private_kib": 61512,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15771,
+      "errors": 0,
+      "duration_seconds": 15.054644799,
+      "requests_per_second": 1047.5836667396884,
+      "payload_bytes": 16537092096,
+      "latency_ms": {
+        "p50": 18.958164,
+        "p95": 68.647593,
+        "p99": 73.76064
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 136636,
+    "samples": 66,
+    "measured_cpu_seconds": 15.829999999999998,
+    "cpu_microseconds_per_success": 1003.7410436877813,
+    "cpu_seconds_per_gib": 1.027830828736288,
+    "phase_median_pss_kib": 110392,
+    "phase_cpu_seconds": 15.290000000000001,
+    "phase_client_cpu_seconds": 9.23,
+    "phase_sample_seconds": 14.593562114000065
+  },
+  {
+    "name": "r2-baseline-download",
+    "variant": "baseline",
+    "workload": "download",
+    "repetition": 2,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65046,
+      "rss_kib": 68412,
+      "private_kib": 61688,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15807,
+      "errors": 0,
+      "duration_seconds": 15.012571037,
+      "requests_per_second": 1052.9175822743518,
+      "payload_bytes": 16574840832,
+      "latency_ms": {
+        "p50": 18.692318,
+        "p95": 68.185903,
+        "p99": 72.762561
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 140802,
+    "samples": 66,
+    "measured_cpu_seconds": 15.62,
+    "cpu_microseconds_per_success": 988.169798190675,
+    "cpu_seconds_per_gib": 1.011885873347251,
+    "phase_median_pss_kib": 107222,
+    "phase_cpu_seconds": 15.269999999999998,
+    "phase_client_cpu_seconds": 9.399999999999999,
+    "phase_sample_seconds": 14.705218312000056
+  },
+  {
+    "name": "r2-caddy-churn",
+    "variant": "caddy",
+    "workload": "churn",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 56576,
+      "rss_kib": 56584,
+      "private_kib": 56576,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 17352,
+      "errors": 0,
+      "duration_seconds": 15.009330153,
+      "requests_per_second": 1156.0809058845146,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 22.125176,
+        "p95": 54.990382,
+        "p99": 63.677005
+      },
+      "handshakes": 17352,
+      "handshake_total_ms": 239689.197445,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 119200,
+    "samples": 72,
+    "measured_cpu_seconds": 22.01,
+    "cpu_microseconds_per_success": 1268.4416781927155,
+    "phase_median_pss_kib": 119084,
+    "phase_cpu_seconds": 21.43,
+    "phase_client_cpu_seconds": 6.979999999999999,
+    "phase_sample_seconds": 14.655438131999972
+  },
+  {
+    "name": "r2-combined-churn",
+    "variant": "combined",
+    "workload": "churn",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64618,
+      "rss_kib": 67880,
+      "private_kib": 61364,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 22997,
+      "errors": 0,
+      "duration_seconds": 15.038837824,
+      "requests_per_second": 1529.1740139188032,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 13.925011,
+        "p95": 53.131424,
+        "p99": 56.629637
+      },
+      "handshakes": 22997,
+      "handshake_total_ms": 224287.808395,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 71506,
+    "samples": 71,
+    "measured_cpu_seconds": 18.75,
+    "cpu_microseconds_per_success": 815.3237378788538,
+    "phase_median_pss_kib": 70250.0,
+    "phase_cpu_seconds": 18.380000000000003,
+    "phase_client_cpu_seconds": 9.43,
+    "phase_sample_seconds": 14.73851026200009
+  },
+  {
+    "name": "r2-baseline-churn",
+    "variant": "baseline",
+    "workload": "churn",
+    "repetition": 2,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64498,
+      "rss_kib": 67760,
+      "private_kib": 61244,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 21990,
+      "errors": 0,
+      "duration_seconds": 15.006245502,
+      "requests_per_second": 1465.389860313109,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.479046,
+        "p95": 54.084117,
+        "p99": 57.466451
+      },
+      "handshakes": 21990,
+      "handshake_total_ms": 224381.054198,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 75614,
+    "samples": 70,
+    "measured_cpu_seconds": 18.630000000000003,
+    "cpu_microseconds_per_success": 847.2032742155527,
+    "phase_median_pss_kib": 72678,
+    "phase_cpu_seconds": 18.009999999999998,
+    "phase_client_cpu_seconds": 9.31,
+    "phase_sample_seconds": 14.549400244000026
+  },
+  {
+    "name": "r3-baseline-small",
+    "variant": "baseline",
+    "workload": "small",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64870,
+      "rss_kib": 68208,
+      "private_kib": 61540,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 231749,
+      "errors": 0,
+      "duration_seconds": 15.001836348,
+      "requests_per_second": 15448.042134581483,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.259522,
+        "p95": 5.85825,
+        "p99": 47.786671
+      },
+      "handshakes": 256,
+      "handshake_total_ms": 1300.859598,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 86882,
+    "samples": 70,
+    "measured_cpu_seconds": 15.729999999999999,
+    "cpu_microseconds_per_success": 67.87515803735937,
+    "phase_median_pss_kib": 84086,
+    "phase_cpu_seconds": 15.2,
+    "phase_client_cpu_seconds": 7.84,
+    "phase_sample_seconds": 14.652431347000174
+  },
+  {
+    "name": "r3-combined-small",
+    "variant": "combined",
+    "workload": "small",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64268,
+      "rss_kib": 67524,
+      "private_kib": 61020,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 229046,
+      "errors": 0,
+      "duration_seconds": 15.002019759,
+      "requests_per_second": 15267.677531393125,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.275349,
+        "p95": 5.805056,
+        "p99": 47.742762
+      },
+      "handshakes": 256,
+      "handshake_total_ms": 1387.57988,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 80096,
+    "samples": 69,
+    "measured_cpu_seconds": 15.56,
+    "cpu_microseconds_per_success": 67.93395213188617,
+    "phase_median_pss_kib": 78710.0,
+    "phase_cpu_seconds": 15.129999999999999,
+    "phase_client_cpu_seconds": 7.739999999999999,
+    "phase_sample_seconds": 14.614368265000167
+  },
+  {
+    "name": "r3-caddy-small",
+    "variant": "caddy",
+    "workload": "small",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 64,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 56976,
+      "rss_kib": 56984,
+      "private_kib": 56976,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 190375,
+      "errors": 0,
+      "duration_seconds": 15.0399317,
+      "requests_per_second": 12657.96971671088,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 2.880023,
+        "p95": 35.92267,
+        "p99": 43.544771
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 129408,
+    "samples": 71,
+    "measured_cpu_seconds": 17.2,
+    "cpu_microseconds_per_success": 90.34799737360473,
+    "phase_median_pss_kib": 127368.0,
+    "phase_cpu_seconds": 16.66,
+    "phase_client_cpu_seconds": 6.8500000000000005,
+    "phase_sample_seconds": 14.591320676999885
+  },
+  {
+    "name": "r3-baseline-rate",
+    "variant": "baseline",
+    "workload": "rate",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64434,
+      "rss_kib": 67668,
+      "private_kib": 61208,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999842866,
+      "requests_per_second": 1000.0104757097394,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.686614,
+        "p95": 1.286658,
+        "p99": 1.344639
+      },
+      "handshakes": 15,
+      "handshake_total_ms": 14.581703,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 68922,
+    "samples": 72,
+    "measured_cpu_seconds": 2.4699999999999998,
+    "cpu_microseconds_per_success": 164.66666666666663,
+    "phase_median_pss_kib": 66838,
+    "phase_cpu_seconds": 2.42,
+    "phase_client_cpu_seconds": 2.43,
+    "phase_sample_seconds": 14.669432724999979
+  },
+  {
+    "name": "r3-combined-rate",
+    "variant": "combined",
+    "workload": "rate",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64522,
+      "rss_kib": 67748,
+      "private_kib": 61304,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999924182,
+      "requests_per_second": 1000.0050545588817,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.679172,
+        "p95": 1.285489,
+        "p99": 1.343956
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 13.203159,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 67098,
+    "samples": 72,
+    "measured_cpu_seconds": 2.47,
+    "cpu_microseconds_per_success": 164.66666666666666,
+    "phase_median_pss_kib": 66174,
+    "phase_cpu_seconds": 2.42,
+    "phase_client_cpu_seconds": 2.4299999999999997,
+    "phase_sample_seconds": 14.651614723999955
+  },
+  {
+    "name": "r3-caddy-rate",
+    "variant": "caddy",
+    "workload": "rate",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 128,
+      "duration": 15,
+      "protocol": "h1",
+      "rate": 1000
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 52880,
+      "rss_kib": 52888,
+      "private_kib": 52880,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999413803,
+      "requests_per_second": 1000.0390813272904,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.781503,
+        "p95": 1.316693,
+        "p99": 1.387482
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 97664,
+    "samples": 72,
+    "measured_cpu_seconds": 3.3899999999999997,
+    "cpu_microseconds_per_success": 225.99999999999997,
+    "phase_median_pss_kib": 97496,
+    "phase_cpu_seconds": 3.29,
+    "phase_client_cpu_seconds": 2.56,
+    "phase_sample_seconds": 14.553536248
+  },
+  {
+    "name": "r3-baseline-upload",
+    "variant": "baseline",
+    "workload": "upload",
+    "repetition": 3,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64870,
+      "rss_kib": 68132,
+      "private_kib": 61616,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 13616,
+      "errors": 0,
+      "duration_seconds": 15.049197993,
+      "requests_per_second": 904.7658224932226,
+      "payload_bytes": 14277410816,
+      "latency_ms": {
+        "p50": 23.872288,
+        "p95": 73.361602,
+        "p99": 79.814811
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 89666,
+    "samples": 68,
+    "measured_cpu_seconds": 13.709999999999999,
+    "cpu_microseconds_per_success": 1006.9036427732079,
+    "cpu_seconds_per_gib": 1.0310693301997649,
+    "phase_median_pss_kib": 80710,
+    "phase_cpu_seconds": 13.33,
+    "phase_client_cpu_seconds": 9.870000000000001,
+    "phase_sample_seconds": 14.647835101999817
+  },
+  {
+    "name": "r3-combined-upload",
+    "variant": "combined",
+    "workload": "upload",
+    "repetition": 3,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64500,
+      "rss_kib": 67700,
+      "private_kib": 61308,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13295,
+      "errors": 0,
+      "duration_seconds": 15.049907666,
+      "requests_per_second": 883.394124073957,
+      "payload_bytes": 13940817920,
+      "latency_ms": {
+        "p50": 25.085259,
+        "p95": 73.057608,
+        "p99": 78.184297
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91152,
+    "samples": 69,
+    "measured_cpu_seconds": 13.770000000000001,
+    "cpu_microseconds_per_success": 1035.7277171869125,
+    "cpu_seconds_per_gib": 1.0605851823993984,
+    "phase_median_pss_kib": 80996,
+    "phase_cpu_seconds": 13.290000000000001,
+    "phase_client_cpu_seconds": 9.54,
+    "phase_sample_seconds": 14.550338183000122
+  },
+  {
+    "name": "r3-caddy-upload",
+    "variant": "caddy",
+    "workload": "upload",
+    "repetition": 3,
+    "settings": {
+      "mode": "upload",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 56864,
+      "rss_kib": 56872,
+      "private_kib": 56864,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 15345,
+      "errors": 0,
+      "duration_seconds": 15.051276576,
+      "requests_per_second": 1019.514851283004,
+      "payload_bytes": 16090398720,
+      "latency_ms": {
+        "p50": 19.179798,
+        "p95": 72.361156,
+        "p99": 80.782429
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "upload",
+      "error_samples": null
+    },
+    "peak_pss_kib": 123864,
+    "samples": 74,
+    "measured_cpu_seconds": 14.74,
+    "cpu_microseconds_per_success": 960.573476702509,
+    "cpu_seconds_per_gib": 0.9836272401433692,
+    "phase_median_pss_kib": 121500.0,
+    "phase_cpu_seconds": 14.24,
+    "phase_client_cpu_seconds": 10.37,
+    "phase_sample_seconds": 14.589815025999997
+  },
+  {
+    "name": "r3-baseline-chunked",
+    "variant": "baseline",
+    "workload": "chunked",
+    "repetition": 3,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65208,
+      "rss_kib": 68536,
+      "private_kib": 61888,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13456,
+      "errors": 0,
+      "duration_seconds": 15.007042473,
+      "requests_per_second": 896.6456931277054,
+      "payload_bytes": 14109638656,
+      "latency_ms": {
+        "p50": 24.371086,
+        "p95": 72.958632,
+        "p99": 79.207206
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 91924,
+    "samples": 68,
+    "measured_cpu_seconds": 14.320000000000002,
+    "cpu_microseconds_per_success": 1064.2092746730084,
+    "cpu_seconds_per_gib": 1.0897502972651607,
+    "phase_median_pss_kib": 84696,
+    "phase_cpu_seconds": 14.04,
+    "phase_client_cpu_seconds": 8.809999999999999,
+    "phase_sample_seconds": 14.749797253999986
+  },
+  {
+    "name": "r3-combined-chunked",
+    "variant": "combined",
+    "workload": "chunked",
+    "repetition": 3,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64316,
+      "rss_kib": 67572,
+      "private_kib": 61068,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 13284,
+      "errors": 0,
+      "duration_seconds": 15.00976087,
+      "requests_per_second": 885.0240929920958,
+      "payload_bytes": 13929283584,
+      "latency_ms": {
+        "p50": 24.970461,
+        "p95": 72.782208,
+        "p99": 78.61496
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 97332,
+    "samples": 68,
+    "measured_cpu_seconds": 14.27,
+    "cpu_microseconds_per_success": 1074.2246311352003,
+    "cpu_seconds_per_gib": 1.100006022282445,
+    "phase_median_pss_kib": 86216,
+    "phase_cpu_seconds": 13.85,
+    "phase_client_cpu_seconds": 8.59,
+    "phase_sample_seconds": 14.55714224899998
+  },
+  {
+    "name": "r3-caddy-chunked",
+    "variant": "caddy",
+    "workload": "chunked",
+    "repetition": 3,
+    "settings": {
+      "mode": "chunked",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54524,
+      "rss_kib": 54532,
+      "private_kib": 54524,
+      "cpu_seconds": 0.03
+    },
+    "load": {
+      "requests": 15661,
+      "errors": 0,
+      "duration_seconds": 15.047045437,
+      "requests_per_second": 1040.8023332933064,
+      "payload_bytes": 16421748736,
+      "latency_ms": {
+        "p50": 19.410881,
+        "p95": 71.359465,
+        "p99": 79.122914
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "chunked",
+      "error_samples": null
+    },
+    "peak_pss_kib": 118764,
+    "samples": 70,
+    "measured_cpu_seconds": 14.92,
+    "cpu_microseconds_per_success": 952.6850137283699,
+    "cpu_seconds_per_gib": 0.9755494540578508,
+    "phase_median_pss_kib": 116388.0,
+    "phase_cpu_seconds": 14.54,
+    "phase_client_cpu_seconds": 9.54,
+    "phase_sample_seconds": 14.697970231999989
+  },
+  {
+    "name": "r3-baseline-download",
+    "variant": "baseline",
+    "workload": "download",
+    "repetition": 3,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65070,
+      "rss_kib": 68428,
+      "private_kib": 61720,
+      "cpu_seconds": 0.09
+    },
+    "load": {
+      "requests": 15147,
+      "errors": 0,
+      "duration_seconds": 15.05723547,
+      "requests_per_second": 1005.9615545083855,
+      "payload_bytes": 15882780672,
+      "latency_ms": {
+        "p50": 19.690336,
+        "p95": 70.03158,
+        "p99": 75.148379
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 114470,
+    "samples": 66,
+    "measured_cpu_seconds": 15.71,
+    "cpu_microseconds_per_success": 1037.1690763847625,
+    "cpu_seconds_per_gib": 1.062061134217997,
+    "phase_median_pss_kib": 108198,
+    "phase_cpu_seconds": 15.29,
+    "phase_client_cpu_seconds": 9.25,
+    "phase_sample_seconds": 14.697479346000137
+  },
+  {
+    "name": "r3-combined-download",
+    "variant": "combined",
+    "workload": "download",
+    "repetition": 3,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 64664,
+      "rss_kib": 67988,
+      "private_kib": 61348,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 15216,
+      "errors": 0,
+      "duration_seconds": 15.050723729,
+      "requests_per_second": 1010.9812839552388,
+      "payload_bytes": 15955132416,
+      "latency_ms": {
+        "p50": 19.35971,
+        "p95": 69.667788,
+        "p99": 74.86043
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 140540,
+    "samples": 66,
+    "measured_cpu_seconds": 15.760000000000002,
+    "cpu_microseconds_per_success": 1035.7518401682441,
+    "cpu_seconds_per_gib": 1.060609884332282,
+    "phase_median_pss_kib": 106960,
+    "phase_cpu_seconds": 15.350000000000001,
+    "phase_client_cpu_seconds": 9.27,
+    "phase_sample_seconds": 14.693291754000029
+  },
+  {
+    "name": "r3-caddy-download",
+    "variant": "caddy",
+    "workload": "download",
+    "repetition": 3,
+    "settings": {
+      "mode": "download",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1"
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 53756,
+      "rss_kib": 53764,
+      "private_kib": 53756,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 17414,
+      "errors": 0,
+      "duration_seconds": 15.013756384,
+      "requests_per_second": 1159.8696258691073,
+      "payload_bytes": 18259902464,
+      "latency_ms": {
+        "p50": 16.649804,
+        "p95": 69.229598,
+        "p99": 76.251392
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "download",
+      "error_samples": null
+    },
+    "peak_pss_kib": 115936,
+    "samples": 70,
+    "measured_cpu_seconds": 15.2,
+    "cpu_microseconds_per_success": 872.8609165039624,
+    "cpu_seconds_per_gib": 0.8938095785000574,
+    "phase_median_pss_kib": 115848.0,
+    "phase_cpu_seconds": 14.86,
+    "phase_client_cpu_seconds": 9.98,
+    "phase_sample_seconds": 14.752280351000081
+  },
+  {
+    "name": "r3-baseline-churn",
+    "variant": "baseline",
+    "workload": "churn",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 67040,
+      "rss_kib": 70244,
+      "private_kib": 63844,
+      "cpu_seconds": 0.08
+    },
+    "load": {
+      "requests": 22116,
+      "errors": 0,
+      "duration_seconds": 15.006835504,
+      "requests_per_second": 1473.7284215652985,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.629556,
+        "p95": 53.488424,
+        "p99": 56.714788
+      },
+      "handshakes": 22116,
+      "handshake_total_ms": 223376.698091,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 77788,
+    "samples": 71,
+    "measured_cpu_seconds": 18.9,
+    "cpu_microseconds_per_success": 854.5849158979925,
+    "phase_median_pss_kib": 76818.0,
+    "phase_cpu_seconds": 18.46,
+    "phase_client_cpu_seconds": 9.23,
+    "phase_sample_seconds": 14.710382579999987
+  },
+  {
+    "name": "r3-combined-churn",
+    "variant": "combined",
+    "workload": "churn",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 65634,
+      "rss_kib": 69016,
+      "private_kib": 62260,
+      "cpu_seconds": 0.07
+    },
+    "load": {
+      "requests": 22819,
+      "errors": 0,
+      "duration_seconds": 15.046535689,
+      "requests_per_second": 1516.561717039104,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.00541,
+        "p95": 53.54129,
+        "p99": 56.956021
+      },
+      "handshakes": 22819,
+      "handshake_total_ms": 226168.326109,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 72226,
+    "samples": 70,
+    "measured_cpu_seconds": 18.700000000000003,
+    "cpu_microseconds_per_success": 819.4925281563611,
+    "phase_median_pss_kib": 71886,
+    "phase_cpu_seconds": 18.11,
+    "phase_client_cpu_seconds": 9.34,
+    "phase_sample_seconds": 14.594081058999791
+  },
+  {
+    "name": "r3-caddy-churn",
+    "variant": "caddy",
+    "workload": "churn",
+    "repetition": 3,
+    "settings": {
+      "mode": "small",
+      "workers": 32,
+      "duration": 15,
+      "protocol": "h1",
+      "churn": true
+    },
+    "success": true,
+    "baseline": {
+      "pss_kib": 54664,
+      "rss_kib": 54672,
+      "private_kib": 54664,
+      "cpu_seconds": 0.02
+    },
+    "load": {
+      "requests": 16893,
+      "errors": 0,
+      "duration_seconds": 15.005963999,
+      "requests_per_second": 1125.7524009204442,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 23.165008,
+        "p95": 55.178373,
+        "p99": 64.332338
+      },
+      "handshakes": 16893,
+      "handshake_total_ms": 233498.91464,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "peak_pss_kib": 117436,
+    "samples": 72,
+    "measured_cpu_seconds": 21.990000000000002,
+    "cpu_microseconds_per_success": 1301.7226069969813,
+    "phase_median_pss_kib": 117320,
+    "phase_cpu_seconds": 21.41,
+    "phase_client_cpu_seconds": 6.989999999999999,
+    "phase_sample_seconds": 14.653590242999826
+  }
+]

@@ -1,5 +1,31 @@
 # Tako Proxy Performance Results
 
+## Latest: buffer reclamation — 26 October 2026
+
+The [production validation report](results/20261026-buffer-release/README.md)
+compares unchanged Tako master with the merged buffer-lifetime implementation
+and pinned Caddy on free GitHub runners (shared 2 CPU quota, 8 GiB RAM, no swap).
+
+| Retained-memory workload | Before | After | Caddy | Tako saving |
+| --- | ---: | ---: | ---: | ---: |
+| 20,000 exercised TLS connections held open | 2,273.68 MiB | 1,019.02 MiB | 1,054.17 MiB | 55.2% |
+| 2,000 uploads followed by streaming responses | 577.97 MiB | 335.30 MiB | 486.44 MiB | 42.0% |
+
+These are means of median holding-phase proxy PSS, excluding client, app and
+kernel socket memory. They do not replace active-saturation memory rows below.
+All **188 complete cases** passed correctness. Longer small-response throughput
+was effectively flat (−0.13%). Chunked-upload saturation remained noisy (−1.26%
+mean, four faster/four slower pairs); matched-rate CPU changed +0.10%, with mixed
+pairs. No repeatable processing-cost regression was detected; exact throughput
+parity on every host is not established. Full latency, CPU, repetitions, source
+pins and raw data are in the report.
+
+Tako still leads Caddy for small responses in the matched group. Existing Caddy
+advantages in HTTP/1 bulk transfers and HTTP/2 uploads remain visible. TLS
+handshake offloading stays disabled after its separate throughput trade-off test.
+
+## Earlier five-proxy VM results — June 2026
+
 Date: 2026-06-04 UTC feature rerun
 
 This is the public single-VM performance report for Tako against nginx,

@@ -1,0 +1,38 @@
+{
+  "name": "r2-caddy-stream",
+  "variant": "caddy",
+  "workload": "stream",
+  "repetition": 2,
+  "settings": {
+    "mode": "stream",
+    "workers": 2000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 56156,
+    "rss_kib": 56164,
+    "private_kib": 56156,
+    "cpu_seconds": 0.02
+  },
+  "load": {
+    "requests": 2000,
+    "errors": 0,
+    "duration_seconds": 13.23723071,
+    "requests_per_second": 0,
+    "payload_bytes": 262144000,
+    "latency_ms": {},
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "stream",
+    "error_samples": null
+  },
+  "peak_pss_kib": 511244,
+  "samples": 53,
+  "phase_median_pss_kib": 511204,
+  "phase_cpu_seconds": 0.0,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.681307242000003
+}

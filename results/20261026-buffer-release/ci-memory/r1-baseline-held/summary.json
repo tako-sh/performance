@@ -1,0 +1,40 @@
+{
+  "name": "r1-baseline-held",
+  "variant": "baseline",
+  "workload": "held",
+  "repetition": 1,
+  "settings": {
+    "mode": "held",
+    "workers": 20000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65068,
+    "rss_kib": 68320,
+    "private_kib": 61824,
+    "cpu_seconds": 0.04
+  },
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 62.883265193,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "peak_pss_kib": 2328468,
+  "samples": 213,
+  "phase_median_pss_kib": 2328468.0,
+  "phase_cpu_seconds": 0.01999999999999602,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.610923155999984,
+  "held_connections": [
+    20000
+  ]
+}

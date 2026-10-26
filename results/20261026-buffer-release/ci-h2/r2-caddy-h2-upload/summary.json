@@ -1,0 +1,45 @@
+{
+  "name": "r2-caddy-h2-upload",
+  "variant": "caddy",
+  "workload": "h2-upload",
+  "repetition": 2,
+  "settings": {
+    "mode": "upload",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 54076,
+    "rss_kib": 54084,
+    "private_kib": 54076,
+    "cpu_seconds": 0.02
+  },
+  "load": {
+    "requests": 8445,
+    "errors": 0,
+    "duration_seconds": 15.051963867,
+    "requests_per_second": 561.0563561419955,
+    "payload_bytes": 8855224320,
+    "latency_ms": {
+      "p50": 50.081454,
+      "p95": 138.787722,
+      "p99": 188.985889
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "upload",
+    "error_samples": null
+  },
+  "peak_pss_kib": 76224,
+  "samples": 72,
+  "measured_cpu_seconds": 14.32,
+  "cpu_microseconds_per_success": 1695.6779159265839,
+  "cpu_seconds_per_gib": 1.7363741859088218,
+  "phase_median_pss_kib": 76072,
+  "phase_cpu_seconds": 14.069999999999999,
+  "phase_client_cpu_seconds": 11.1,
+  "phase_sample_seconds": 14.783690754999952
+}

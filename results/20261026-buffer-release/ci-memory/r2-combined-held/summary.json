@@ -1,0 +1,41 @@
+{
+  "name": "r2-combined-held",
+  "variant": "combined",
+  "workload": "held",
+  "repetition": 2,
+  "settings": {
+    "mode": "held",
+    "workers": 20000,
+    "duration": 10,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 65138,
+    "rss_kib": 68452,
+    "private_kib": 61832,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "bytes": 5460000,
+    "concurrency": 20000,
+    "duration_sec": 64.772694398,
+    "errors": 0,
+    "note": "Connection-retention experiment; RPS is intentionally not measured.",
+    "requests": 420000,
+    "requests_per_sec": 0,
+    "status_counts": {
+      "200": 420000
+    }
+  },
+  "peak_pss_kib": 1043978,
+  "samples": 208,
+  "phase_median_pss_kib": 1043978.0,
+  "phase_cpu_seconds": 0.030000000000001137,
+  "phase_client_cpu_seconds": 0.0,
+  "phase_sample_seconds": 9.750335543999995,
+  "held_connections": [
+    20000,
+    20000
+  ]
+}

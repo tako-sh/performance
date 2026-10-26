@@ -1,0 +1,44 @@
+{
+  "name": "r2-combined-h2-small",
+  "variant": "combined",
+  "workload": "h2-small",
+  "repetition": 2,
+  "settings": {
+    "mode": "small",
+    "workers": 64,
+    "duration": 15,
+    "protocol": "h2"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 66796,
+    "rss_kib": 70092,
+    "private_kib": 63508,
+    "cpu_seconds": 0.08
+  },
+  "load": {
+    "requests": 218012,
+    "errors": 0,
+    "duration_seconds": 15.001178283,
+    "requests_per_second": 14532.99173485998,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 2.553726,
+      "p95": 6.737079,
+      "p99": 45.399268
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h2",
+    "workload": "small",
+    "error_samples": null
+  },
+  "peak_pss_kib": 80688,
+  "samples": 69,
+  "measured_cpu_seconds": 15.17,
+  "cpu_microseconds_per_success": 69.58332568849421,
+  "phase_median_pss_kib": 79978.0,
+  "phase_cpu_seconds": 14.620000000000001,
+  "phase_client_cpu_seconds": 7.32,
+  "phase_sample_seconds": 14.621587266000006
+}

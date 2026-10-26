@@ -1,0 +1,45 @@
+{
+  "name": "r1-caddy-download",
+  "variant": "caddy",
+  "workload": "download",
+  "repetition": 1,
+  "settings": {
+    "mode": "download",
+    "workers": 32,
+    "duration": 15,
+    "protocol": "h1"
+  },
+  "success": true,
+  "baseline": {
+    "pss_kib": 53976,
+    "rss_kib": 53984,
+    "private_kib": 53976,
+    "cpu_seconds": 0.03
+  },
+  "load": {
+    "requests": 18091,
+    "errors": 0,
+    "duration_seconds": 15.013416022,
+    "requests_per_second": 1204.9889228067912,
+    "payload_bytes": 18969788416,
+    "latency_ms": {
+      "p50": 15.823138,
+      "p95": 68.465681,
+      "p99": 75.661068
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "download",
+    "error_samples": null
+  },
+  "peak_pss_kib": 115960,
+  "samples": 69,
+  "measured_cpu_seconds": 15.28,
+  "cpu_microseconds_per_success": 844.6188712619535,
+  "cpu_seconds_per_gib": 0.8648897241722403,
+  "phase_median_pss_kib": 115844.0,
+  "phase_cpu_seconds": 14.830000000000002,
+  "phase_client_cpu_seconds": 9.99,
+  "phase_sample_seconds": 14.601411490999965
+}
