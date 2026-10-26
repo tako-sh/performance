@@ -12,6 +12,10 @@ the entire public comparison, using the same workload as the original VM page:
 - Three repetitions: **105 proxy cases and 30 feature cases**. A separate
   seven-case smoke run validates startup, TLS, payloads, and feature operations.
 
+Before every workflow measurement, a preflight task must reach `succeeded`
+with its persisted `ack` step. After load, record workflow status/step counts
+separately: HTTP enqueue throughput is not workflow completion throughput.
+
 Every case measures throughput, p50/p95/p99, HTTP status counts, client errors,
 process PSS/RSS/private memory, and CPU. nginx includes its master and workers;
 Tako's app and workflow processes are counted separately from the proxy.

@@ -66,6 +66,10 @@ def analyze(root):
                 close(row['non200_pct'], (result['requests'] - ok) / attempts * 100)
                 close(row['client_error_pct'], result['errors'] / attempts * 100)
                 assert row['clean'] == (ok == attempts)
+                if row['endpoint'] == 'workflow-enqueue':
+                    preflight = json.loads((case_dir / 'workflow-preflight.json').read_text())
+                    assert preflight == dict(status='succeeded', last_error=None, ack_steps=1)
+                    assert row['workflow_after_load']['ack_steps'] > 0
                 if group == 'http' and row['clean']:
                     assert result['bytes'] == ok * 13
                 samples = json.loads((case_dir / 'samples.json').read_text())
@@ -104,11 +108,14 @@ def analyze(root):
                                      ('loadgenCpu', 'loadgen', 'cpu_pct')]:
             metrics[key] = mean_range([r['resources'][process][metric] for r in repetitions])
         metrics['cpu'] = mean_range([r['resources']['total_cpu_pct'] for r in repetitions])
-        rows.append(dict(proxy=proxy, endpoint=endpoint, conc=concurrency, clean=all(r['clean'] for r in repetitions),
+        aggregate = dict(proxy=proxy, endpoint=endpoint, conc=concurrency, clean=all(r['clean'] for r in repetitions),
                          requests=sum(r['load']['requests'] for r in repetitions),
                          clientErrors=sum(r['load']['errors'] for r in repetitions),
                          non200=sum(r['load']['requests'] - r['load']['status_counts'].get('200', 0) for r in repetitions),
-                         metrics=metrics, rawCases=[r['name'] for r in repetitions]))
+                         metrics=metrics, rawCases=[r['name'] for r in repetitions])
+        if endpoint == 'workflow-enqueue':
+            aggregate['workflowAfterLoad'] = [r['workflow_after_load'] for r in repetitions]
+        rows.append(aggregate)
     result = dict(resultDirectory=root.name, takoRevision=TAKO_REVISION, totalCases=135, repetitions=3,
                   date=max(r['load']['started_at'][:10] for r in cases),
                   versions=versions[0], runtimeImage=next(iter(images)),

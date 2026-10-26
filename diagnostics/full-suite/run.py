@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import platform
 import shutil
+import sqlite3
 import statistics
 import subprocess
 import time
@@ -90,6 +91,17 @@ def prepare():
     runtime.mkdir(parents=True, exist_ok=True)
     shutil.copy('/build/bun', runtime / 'bun')
     (runtime / 'bun').chmod(0o755)
+
+
+def workflow_state(run_id=None):
+    path = DATA / 'apps/bench-features/production/data/tako/workflows.sqlite'
+    with sqlite3.connect(f'file:{path}?mode=ro', uri=True, timeout=5) as db:
+        if run_id:
+            run = db.execute('SELECT status, last_error FROM runs WHERE id = ?', (run_id,)).fetchone()
+            ack = db.execute("SELECT COUNT(*) FROM steps WHERE run_id = ? AND name = 'ack'", (run_id,)).fetchone()[0]
+            return dict(status=run[0] if run else None, last_error=run[1] if run else None, ack_steps=ack)
+        return dict(runs=dict(db.execute('SELECT status, COUNT(*) FROM runs GROUP BY status').fetchall()),
+                    ack_steps=db.execute("SELECT COUNT(*) FROM steps WHERE name = 'ack'").fetchone()[0])
 
 
 def ready(server, endpoint):
@@ -205,6 +217,17 @@ def case(args, proxy, endpoint, concurrency, index):
             payload = json.loads(response.stdout)
             if payload.get('ok') is not True or not payload.get('id'):
                 raise RuntimeError(f'feature correctness check failed: {payload}')
+            if endpoint == 'workflow-enqueue':
+                for _ in range(300):
+                    preflight = workflow_state(payload['id'])
+                    if preflight['status'] == 'succeeded' and preflight['ack_steps'] == 1:
+                        break
+                    if preflight['status'] in ['dead', 'cancelled']:
+                        raise RuntimeError(f'workflow worker preflight failed: {preflight}')
+                    time.sleep(0.1)
+                else:
+                    raise RuntimeError(f'workflow worker did not persist its ack: {preflight}')
+                write_json(case_dir / 'workflow-preflight.json', preflight)
         argv = ['/build/loadgen', '-name', name, '-url', f'https://127.0.0.1:18443/{endpoint}',
                 '-host', 'bench.test', '-sni', 'bench.test', '-insecure', '-source-ips', common.SOURCE_IPS,
                 '-concurrency', str(concurrency), '-warmup', f'{args.warmup}s',
@@ -240,6 +263,8 @@ def case(args, proxy, endpoint, concurrency, index):
                    non200_pct=(result['requests'] - ok) / attempts * 100,
                    client_error_pct=result['errors'] / attempts * 100,
                    clean=ok == attempts, completed=True)
+        if endpoint == 'workflow-enqueue':
+            row['workflow_after_load'] = workflow_state()
         write_json(case_dir / 'samples.json', samples)
         write_json(case_dir / 'summary.json', row)
         print(json.dumps({k: row[k] for k in ['name', 'rps200', 'success_pct', 'clean']}), flush=True)
