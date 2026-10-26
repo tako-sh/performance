@@ -1,0 +1,109 @@
+name: TLS offload experiments
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - diagnostics/tls-offload/**
+      - .github/workflows/tls.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tls-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TAKO_REVISION: f0ed5d938a4f26f4c775336c8f16aa572fe20dae
+  OPENSSL_NO_VENDOR: '1'
+
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.3'
+          cache-dependency-path: diagnostics/full-memory/caddy/go.sum
+      - name: Toolchains and libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tako-source/target
+          key: tls-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-${{ hashFiles('diagnostics/tls-offload/tako-tls.patch') }}
+          restore-keys: |
+            tls-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-
+            buffers-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-
+            memory-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-
+      - name: Validate harness
+        run: |
+          go test ./cmd/benchapp ./diagnostics/buffer-lifetime/load
+          python3 -m py_compile diagnostics/tls-offload/*.py
+          bash -n diagnostics/tls-offload/entrypoint.sh
+      - name: Build unchanged Tako control
+        run: |
+          mkdir -p build
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-server
+      - name: Build and test offload candidate
+        env:
+          TAKO_BENCH_TLS_OFFLOAD: '1'
+        run: |
+          git -C tako-source apply ../diagnostics/tls-offload/tako-tls.patch
+          cargo test --manifest-path tako-source/Cargo.toml --locked -p tako-server proxy:: -j 4
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-candidate
+          CGO_ENABLED=0 go build -trimpath -o build/benchapp ./cmd/benchapp
+          CGO_ENABLED=0 go build -trimpath -o build/buffer-load ./diagnostics/buffer-lifetime/load
+          (cd diagnostics/full-memory/caddy && CGO_ENABLED=0 go build -mod=readonly -trimpath -o ../../../build/caddy .)
+          chmod 755 build/*
+          {
+            echo "tako_revision=$TAKO_REVISION"
+            echo "performance_revision=$(git rev-parse HEAD)"
+            rustc --version
+            go version
+            sha256sum build/tako-server build/tako-candidate build/benchapp build/buffer-load build/caddy diagnostics/tls-offload/tako-tls.patch
+          } > build/build.txt
+      - name: Build isolated runner
+        run: |
+          docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Compare matched TLS arrival rates
+        run: |
+          mkdir -p results/tls
+          cp build/build.txt results/tls/
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g --entrypoint bash \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/tls,dst=/results" \
+            tako-memory-runner /perf/diagnostics/tls-offload/entrypoint.sh --repetitions 4
+      - name: Summarize
+        if: always()
+        run: |
+          if test -f results/tls/summary.json; then
+            python3 diagnostics/tls-offload/summarize.py results/tls >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tls-results-${{ github.sha }}
+          path: |
+            results/tls/**/*.json
+            results/tls/build.txt
+          retention-days: 14
