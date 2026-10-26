@@ -59,7 +59,7 @@ jobs:
             --mount "type=bind,src=$PWD,dst=/perf,readonly" \
             --mount "type=bind,src=$PWD/results/buffer-chunked-rate,dst=/results" \
             tako-memory-runner /perf/diagnostics/rate-validation/entrypoint.sh \
-              --scenarios "$SCENARIO" --repetitions 8 --duration 60 --rate 500 --variants baseline,combined
+              --scenarios "$SCENARIO" --repetitions 8 --duration 60 --rate 250 --variants baseline,combined
       - name: Summarize
         if: always()
         run: |
