@@ -211,6 +211,9 @@ def main():
                     cpu_max=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),
                     memory_max=Path('/sys/fs/cgroup/memory.max').read_text().strip(),
                     swap_max=Path('/sys/fs/cgroup/memory.swap.max').read_text().strip(),
+                    network_limits={key: Path('/proc/sys/' + key.replace('.', '/')).read_text().strip()
+                                    for key in ('net.ipv4.ip_local_port_range', 'net.ipv4.tcp_tw_reuse',
+                                                'net.core.somaxconn', 'net.ipv4.tcp_max_syn_backlog')},
                     openssl=subprocess.check_output(['openssl', 'version'], text=True).strip(),
                     binaries={p.name: hashlib.file_digest(p.open('rb'), 'sha256').hexdigest()
                               for p in Path('/build').iterdir() if p.is_file()},

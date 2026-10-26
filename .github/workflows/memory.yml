@@ -71,6 +71,12 @@ jobs:
             --mount "type=bind,src=$PWD,dst=/perf,readonly" \
             --mount "type=bind,src=$PWD/results/full-memory,dst=/results" \
             tako-memory-runner
+      - name: Summarize completed cases
+        if: always()
+        run: |
+          if test -f results/full-memory/summary.json; then
+            python3 diagnostics/full-memory/summarize.py results/full-memory >> "$GITHUB_STEP_SUMMARY"
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:

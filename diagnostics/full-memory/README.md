@@ -12,6 +12,12 @@ upstream app, and the client share that limit. Cgroups and app identities are se
 up by Tako's original installer. The container has a private cgroup namespace;
 never mount the host cgroup tree into it.
 
+The private network namespace uses ephemeral ports 10240–65535 and 65535-entry
+listen/SYN backlogs for both proxies and their apps. The initial untuned 20k run
+exhausted the default 28,232 upstream source ports during connection churn and
+hit upstream health-check timeouts. These kernel settings are recorded in each
+result and do not modify the host or Tako's connection/health-check policies.
+
 The workflow pins the Tako revision, Rust and Go versions, Caddy and plugin
 dependencies, and Ubuntu image digest. It uploads raw samples, request results,
 binary hashes, resource limits, and source revisions as an artifact. Runtime logs
