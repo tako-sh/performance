@@ -54,6 +54,28 @@ The optional workflow-dispatch `stress` input runs 20,000 continuously active
 workers as well. Local runs overloaded the upstream and triggered health checks;
 those failing cases remain explicitly unsuccessful and are not capacity wins.
 
+## Requirement for changing the production default
+
+Memory savings must preserve performance. A candidate must satisfy both of these
+comparisons under the same workload and resource limits:
+
+- No repeatable regression against unchanged Tako (64 KiB) in throughput,
+  p95/p99 latency, or CPU per request/transferred byte.
+- Remain faster than Caddy on the compared workloads, with successful responses.
+  Staying ahead of Caddy does not justify a slowdown relative to current Tako.
+
+Check small requests, large uploads and downloads, HTTP/1.1 and HTTP/2, and steady
+connections and connection churn. Compare tail latency at matched offered load;
+verify that the client is not the throughput bottleneck. Use enough paired trials
+to establish measurement uncertainty. An inconclusive difference requires more
+measurement; it does not establish absence of a regression. There is no approved
+percentage of slowdown to exchange for lower memory use.
+
+The current two short active repetitions and held-connection tests establish
+memory savings and basic correctness. A successful memory workflow does **not**
+certify this performance requirement. Neither smaller buffer is approved as the
+production default by these results alone.
+
 ## Local run
 
 Use Linux with Docker and cgroup v2. Follow the workflow's build commands to

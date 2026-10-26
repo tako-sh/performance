@@ -1,0 +1,56 @@
+{
+  "name": "r1-tako-64-c5000",
+  "mode": "active",
+  "variant": "tako-64",
+  "concurrency": 5000,
+  "repetition": 1,
+  "baseline": {
+    "pss_kib": 64124,
+    "rss_kib": 67400,
+    "private_kib": 60856,
+    "cpu_seconds": 0.06
+  },
+  "after_close": {
+    "pss_kib": 728596,
+    "rss_kib": 731872,
+    "private_kib": 725328,
+    "cpu_seconds": 31.93
+  },
+  "peak": {
+    "pss_kib": 732300,
+    "rss_kib": 735576,
+    "private_kib": 729032
+  },
+  "process_cpu_seconds": 31.5,
+  "samples_include_warmup": true,
+  "load": {
+    "name": "r1-tako-64-c5000",
+    "method": "GET",
+    "url": "https://127.0.0.1:18443/plaintext",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 20.608330528,
+    "concurrency": 5000,
+    "requests": 80706,
+    "errors": 0,
+    "bytes": 1049178,
+    "requests_per_sec": 3916.18330705376,
+    "bytes_per_sec": 50910.38299169888,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 8221.11561,
+      "mean": 1250.488334,
+      "min": 7.632111,
+      "p50": 922.121345,
+      "p90": 2085.183137,
+      "p95": 4242.955608,
+      "p99": 6710.284782
+    },
+    "status_counts": {
+      "200": 80706
+    },
+    "started_at": "2026-10-26T06:18:14Z"
+  },
+  "success": true
+}

@@ -54,6 +54,33 @@ and supply the table's control. The original invalid sample is preserved.
 
 ## Free GitHub runner
 
+The [corrected Actions run](https://github.com/tako-sh/performance/actions/runs/40278058403)
+completed successfully, including all active and held cases, with zero failed
+request or connection-count validations. Its [complete raw results](ci-passing/)
+record the source/build identity and resource limits.
+
+For the two active HTTP/1.1 small-response repeats at 5,000 workers:
+
+| Configuration | Mean requests/s | Change vs unchanged Tako | Per-run p99 latency range, ms |
+| --- | ---: | ---: | ---: |
+| Tako, 64 KiB | 3,893 | baseline | 6,710–7,566 |
+| Tako, 32 KiB | 3,830 | −1.6% | 7,395–7,514 |
+| Tako, 16 KiB | 3,904 | +0.3% | 7,006–7,397 |
+| Caddy | 2,751 | control | 7,086–7,277 |
+
+Both candidates had about 39–42% higher throughput than Caddy in this workload. That does
+not establish no slowdown against unchanged Tako. In particular, 32 KiB's mean
+throughput was lower in this run, and the tail-latency ranges overlap. Two short
+repeats cannot establish whether small differences are noise or regressions.
+These saturated, closed-loop runs also include connection churn and share two
+CPUs with the client; they do not replace latency tests at matched offered load.
+
+**Acceptance requirement:** preserve current Tako throughput, tail latency and
+CPU efficiency, and remain ahead of Caddy across the relevant workloads. Any
+repeatable regression blocks a default change even if memory improves or Caddy
+remains slower. Full-server bulk transfers and HTTP/2 remain unmeasured here.
+Neither 32 KiB nor 16 KiB has cleared that requirement yet.
+
 The [initial Actions run](https://github.com/tako-sh/performance/actions/runs/40275312582)
 built the pinned binaries, passed the proxy tests, and reproduced the memory
 reduction in Tako at 5k workers: 782.2 → 614.1 → 536.5 MiB for 64/32/16 KiB,
@@ -61,7 +88,7 @@ with all Tako requests returning 200. That is one pass, not a completed repeat.
 Caddy returned 61 HTTP 502s, and the next case hit the listener-port collision
 described below. The run failed and its [raw artifact data](ci-initial/summary.json)
 is retained as incomplete evidence. The corrected workflow runs active 5k and
-held 20k comparisons separately; its fresh replay must be checked independently.
+held 20k comparisons separately, as recorded in the successful replay above.
 
 ## Setup and measurement
 
