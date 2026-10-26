@@ -17,6 +17,8 @@ listen/SYN backlogs for both proxies and their apps. The initial untuned 20k run
 exhausted the default 28,232 upstream source ports during connection churn and
 hit upstream health-check timeouts. These kernel settings are recorded in each
 result and do not modify the host or Tako's connection/health-check policies.
+The public listener ports are reserved from ephemeral allocation, and Caddy uses
+a fresh upstream port per case, as Tako's deployed app already does.
 
 The workflow pins the Tako revision, Rust and Go versions, Caddy and plugin
 dependencies, and Ubuntu image digest. It uploads raw samples, request results,
@@ -25,7 +27,7 @@ stay in the local output directory; they can contain build-machine source paths.
 
 ## Workload and interpretation
 
-- 5,000 and 20,000 concurrent workers; 16 loopback client IPs avoid Tako's
+- 5,000 concurrent workers; 16 loopback client IPs avoid Tako's
   per-IP active-request limit. Each case starts fresh proxy processes.
 - 5 seconds of warmup and 20 seconds measured load, twice with reversed variant
   order. Small responses, TLS HTTP/1.1, one upstream instance, same certificate.
@@ -41,10 +43,21 @@ stay in the local output directory; they can contain build-machine source paths.
   checks before changing Tako's defaults. The temporary patch does not affect the
   custom PROXY-protocol listener, upstream sockets, or HTTP body buffers.
 
+The second mode (`--mode held --concurrency 20000`) opens exactly 20,000 TLS
+connections, performs 21 verified requests per connection with at most 64 requests
+in flight, then holds every connection open for ten seconds. It reports median
+PSS during that holding phase and verifies the established-connection count.
+This measures retained connection memory without saturating the upstream. It
+does not measure maximum throughput. Both modes run twice in reverse order in CI.
+
+The optional workflow-dispatch `stress` input runs 20,000 continuously active
+workers as well. Local runs overloaded the upstream and triggered health checks;
+those failing cases remain explicitly unsuccessful and are not capacity wins.
+
 ## Local run
 
 Use Linux with Docker and cgroup v2. Follow the workflow's build commands to
-produce `build/{tako-server,benchapp,loadgen,caddy}`. Then run its Docker commands.
+produce `build/{tako-server,benchapp,loadgen,hold-connections,caddy}`. Then run its Docker commands.
 The runner accepts `--concurrency 5000 --duration 20 --repetitions 2`; use
 `--concurrency 20 --duration 2 --warmup 1 --repetitions 1` for a smoke test.
 

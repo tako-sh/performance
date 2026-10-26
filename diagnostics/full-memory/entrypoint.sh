@@ -8,6 +8,7 @@ ulimit -n 131072
 # This container has its own network namespace. Warmup-to-measurement churn at
 # 20k workers can exhaust the default 28k upstream source ports and 4096 backlog.
 sysctl -w 'net.ipv4.ip_local_port_range=10240 65535' \
+  net.ipv4.ip_local_reserved_ports=18080,18443 \
   net.core.somaxconn=65535 net.ipv4.tcp_max_syn_backlog=65535 > /results/network.txt
 # Local builds may need a supplied native library directory. CI builds use the
 # distribution's libraries. The helper intentionally clears its environment.

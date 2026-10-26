@@ -9,6 +9,7 @@ import platform
 import shutil
 import signal
 import socket
+import statistics
 import subprocess
 import time
 
@@ -121,9 +122,14 @@ def case(args, variant, concurrency, repetition):
     server = upstream = load = None
     try:
         if variant == 'caddy':
+            # Match Tako's fresh backend endpoint each case; old TIME_WAIT
+            # sockets must not consume the next case's upstream port budget.
+            upstream_port = str(9100 + repetition * 10 + args.concurrency.split(',').index(str(concurrency)))
+            caddy_config = case_dir / 'Caddyfile'
+            caddy_config.write_text(Path('/Caddyfile').read_text().replace('127.0.0.1:9101', f'127.0.0.1:{upstream_port}'))
             upstream = start(['/build/benchapp'], case_dir / 'app.log',
-                             env={**os.environ, 'PORT': '9101', 'GOMAXPROCS': '2'})
-            server = start(['/build/caddy', 'run', '--config', '/Caddyfile', '--adapter', 'caddyfile'],
+                             env={**os.environ, 'PORT': upstream_port, 'GOMAXPROCS': '2'})
+            server = start(['/build/caddy', 'run', '--config', str(caddy_config), '--adapter', 'caddyfile'],
                            case_dir / 'server.log', env={**os.environ, 'GOMAXPROCS': '2'})
         else:
             Path(SOCKET).unlink(missing_ok=True)
@@ -155,6 +161,9 @@ def case(args, variant, concurrency, repetition):
                 '-source-ips', SOURCE_IPS, '-concurrency', str(concurrency),
                 '-warmup', f'{args.warmup}s', '-duration', f'{args.duration}s',
                 '-request-timeout', '60s']
+        if args.mode == 'held':
+            argv = ['/build/hold-connections', '-concurrency', str(concurrency),
+                    '-phase-file', str(case_dir / 'phase.json')]
         with (case_dir / 'load.json').open('wb') as output, (case_dir / 'load.stderr').open('wb') as error:
             load = subprocess.Popen(argv, stdout=output, stderr=error,
                                     env={**os.environ, 'GOMAXPROCS': '2'})
@@ -163,10 +172,13 @@ def case(args, variant, concurrency, repetition):
         while load.poll() is None:
             sample = memory(server.pid)
             sample['elapsed_seconds'] = round(time.monotonic() - started, 3)
+            if args.mode == 'held' and (case_dir / 'phase.json').exists():
+                sample['phase'] = json.loads((case_dir / 'phase.json').read_text())['phase']
             if len(samples) % 20 == 0:
                 sample['established_tls_port_connections'] = established_connections()
             samples.append(sample)
-            if sample['elapsed_seconds'] > args.warmup + args.duration + 150:
+            deadline = 600 if args.mode == 'held' else args.warmup + args.duration + 150
+            if sample['elapsed_seconds'] > deadline:
                 raise RuntimeError('load generator exceeded deadline')
             time.sleep(0.25)
         if load.returncode:
@@ -174,7 +186,7 @@ def case(args, variant, concurrency, repetition):
         result = json.loads((case_dir / 'load.json').read_text())
         time.sleep(2)
         after = memory(server.pid)
-        summary = dict(name=name, variant=variant, concurrency=concurrency, repetition=repetition,
+        summary = dict(name=name, mode=args.mode, variant=variant, concurrency=concurrency, repetition=repetition,
                        baseline=baseline, after_close=after,
                        peak={k: max(s[k] for s in samples) for k in ('pss_kib', 'rss_kib', 'private_kib')},
                        process_cpu_seconds=samples[-1]['cpu_seconds']-baseline['cpu_seconds'],
@@ -182,6 +194,12 @@ def case(args, variant, concurrency, repetition):
                        success=result['requests'] > 0 and result['errors'] == 0
                        and set(result['status_counts']) == {'200'}
                        and result['bytes'] == 13 * result['requests'])
+        if args.mode == 'held':
+            held = [s for s in samples if s.get('phase') == 'holding'][4:]
+            counts = [s['established_tls_port_connections'] for s in held if 'established_tls_port_connections' in s]
+            summary['held_pss_kib'] = statistics.median(s['pss_kib'] for s in held)
+            summary['held_connections'] = counts
+            summary['success'] = summary['success'] and bool(counts) and all(c == concurrency for c in counts)
         (case_dir / 'samples.json').write_text(json.dumps(samples, indent=2) + '\n')
         (case_dir / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
         print(json.dumps(dict(name=name, pss_mib=round(summary['peak']['pss_kib']/1024, 1),
@@ -201,18 +219,20 @@ def case(args, variant, concurrency, repetition):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--concurrency', default='5000,20000')
+    parser.add_argument('--mode', choices=('active', 'held'), default='active')
+    parser.add_argument('--concurrency', default='5000')
     parser.add_argument('--variants', default='tako-64,tako-32,tako-16,caddy')
     parser.add_argument('--repetitions', type=int, default=2)
     parser.add_argument('--warmup', type=int, default=5)
     parser.add_argument('--duration', type=int, default=20)
     args = parser.parse_args()
     metadata = dict(kernel=platform.release(), architecture=platform.machine(),
+                    runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                     cpu_max=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),
                     memory_max=Path('/sys/fs/cgroup/memory.max').read_text().strip(),
                     swap_max=Path('/sys/fs/cgroup/memory.swap.max').read_text().strip(),
                     network_limits={key: Path('/proc/sys/' + key.replace('.', '/')).read_text().strip()
-                                    for key in ('net.ipv4.ip_local_port_range', 'net.ipv4.tcp_tw_reuse',
+                                    for key in ('net.ipv4.ip_local_port_range', 'net.ipv4.ip_local_reserved_ports', 'net.ipv4.tcp_tw_reuse',
                                                 'net.core.somaxconn', 'net.ipv4.tcp_max_syn_backlog')},
                     openssl=subprocess.check_output(['openssl', 'version'], text=True).strip(),
                     binaries={p.name: hashlib.file_digest(p.open('rb'), 'sha256').hexdigest()
@@ -228,7 +248,7 @@ def main():
                 results.append(case(args, variant, concurrency, repetition))
                 (OUT / 'summary.json').write_text(json.dumps(results, indent=2) + '\n')
     if not all(r['success'] for r in results):
-        raise SystemExit('One or more cases had failed requests; inspect summary.json')
+        raise SystemExit('One or more cases failed request or connection-count validation; inspect summary.json')
 
 
 if __name__ == '__main__':

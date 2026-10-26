@@ -1,0 +1,55 @@
+{
+  "name": "r1-caddy-c5000",
+  "variant": "caddy",
+  "concurrency": 5000,
+  "repetition": 1,
+  "baseline": {
+    "pss_kib": 50496,
+    "rss_kib": 50504,
+    "private_kib": 50496,
+    "cpu_seconds": 0.03
+  },
+  "after_close": {
+    "pss_kib": 576460,
+    "rss_kib": 576468,
+    "private_kib": 576460,
+    "cpu_seconds": 32.83
+  },
+  "peak": {
+    "pss_kib": 754468,
+    "rss_kib": 754476,
+    "private_kib": 754468
+  },
+  "process_cpu_seconds": 32.74,
+  "samples_include_warmup": true,
+  "load": {
+    "name": "r1-caddy-c5000",
+    "method": "GET",
+    "url": "https://127.0.0.1:18443/plaintext",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 20.457107952,
+    "concurrency": 5000,
+    "requests": 161360,
+    "errors": 0,
+    "bytes": 2097680,
+    "requests_per_sec": 7887.722955689079,
+    "bytes_per_sec": 102540.39842395802,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 3489.314701,
+      "mean": 626.361382,
+      "min": 0.234706,
+      "p50": 561.942734,
+      "p90": 679.432658,
+      "p95": 722.50944,
+      "p99": 3374.135762
+    },
+    "status_counts": {
+      "200": 161360
+    },
+    "started_at": "2026-10-26T05:33:08Z"
+  },
+  "success": true
+}

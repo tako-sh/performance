@@ -1,0 +1,30 @@
+{
+  "name": "r2-caddy-c20000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 23.24390067,
+  "concurrency": 20000,
+  "requests": 42615,
+  "errors": 0,
+  "bytes": 432133,
+  "requests_per_sec": 1833.3841899006877,
+  "bytes_per_sec": 18591.24275805125,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 22025.984994,
+    "mean": 10313.058189,
+    "min": 0.862943,
+    "p50": 6673.542928,
+    "p90": 17092.325447,
+    "p95": 17570.41085,
+    "p99": 17896.276244
+  },
+  "status_counts": {
+    "200": 33241,
+    "502": 9374
+  },
+  "started_at": "2026-10-26T05:39:06Z"
+}
