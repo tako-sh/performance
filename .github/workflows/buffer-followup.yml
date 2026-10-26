@@ -1,0 +1,71 @@
+name: Buffer latency follow-up
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/buffer-followup.yml
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: buffer-followup-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [h2-download, h2-rate]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: 35c4234595be4e66fc86339c2a37a298653a4c63
+          path: tako-source
+          persist-credentials: false
+      - name: Reuse the exact measured binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: buffer-release-binaries
+          run-id: 40340201528
+          github-token: ${{ github.token }}
+          path: build
+      - name: Verify binaries and build runner
+        run: |
+          grep '  build/' build/build.txt | sha256sum --check
+          chmod 755 build/*
+          docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Measure eight longer paired repetitions
+        env:
+          SCENARIO: ${{ matrix.scenario }}
+        run: |
+          mkdir -p results/buffer-followup
+          cp build/build.txt results/buffer-followup/
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g --entrypoint bash \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/buffer-followup,dst=/results" \
+            tako-memory-runner /perf/diagnostics/release-validation/entrypoint.sh \
+              --scenarios "$SCENARIO" --repetitions 8 --duration 60 --variants baseline,combined
+      - name: Summarize
+        if: always()
+        run: |
+          if test -f results/buffer-followup/summary.json; then
+            python3 diagnostics/buffer-lifetime/summarize.py results/buffer-followup >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: buffer-followup-${{ matrix.scenario }}-${{ github.sha }}
+          path: |
+            results/buffer-followup/**/*.json
+            results/buffer-followup/build.txt
+          retention-days: 14
