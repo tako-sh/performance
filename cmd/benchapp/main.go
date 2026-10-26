@@ -56,6 +56,7 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
+	registerBufferEndpoints(mux)
 	mux.HandleFunc("/", cfg.handleRoot)
 	mux.HandleFunc("/plaintext", cfg.handlePlaintext)
 	mux.HandleFunc("/json", cfg.handleJSON)

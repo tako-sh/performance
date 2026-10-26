@@ -1,0 +1,170 @@
+name: Buffer lifetime experiments
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - diagnostics/buffer-lifetime/**
+      - cmd/benchapp/**
+      - .github/workflows/buffers.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: buffers-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TAKO_REVISION: f0ed5d938a4f26f4c775336c8f16aa572fe20dae
+  PINGORA_REVISION: 702f69015e53f7244d6ad2e743de571d859a70a4
+  OPENSSL_NO_VENDOR: '1'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: cloudflare/pingora
+          ref: ${{ env.PINGORA_REVISION }}
+          path: pingora-upstream
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.3'
+          cache-dependency-path: diagnostics/full-memory/caddy/go.sum
+      - name: Toolchains and libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tako-source/target
+          key: buffers-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-${{ hashFiles('diagnostics/buffer-lifetime/**', '!diagnostics/buffer-lifetime/README.md') }}
+          restore-keys: |
+            buffers-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-
+            memory-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}-
+      - name: Validate clients and isolated reader
+        run: |
+          go test ./cmd/benchapp ./diagnostics/buffer-lifetime/load
+          cargo test --locked --manifest-path diagnostics/buffer-lifetime/Cargo.toml
+          python3 -m py_compile diagnostics/buffer-lifetime/*.py
+          bash -n diagnostics/buffer-lifetime/entrypoint.sh
+      - name: Build unchanged Tako control
+        run: |
+          mkdir -p build
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-server
+          cargo metadata --manifest-path tako-source/Cargo.toml --locked --format-version 1 > /tmp/tako-metadata.json
+          python3 - <<'PY'
+          import json, pathlib, shutil
+          packages = json.loads(pathlib.Path('/tmp/tako-metadata.json').read_text())['packages']
+          core = next(p for p in packages if p['name'] == 'pingora-core')
+          assert core['version'] == '0.9.0'
+          shutil.copytree(pathlib.Path(core['manifest_path']).parent, 'pingora-core')
+          shutil.copytree('pingora-upstream/pingora-core/tests', 'pingora-core/tests')
+          shutil.copy('diagnostics/buffer-lifetime/pingora-tests.lock', 'pingora-core/Cargo.lock')
+          PY
+      - name: Apply experimental buffer changes
+        run: |
+          python3 diagnostics/buffer-lifetime/prepare.py pingora-core
+          cat >> tako-source/Cargo.toml <<'TOML'
+
+          [patch.crates-io]
+          pingora-core = { path = "../pingora-core" }
+          TOML
+          cargo update --manifest-path tako-source/Cargo.toml -p pingora-core --offline
+      - name: Test affected Pingora protocols and listeners
+        env:
+          TAKO_BENCH_IDLE_L4: '1'
+          TAKO_BENCH_RELEASE_BODY: '1'
+          CARGO_TARGET_DIR: ${{ github.workspace }}/tako-source/target
+        run: |
+          cargo test --manifest-path pingora-core/Cargo.toml --locked --no-default-features --features openssl --lib protocols:: -j 4
+          cargo test --manifest-path pingora-core/Cargo.toml --locked --no-default-features --features openssl --lib listeners:: -j 4
+          cargo test --manifest-path tako-source/Cargo.toml --locked -p tako-server proxy:: -j 4
+      - name: Build candidate and benchmark binaries
+        run: |
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-candidate
+          CGO_ENABLED=0 go build -trimpath -o build/benchapp ./cmd/benchapp
+          CGO_ENABLED=0 go build -trimpath -o build/buffer-load ./diagnostics/buffer-lifetime/load
+          CGO_ENABLED=0 go build -trimpath -o build/hold-connections ./diagnostics/full-memory/hold
+          (cd diagnostics/full-memory/caddy && CGO_ENABLED=0 go build -mod=readonly -trimpath -o ../../../build/caddy .)
+          chmod 755 build/*
+          {
+            echo "tako_revision=$TAKO_REVISION"
+            echo "pingora_revision=$PINGORA_REVISION"
+            echo "performance_revision=$(git rev-parse HEAD)"
+            rustc --version
+            go version
+            sha256sum build/* diagnostics/buffer-lifetime/{prepare.py,src/lib.rs,buffered.rs,pingora-tests.lock}
+          } > build/build.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: buffer-binaries
+          path: build/
+          retention-days: 7
+
+  compare:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [memory, h1, h2]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: buffer-binaries
+          path: build
+      - name: Build isolated runner
+        run: |
+          chmod 755 build/*
+          docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-memory-runner -f diagnostics/full-memory/Dockerfile .
+      - name: Compare paired variants
+        run: |
+          mkdir -p results/buffers
+          cp build/build.txt results/buffers/
+          docker run --rm --privileged --cgroupns=private --cpus=2 --memory=8g --memory-swap=8g --entrypoint bash \
+            --mount "type=bind,src=$PWD/build,dst=/build,readonly" \
+            --mount "type=bind,src=$PWD/tako-source,dst=/source,readonly" \
+            --mount "type=bind,src=$PWD,dst=/perf,readonly" \
+            --mount "type=bind,src=$PWD/results/buffers,dst=/results" \
+            tako-memory-runner /perf/diagnostics/buffer-lifetime/entrypoint.sh --group '${{ matrix.group }}' --repetitions 3
+      - name: Summarize
+        if: always()
+        run: |
+          if test -f results/buffers/summary.json; then
+            python3 diagnostics/buffer-lifetime/summarize.py results/buffers >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: buffer-results-${{ matrix.group }}-${{ github.sha }}
+          path: |
+            results/buffers/**/*.json
+            results/buffers/build.txt
+          retention-days: 14
