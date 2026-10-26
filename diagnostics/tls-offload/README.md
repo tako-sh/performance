@@ -6,6 +6,9 @@ established requests from expensive handshake work, but adds threads, scheduling
 and memory. It does not make the cryptographic work disappear. Production Tako
 defaults remain unchanged; this is a separate candidate from buffer reclamation.
 
+The [measured report](../../results/20261026-tls-offload/README.md) records the
+latency benefit, handshake throughput cost and overload limits.
+
 ## Why test it
 
 A local server-only CPU profile provided a reason to investigate. Under a shared
@@ -22,6 +25,12 @@ or a performance acceptance result. Shared CPU quota and load-generator work als
 contribute to latency. Profiles include warmup and setup, and symbol resolution
 is incomplete. Raw stacks may contain machine paths and addresses and must stay
 private; publish only reviewed aggregates. Offload acceptance runs omit perf.
+
+`profile.py` reproduces the two exploratory cases using the existing container
+fixtures. Install `linux-perf` in a disposable image and substitute this program
+for the final Python command in `diagnostics/full-memory/entrypoint.sh`, keeping
+the original installer, mounts and resource limits. It writes private perf data
+and decoded reports alongside request JSON. Never upload those files wholesale.
 
 ## Controlled comparison
 

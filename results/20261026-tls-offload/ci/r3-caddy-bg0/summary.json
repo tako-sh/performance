@@ -1,0 +1,30 @@
+{
+  "name": "r3-caddy-bg0",
+  "variant": "caddy",
+  "background_rate": 0,
+  "repetition": 3,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 14.999402929,
+    "requests_per_second": 1000.0398063178131,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.899981,
+      "p95": 1.457667,
+      "p99": 1.520176
+    },
+    "handshakes": 0,
+    "handshake_total_ms": 0,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": null,
+  "success": true,
+  "peak_pss_kib": 111948,
+  "median_pss_kib": 111756,
+  "threads": 8,
+  "measured_cpu_seconds": 4.82,
+  "cpu_microseconds_per_total_request": 321.3333333333333
+}

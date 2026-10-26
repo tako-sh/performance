@@ -1,0 +1,46 @@
+{
+  "name": "r3-baseline-bg1500",
+  "variant": "baseline",
+  "background_rate": 1500,
+  "repetition": 3,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.058663708,
+    "requests_per_second": 996.1043217952445,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 55.010697,
+      "p95": 96.461197,
+      "p99": 178.583649
+    },
+    "handshakes": 121,
+    "handshake_total_ms": 12793.655857,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": {
+    "requests": 22500,
+    "errors": 0,
+    "duration_seconds": 32.225758502,
+    "requests_per_second": 698.1992370669445,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 10657.392455,
+      "p95": 16592.118299,
+      "p99": 17116.36487
+    },
+    "handshakes": 22500,
+    "handshake_total_ms": 973769.062588,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "success": true,
+  "peak_pss_kib": 96064,
+  "median_pss_kib": 94264.0,
+  "threads": 13,
+  "measured_cpu_seconds": 40.1,
+  "cpu_microseconds_per_total_request": 1069.3333333333333
+}

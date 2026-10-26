@@ -1,0 +1,46 @@
+{
+  "name": "r2-caddy-bg1500",
+  "variant": "caddy",
+  "background_rate": 1500,
+  "repetition": 2,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.095359411,
+    "requests_per_second": 993.6828658130186,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 76.823415,
+      "p95": 144.729365,
+      "p99": 182.137521
+    },
+    "handshakes": 79,
+    "handshake_total_ms": 6304.047884,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": {
+    "requests": 22500,
+    "errors": 0,
+    "duration_seconds": 36.192132474,
+    "requests_per_second": 621.6820745824728,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 13109.246424,
+      "p95": 20429.081987,
+      "p99": 21081.851514
+    },
+    "handshakes": 22500,
+    "handshake_total_ms": 1006249.403667,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "success": true,
+  "peak_pss_kib": 137912,
+  "median_pss_kib": 137724.0,
+  "threads": 8,
+  "measured_cpu_seconds": 49.15,
+  "cpu_microseconds_per_total_request": 1310.6666666666667
+}

@@ -1,0 +1,46 @@
+{
+  "name": "r4-caddy-bg2500",
+  "variant": "caddy",
+  "background_rate": 2500,
+  "repetition": 4,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.059080822,
+    "requests_per_second": 996.0767311963896,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 75.538298,
+      "p95": 142.494059,
+      "p99": 184.79944
+    },
+    "handshakes": 98,
+    "handshake_total_ms": 11739.574663,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": {
+    "requests": 37500,
+    "errors": 0,
+    "duration_seconds": 56.459381375,
+    "requests_per_second": 664.1943125612222,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 22760.435057,
+      "p95": 39617.804742,
+      "p99": 41124.941138
+    },
+    "handshakes": 37500,
+    "handshake_total_ms": 1573779.738417,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "success": true,
+  "peak_pss_kib": 139408,
+  "median_pss_kib": 137180.0,
+  "threads": 8,
+  "measured_cpu_seconds": 77.37,
+  "cpu_microseconds_per_total_request": 1473.7142857142858
+}

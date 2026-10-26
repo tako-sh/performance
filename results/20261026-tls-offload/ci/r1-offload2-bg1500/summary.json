@@ -1,0 +1,46 @@
+{
+  "name": "r1-offload2-bg1500",
+  "variant": "offload2",
+  "background_rate": 1500,
+  "repetition": 1,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.010295436,
+    "requests_per_second": 999.3141083702252,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 14.666848,
+      "p95": 55.689221,
+      "p99": 67.80894
+    },
+    "handshakes": 125,
+    "handshake_total_ms": 11748.702459,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": {
+    "requests": 22500,
+    "errors": 0,
+    "duration_seconds": 33.536053318,
+    "requests_per_second": 670.9197348491643,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 11050.270534,
+      "p95": 17789.105723,
+      "p99": 18414.92777
+    },
+    "handshakes": 22500,
+    "handshake_total_ms": 1053828.711789,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "success": true,
+  "peak_pss_kib": 97976,
+  "median_pss_kib": 94918.0,
+  "threads": 14,
+  "measured_cpu_seconds": 43.29,
+  "cpu_microseconds_per_total_request": 1154.4
+}

@@ -5,6 +5,10 @@ on:
   pull_request:
     paths:
       - diagnostics/tls-offload/**
+      - diagnostics/full-memory/**
+      - diagnostics/buffer-lifetime/run.py
+      - diagnostics/buffer-lifetime/load/**
+      - cmd/benchapp/**
       - .github/workflows/tls.yml
 
 permissions:
@@ -55,6 +59,7 @@ jobs:
         run: |
           go test ./cmd/benchapp ./diagnostics/buffer-lifetime/load
           python3 -m py_compile diagnostics/tls-offload/*.py
+          python3 diagnostics/full-memory/test_connections.py
           bash -n diagnostics/tls-offload/entrypoint.sh
       - name: Build unchanged Tako control
         run: |

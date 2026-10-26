@@ -10,6 +10,10 @@ and Caddy, including HTTP/2, bulk transfers, and streaming responses.
 The [26 October investigation](results/20261026-buffer-lifetime/README.md) records
 the memory savings, performance limitations and socket-count correction.
 
+The [TLS offload investigation](results/20261026-tls-offload/README.md) compares
+established-request latency, completed handshake throughput and memory after
+profiling found handshake interference.
+
 Repeatable benchmarks for Tako, nginx, Caddy, HAProxy, and Envoy.
 
 See [RESULTS.md](RESULTS.md) for the baseline, high-load follow-up, raw result

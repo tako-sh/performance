@@ -1,0 +1,1954 @@
+[
+  {
+    "name": "r1-baseline-bg0",
+    "variant": "baseline",
+    "background_rate": 0,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000408202,
+      "requests_per_second": 999.972787273886,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.837073,
+        "p95": 1.407568,
+        "p99": 1.4951
+      },
+      "handshakes": 12,
+      "handshake_total_ms": 19.016874,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 66474,
+    "median_pss_kib": 65098,
+    "threads": 11,
+    "measured_cpu_seconds": 3.8400000000000003,
+    "cpu_microseconds_per_total_request": 256.00000000000006
+  },
+  {
+    "name": "r1-offload1-bg0",
+    "variant": "offload1",
+    "background_rate": 0,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000339337,
+      "requests_per_second": 999.9773780450978,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.833775,
+        "p95": 1.404407,
+        "p99": 1.481341
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 22.95518,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 68662,
+    "median_pss_kib": 67966,
+    "threads": 11,
+    "measured_cpu_seconds": 3.7600000000000002,
+    "cpu_microseconds_per_total_request": 250.66666666666666
+  },
+  {
+    "name": "r1-offload2-bg0",
+    "variant": "offload2",
+    "background_rate": 0,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999539005,
+      "requests_per_second": 1000.0307339445462,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.836031,
+        "p95": 1.405724,
+        "p99": 1.493848
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 23.971787,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 69316,
+    "median_pss_kib": 68688,
+    "threads": 13,
+    "measured_cpu_seconds": 3.84,
+    "cpu_microseconds_per_total_request": 256.0
+  },
+  {
+    "name": "r1-caddy-bg0",
+    "variant": "caddy",
+    "background_rate": 0,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999850431,
+      "requests_per_second": 1000.0099713660937,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.895567,
+        "p95": 1.44642,
+        "p99": 1.512003
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 114080,
+    "median_pss_kib": 113872,
+    "threads": 8,
+    "measured_cpu_seconds": 4.9,
+    "cpu_microseconds_per_total_request": 326.6666666666667
+  },
+  {
+    "name": "r1-baseline-bg1500",
+    "variant": "baseline",
+    "background_rate": 1500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.022839967,
+      "requests_per_second": 998.4796505154703,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 54.470482,
+        "p95": 93.178175,
+        "p99": 126.275416
+      },
+      "handshakes": 123,
+      "handshake_total_ms": 12020.035367,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 32.600757763,
+      "requests_per_second": 690.1680066325397,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 10630.597408,
+        "p95": 16932.211626,
+        "p99": 17504.891408
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 979834.84461,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 98240,
+    "median_pss_kib": 95008.0,
+    "threads": 13,
+    "measured_cpu_seconds": 40.7,
+    "cpu_microseconds_per_total_request": 1085.3333333333333
+  },
+  {
+    "name": "r1-offload1-bg1500",
+    "variant": "offload1",
+    "background_rate": 1500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000176895,
+      "requests_per_second": 999.9882071390732,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.274258,
+        "p95": 27.996684,
+        "p99": 34.021676
+      },
+      "handshakes": 43,
+      "handshake_total_ms": 2745.508658,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.340268222,
+      "requests_per_second": 674.8595977147265,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11371.930099,
+        "p95": 17678.417016,
+        "p99": 18228.988457
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1070591.315113,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 82828,
+    "median_pss_kib": 81384.0,
+    "threads": 13,
+    "measured_cpu_seconds": 40.33,
+    "cpu_microseconds_per_total_request": 1075.4666666666667
+  },
+  {
+    "name": "r1-offload2-bg1500",
+    "variant": "offload2",
+    "background_rate": 1500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.010295436,
+      "requests_per_second": 999.3141083702252,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.666848,
+        "p95": 55.689221,
+        "p99": 67.80894
+      },
+      "handshakes": 125,
+      "handshake_total_ms": 11748.702459,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.536053318,
+      "requests_per_second": 670.9197348491643,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11050.270534,
+        "p95": 17789.105723,
+        "p99": 18414.92777
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1053828.711789,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 97976,
+    "median_pss_kib": 94918.0,
+    "threads": 14,
+    "measured_cpu_seconds": 43.29,
+    "cpu_microseconds_per_total_request": 1154.4
+  },
+  {
+    "name": "r1-caddy-bg1500",
+    "variant": "caddy",
+    "background_rate": 1500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.099680629,
+      "requests_per_second": 993.3984942165891,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 77.22178,
+        "p95": 146.197881,
+        "p99": 197.187201
+      },
+      "handshakes": 110,
+      "handshake_total_ms": 12509.208144,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 36.337385409,
+      "requests_per_second": 619.1969990891868,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 13010.331224,
+        "p95": 20562.903882,
+        "p99": 21204.39117
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1016468.799602,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 143804,
+    "median_pss_kib": 135188,
+    "threads": 8,
+    "measured_cpu_seconds": 49.470000000000006,
+    "cpu_microseconds_per_total_request": 1319.2000000000003
+  },
+  {
+    "name": "r1-baseline-bg2500",
+    "variant": "baseline",
+    "background_rate": 2500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.078021136,
+      "requests_per_second": 994.8255055954446,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 54.234726,
+        "p95": 91.939441,
+        "p99": 137.436711
+      },
+      "handshakes": 125,
+      "handshake_total_ms": 9179.954102,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 51.344856642,
+      "requests_per_second": 730.3555302815874,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20064.076082,
+        "p95": 34727.191679,
+        "p99": 36031.317615
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1534085.220925,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 94946,
+    "median_pss_kib": 93022.0,
+    "threads": 14,
+    "measured_cpu_seconds": 64.69,
+    "cpu_microseconds_per_total_request": 1232.1904761904761
+  },
+  {
+    "name": "r1-offload1-bg2500",
+    "variant": "offload1",
+    "background_rate": 2500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000982832,
+      "requests_per_second": 999.9344821595354,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.291869,
+        "p95": 28.182783,
+        "p99": 34.023562
+      },
+      "handshakes": 48,
+      "handshake_total_ms": 3534.546175,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 52.599519664,
+      "requests_per_second": 712.9342670721313,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 21047.073899,
+        "p95": 35992.626504,
+        "p99": 37305.259308
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1684191.359545,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 83356,
+    "median_pss_kib": 81912.0,
+    "threads": 13,
+    "measured_cpu_seconds": 64.49,
+    "cpu_microseconds_per_total_request": 1228.3809523809523
+  },
+  {
+    "name": "r1-offload2-bg2500",
+    "variant": "offload2",
+    "background_rate": 2500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.013156814,
+      "requests_per_second": 999.1236477335844,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 15.868956,
+        "p95": 56.494612,
+        "p99": 71.506393
+      },
+      "handshakes": 125,
+      "handshake_total_ms": 12977.860329,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 53.854506803,
+      "requests_per_second": 696.3205537686038,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 21145.897188,
+        "p95": 37101.537604,
+        "p99": 38551.358688
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1691129.361426,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 96362,
+    "median_pss_kib": 94602.0,
+    "threads": 14,
+    "measured_cpu_seconds": 70.21,
+    "cpu_microseconds_per_total_request": 1337.3333333333333
+  },
+  {
+    "name": "r1-caddy-bg2500",
+    "variant": "caddy",
+    "background_rate": 2500,
+    "repetition": 1,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.092766663,
+      "requests_per_second": 993.853568065329,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 76.971908,
+        "p95": 142.752286,
+        "p99": 178.335518
+      },
+      "handshakes": 75,
+      "handshake_total_ms": 5758.872822,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 57.292483832,
+      "requests_per_second": 654.536118733516,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 23505.627811,
+        "p95": 40466.485068,
+        "p99": 41958.887422
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1614903.957158,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 137908,
+    "median_pss_kib": 137556,
+    "threads": 8,
+    "measured_cpu_seconds": 78.61,
+    "cpu_microseconds_per_total_request": 1497.3333333333333
+  },
+  {
+    "name": "r2-caddy-bg0",
+    "variant": "caddy",
+    "background_rate": 0,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.00003189,
+      "requests_per_second": 999.9978740045199,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.892012,
+        "p95": 1.449735,
+        "p99": 1.515152
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 111576,
+    "median_pss_kib": 111364,
+    "threads": 8,
+    "measured_cpu_seconds": 4.79,
+    "cpu_microseconds_per_total_request": 319.3333333333333
+  },
+  {
+    "name": "r2-offload2-bg0",
+    "variant": "offload2",
+    "background_rate": 0,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000349585,
+      "requests_per_second": 999.9766948764748,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.843408,
+        "p95": 1.42231,
+        "p99": 1.509322
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 23.741448,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 70628,
+    "median_pss_kib": 69244,
+    "threads": 13,
+    "measured_cpu_seconds": 3.8999999999999995,
+    "cpu_microseconds_per_total_request": 259.99999999999994
+  },
+  {
+    "name": "r2-offload1-bg0",
+    "variant": "offload1",
+    "background_rate": 0,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999504213,
+      "requests_per_second": 1000.0330535591684,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.833327,
+        "p95": 1.401039,
+        "p99": 1.488077
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 22.425854,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 69046,
+    "median_pss_kib": 68574,
+    "threads": 12,
+    "measured_cpu_seconds": 3.8000000000000003,
+    "cpu_microseconds_per_total_request": 253.33333333333337
+  },
+  {
+    "name": "r2-baseline-bg0",
+    "variant": "baseline",
+    "background_rate": 0,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000248172,
+      "requests_per_second": 999.9834554737259,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.838198,
+        "p95": 1.407962,
+        "p99": 1.497548
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 24.541473,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 66918,
+    "median_pss_kib": 65978,
+    "threads": 10,
+    "measured_cpu_seconds": 3.8600000000000003,
+    "cpu_microseconds_per_total_request": 257.33333333333337
+  },
+  {
+    "name": "r2-caddy-bg1500",
+    "variant": "caddy",
+    "background_rate": 1500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.095359411,
+      "requests_per_second": 993.6828658130186,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 76.823415,
+        "p95": 144.729365,
+        "p99": 182.137521
+      },
+      "handshakes": 79,
+      "handshake_total_ms": 6304.047884,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 36.192132474,
+      "requests_per_second": 621.6820745824728,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 13109.246424,
+        "p95": 20429.081987,
+        "p99": 21081.851514
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1006249.403667,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 137912,
+    "median_pss_kib": 137724.0,
+    "threads": 8,
+    "measured_cpu_seconds": 49.15,
+    "cpu_microseconds_per_total_request": 1310.6666666666667
+  },
+  {
+    "name": "r2-offload2-bg1500",
+    "variant": "offload2",
+    "background_rate": 1500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.022772265,
+      "requests_per_second": 998.4841502887549,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 15.074694,
+        "p95": 55.914586,
+        "p99": 66.776744
+      },
+      "handshakes": 124,
+      "handshake_total_ms": 16647.906512,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.554186192,
+      "requests_per_second": 670.5571659897523,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11007.711602,
+        "p95": 17852.629856,
+        "p99": 18465.731574
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1052545.783249,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 98560,
+    "median_pss_kib": 96452,
+    "threads": 13,
+    "measured_cpu_seconds": 43.23,
+    "cpu_microseconds_per_total_request": 1152.8
+  },
+  {
+    "name": "r2-offload1-bg1500",
+    "variant": "offload1",
+    "background_rate": 1500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000349285,
+      "requests_per_second": 999.9767148755429,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.30193,
+        "p95": 28.707958,
+        "p99": 34.017371
+      },
+      "handshakes": 53,
+      "handshake_total_ms": 3900.240003,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.583169332,
+      "requests_per_second": 669.978457886662,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11576.707817,
+        "p95": 17911.695929,
+        "p99": 18477.743544
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1076001.293077,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 82928,
+    "median_pss_kib": 82010.0,
+    "threads": 15,
+    "measured_cpu_seconds": 40.54,
+    "cpu_microseconds_per_total_request": 1081.0666666666666
+  },
+  {
+    "name": "r2-baseline-bg1500",
+    "variant": "baseline",
+    "background_rate": 1500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.066851922,
+      "requests_per_second": 995.5629800872746,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 53.768835,
+        "p95": 92.055189,
+        "p99": 141.767363
+      },
+      "handshakes": 121,
+      "handshake_total_ms": 8490.05875,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 32.573144549,
+      "requests_per_second": 690.753082379047,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 10597.221881,
+        "p95": 16871.362489,
+        "p99": 17450.506243
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 988819.494386,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 93126,
+    "median_pss_kib": 91126.0,
+    "threads": 12,
+    "measured_cpu_seconds": 40.76,
+    "cpu_microseconds_per_total_request": 1086.9333333333334
+  },
+  {
+    "name": "r2-caddy-bg2500",
+    "variant": "caddy",
+    "background_rate": 2500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.087406459,
+      "requests_per_second": 994.2066610827031,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 76.836229,
+        "p95": 146.831926,
+        "p99": 187.790461
+      },
+      "handshakes": 93,
+      "handshake_total_ms": 7363.7143,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 56.938719566,
+      "requests_per_second": 658.6027976363644,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 23332.182082,
+        "p95": 40151.213132,
+        "p99": 41592.390672
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1595165.431297,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 139576,
+    "median_pss_kib": 138910.0,
+    "threads": 8,
+    "measured_cpu_seconds": 77.96000000000001,
+    "cpu_microseconds_per_total_request": 1484.9523809523812
+  },
+  {
+    "name": "r2-offload2-bg2500",
+    "variant": "offload2",
+    "background_rate": 2500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.048796639,
+      "requests_per_second": 996.7574391381208,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.402078,
+        "p95": 55.530687,
+        "p99": 67.677233
+      },
+      "handshakes": 125,
+      "handshake_total_ms": 12334.770699,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 53.513416212,
+      "requests_per_second": 700.7588499197868,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20903.617499,
+        "p95": 36734.782378,
+        "p99": 38186.64395
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1679129.468958,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 96488,
+    "median_pss_kib": 94126.0,
+    "threads": 13,
+    "measured_cpu_seconds": 70.02,
+    "cpu_microseconds_per_total_request": 1333.7142857142858
+  },
+  {
+    "name": "r2-offload1-bg2500",
+    "variant": "offload1",
+    "background_rate": 2500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.013762496,
+      "requests_per_second": 999.0833413007788,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.263055,
+        "p95": 28.121631,
+        "p99": 33.476254
+      },
+      "handshakes": 39,
+      "handshake_total_ms": 1963.700032,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 51.987651601,
+      "requests_per_second": 721.3251386657879,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20794.6446,
+        "p95": 35374.577057,
+        "p99": 36690.670469
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1665036.454327,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 82872,
+    "median_pss_kib": 81540.0,
+    "threads": 16,
+    "measured_cpu_seconds": 63.790000000000006,
+    "cpu_microseconds_per_total_request": 1215.0476190476193
+  },
+  {
+    "name": "r2-baseline-bg2500",
+    "variant": "baseline",
+    "background_rate": 2500,
+    "repetition": 2,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.082156213,
+      "requests_per_second": 994.5527541394124,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 53.116495,
+        "p95": 90.552872,
+        "p99": 106.85839
+      },
+      "handshakes": 124,
+      "handshake_total_ms": 10522.675716,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 51.614748207,
+      "requests_per_second": 726.5365288542519,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20205.540076,
+        "p95": 35032.947165,
+        "p99": 36337.484216
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1535935.253038,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 95460,
+    "median_pss_kib": 93704.0,
+    "threads": 14,
+    "measured_cpu_seconds": 65.06,
+    "cpu_microseconds_per_total_request": 1239.2380952380952
+  },
+  {
+    "name": "r3-baseline-bg0",
+    "variant": "baseline",
+    "background_rate": 0,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999443373,
+      "requests_per_second": 1000.0371098437561,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.837157,
+        "p95": 1.412956,
+        "p99": 1.499711
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 24.04957,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 68068,
+    "median_pss_kib": 67432,
+    "threads": 11,
+    "measured_cpu_seconds": 3.8600000000000003,
+    "cpu_microseconds_per_total_request": 257.33333333333337
+  },
+  {
+    "name": "r3-offload1-bg0",
+    "variant": "offload1",
+    "background_rate": 0,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999868427,
+      "requests_per_second": 1000.0087716102738,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.837132,
+        "p95": 1.409143,
+        "p99": 1.487334
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 23.217848,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 69000,
+    "median_pss_kib": 68392,
+    "threads": 11,
+    "measured_cpu_seconds": 3.81,
+    "cpu_microseconds_per_total_request": 254.0
+  },
+  {
+    "name": "r3-offload2-bg0",
+    "variant": "offload2",
+    "background_rate": 0,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999492801,
+      "requests_per_second": 1000.0338144100423,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.837067,
+        "p95": 1.403475,
+        "p99": 1.487984
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 25.882974,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 69112,
+    "median_pss_kib": 68784,
+    "threads": 13,
+    "measured_cpu_seconds": 3.81,
+    "cpu_microseconds_per_total_request": 254.0
+  },
+  {
+    "name": "r3-caddy-bg0",
+    "variant": "caddy",
+    "background_rate": 0,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999402929,
+      "requests_per_second": 1000.0398063178131,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.899981,
+        "p95": 1.457667,
+        "p99": 1.520176
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 111948,
+    "median_pss_kib": 111756,
+    "threads": 8,
+    "measured_cpu_seconds": 4.82,
+    "cpu_microseconds_per_total_request": 321.3333333333333
+  },
+  {
+    "name": "r3-baseline-bg1500",
+    "variant": "baseline",
+    "background_rate": 1500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.058663708,
+      "requests_per_second": 996.1043217952445,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 55.010697,
+        "p95": 96.461197,
+        "p99": 178.583649
+      },
+      "handshakes": 121,
+      "handshake_total_ms": 12793.655857,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 32.225758502,
+      "requests_per_second": 698.1992370669445,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 10657.392455,
+        "p95": 16592.118299,
+        "p99": 17116.36487
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 973769.062588,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 96064,
+    "median_pss_kib": 94264.0,
+    "threads": 13,
+    "measured_cpu_seconds": 40.1,
+    "cpu_microseconds_per_total_request": 1069.3333333333333
+  },
+  {
+    "name": "r3-offload1-bg1500",
+    "variant": "offload1",
+    "background_rate": 1500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999611307,
+      "requests_per_second": 1000.0259135381607,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.29214,
+        "p95": 28.448038,
+        "p99": 34.460631
+      },
+      "handshakes": 51,
+      "handshake_total_ms": 3014.308083,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.109631258,
+      "requests_per_second": 679.5605733169715,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11328.796401,
+        "p95": 17461.52758,
+        "p99": 18002.404138
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1063030.797662,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 82896,
+    "median_pss_kib": 81744.0,
+    "threads": 15,
+    "measured_cpu_seconds": 39.97,
+    "cpu_microseconds_per_total_request": 1065.8666666666666
+  },
+  {
+    "name": "r3-offload2-bg1500",
+    "variant": "offload2",
+    "background_rate": 1500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.00035599,
+      "requests_per_second": 999.9762678965595,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.718304,
+        "p95": 56.643785,
+        "p99": 68.524321
+      },
+      "handshakes": 123,
+      "handshake_total_ms": 11793.675202,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.777911482,
+      "requests_per_second": 666.1157843340931,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11153.463315,
+        "p95": 18049.621835,
+        "p99": 18652.698593
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1062994.746646,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 98266,
+    "median_pss_kib": 95102.0,
+    "threads": 16,
+    "measured_cpu_seconds": 43.49,
+    "cpu_microseconds_per_total_request": 1159.7333333333333
+  },
+  {
+    "name": "r3-caddy-bg1500",
+    "variant": "caddy",
+    "background_rate": 1500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.092471013,
+      "requests_per_second": 993.873036898971,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 74.549825,
+        "p95": 141.129443,
+        "p99": 176.5067
+      },
+      "handshakes": 88,
+      "handshake_total_ms": 5553.215123,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 36.021815276,
+      "requests_per_second": 624.621491937718,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 12911.838031,
+        "p95": 20235.365077,
+        "p99": 20894.429975
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1006541.220306,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 139888,
+    "median_pss_kib": 135160.0,
+    "threads": 8,
+    "measured_cpu_seconds": 48.91,
+    "cpu_microseconds_per_total_request": 1304.2666666666667
+  },
+  {
+    "name": "r3-baseline-bg2500",
+    "variant": "baseline",
+    "background_rate": 2500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.052726416,
+      "requests_per_second": 996.4972182086591,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 53.670688,
+        "p95": 91.333068,
+        "p99": 130.693133
+      },
+      "handshakes": 123,
+      "handshake_total_ms": 10284.956373,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 51.437785126,
+      "requests_per_second": 729.0360560459875,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 19834.623854,
+        "p95": 34720.944678,
+        "p99": 36101.42573
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1542190.974074,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 95620,
+    "median_pss_kib": 91918.0,
+    "threads": 15,
+    "measured_cpu_seconds": 64.99,
+    "cpu_microseconds_per_total_request": 1237.9047619047617
+  },
+  {
+    "name": "r3-offload1-bg2500",
+    "variant": "offload1",
+    "background_rate": 2500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.006637522,
+      "requests_per_second": 999.5576942542746,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.323312,
+        "p95": 29.317205,
+        "p99": 34.671063
+      },
+      "handshakes": 37,
+      "handshake_total_ms": 1744.370482,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 52.861875626,
+      "requests_per_second": 709.3959409483326,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 21323.758522,
+        "p95": 36280.2244,
+        "p99": 37584.479581
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1692977.063992,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 83128,
+    "median_pss_kib": 81042.0,
+    "threads": 22,
+    "measured_cpu_seconds": 64.71,
+    "cpu_microseconds_per_total_request": 1232.5714285714284
+  },
+  {
+    "name": "r3-offload2-bg2500",
+    "variant": "offload2",
+    "background_rate": 2500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.037053471,
+      "requests_per_second": 997.535855606854,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.446188,
+        "p95": 55.126881,
+        "p99": 64.176481
+      },
+      "handshakes": 105,
+      "handshake_total_ms": 7930.477257,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 52.871674041,
+      "requests_per_second": 709.2644725211492,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20671.166473,
+        "p95": 36180.785037,
+        "p99": 37528.141859
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1665494.633519,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 93464,
+    "median_pss_kib": 91892,
+    "threads": 14,
+    "measured_cpu_seconds": 69.07000000000001,
+    "cpu_microseconds_per_total_request": 1315.6190476190477
+  },
+  {
+    "name": "r3-caddy-bg2500",
+    "variant": "caddy",
+    "background_rate": 2500,
+    "repetition": 3,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.110730066,
+      "requests_per_second": 992.6720902619293,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 72.633716,
+        "p95": 144.914635,
+        "p99": 186.455059
+      },
+      "handshakes": 111,
+      "handshake_total_ms": 12533.354765,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 55.880702673,
+      "requests_per_second": 671.0724490964384,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 22647.52062,
+        "p95": 39129.135455,
+        "p99": 40557.812793
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1580515.553277,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 139812,
+    "median_pss_kib": 137332.0,
+    "threads": 8,
+    "measured_cpu_seconds": 76.53,
+    "cpu_microseconds_per_total_request": 1457.7142857142858
+  },
+  {
+    "name": "r4-caddy-bg0",
+    "variant": "caddy",
+    "background_rate": 0,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999907296,
+      "requests_per_second": 1000.0061803048626,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.889625,
+        "p95": 1.44457,
+        "p99": 1.50282
+      },
+      "handshakes": 0,
+      "handshake_total_ms": 0,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 113908,
+    "median_pss_kib": 113724,
+    "threads": 8,
+    "measured_cpu_seconds": 4.8,
+    "cpu_microseconds_per_total_request": 320.0
+  },
+  {
+    "name": "r4-offload2-bg0",
+    "variant": "offload2",
+    "background_rate": 0,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000334005,
+      "requests_per_second": 999.9777334958083,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.843603,
+        "p95": 1.421153,
+        "p99": 1.505174
+      },
+      "handshakes": 13,
+      "handshake_total_ms": 23.010093,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 69094,
+    "median_pss_kib": 68926,
+    "threads": 12,
+    "measured_cpu_seconds": 3.87,
+    "cpu_microseconds_per_total_request": 258.0
+  },
+  {
+    "name": "r4-offload1-bg0",
+    "variant": "offload1",
+    "background_rate": 0,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000376906,
+      "requests_per_second": 999.974873564687,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.832934,
+        "p95": 1.393572,
+        "p99": 1.480248
+      },
+      "handshakes": 14,
+      "handshake_total_ms": 23.322286,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 69144,
+    "median_pss_kib": 68336,
+    "threads": 12,
+    "measured_cpu_seconds": 3.8000000000000003,
+    "cpu_microseconds_per_total_request": 253.33333333333337
+  },
+  {
+    "name": "r4-baseline-bg0",
+    "variant": "baseline",
+    "background_rate": 0,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.000141685,
+      "requests_per_second": 999.9905544225531,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 0.834252,
+        "p95": 1.400554,
+        "p99": 1.493843
+      },
+      "handshakes": 13,
+      "handshake_total_ms": 20.643279,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": null,
+    "success": true,
+    "peak_pss_kib": 66426,
+    "median_pss_kib": 65778,
+    "threads": 11,
+    "measured_cpu_seconds": 3.8300000000000005,
+    "cpu_microseconds_per_total_request": 255.33333333333337
+  },
+  {
+    "name": "r4-caddy-bg1500",
+    "variant": "caddy",
+    "background_rate": 1500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.086372445,
+      "requests_per_second": 994.2748036139976,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 76.341703,
+        "p95": 148.939876,
+        "p99": 214.585761
+      },
+      "handshakes": 112,
+      "handshake_total_ms": 11189.650942,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 35.792217164,
+      "requests_per_second": 628.6282824253374,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 12856.895752,
+        "p95": 20010.500699,
+        "p99": 20665.638651
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 988556.558337,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 139656,
+    "median_pss_kib": 137336,
+    "threads": 8,
+    "measured_cpu_seconds": 48.42,
+    "cpu_microseconds_per_total_request": 1291.2
+  },
+  {
+    "name": "r4-offload2-bg1500",
+    "variant": "offload2",
+    "background_rate": 1500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.045538221,
+      "requests_per_second": 996.9733072801318,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 16.236974,
+        "p95": 57.055688,
+        "p99": 73.736345
+      },
+      "handshakes": 124,
+      "handshake_total_ms": 13259.245025,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.660132365,
+      "requests_per_second": 668.4465692534123,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11117.184292,
+        "p95": 17959.963695,
+        "p99": 18542.973973
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1063399.954224,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 96410,
+    "median_pss_kib": 95198,
+    "threads": 14,
+    "measured_cpu_seconds": 43.47,
+    "cpu_microseconds_per_total_request": 1159.2
+  },
+  {
+    "name": "r4-offload1-bg1500",
+    "variant": "offload1",
+    "background_rate": 1500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999688148,
+      "requests_per_second": 1000.0207905655719,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.250766,
+        "p95": 27.478242,
+        "p99": 32.785021
+      },
+      "handshakes": 53,
+      "handshake_total_ms": 3665.190348,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 33.174881105,
+      "requests_per_second": 678.2239830426666,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 11366.408033,
+        "p95": 17505.38035,
+        "p99": 18063.5404
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 1065039.907056,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 83364,
+    "median_pss_kib": 81770.0,
+    "threads": 13,
+    "measured_cpu_seconds": 40.11,
+    "cpu_microseconds_per_total_request": 1069.6
+  },
+  {
+    "name": "r4-baseline-bg1500",
+    "variant": "baseline",
+    "background_rate": 1500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.071524997,
+      "requests_per_second": 995.2542959644604,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 54.006315,
+        "p95": 93.772621,
+        "p99": 133.67086
+      },
+      "handshakes": 123,
+      "handshake_total_ms": 9083.699573,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 22500,
+      "errors": 0,
+      "duration_seconds": 32.119718236,
+      "requests_per_second": 700.5042769890132,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 10468.947897,
+        "p95": 16455.777679,
+        "p99": 17002.759387
+      },
+      "handshakes": 22500,
+      "handshake_total_ms": 961024.547744,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 92876,
+    "median_pss_kib": 90354.0,
+    "threads": 14,
+    "measured_cpu_seconds": 40.28,
+    "cpu_microseconds_per_total_request": 1074.1333333333334
+  },
+  {
+    "name": "r4-caddy-bg2500",
+    "variant": "caddy",
+    "background_rate": 2500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.059080822,
+      "requests_per_second": 996.0767311963896,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 75.538298,
+        "p95": 142.494059,
+        "p99": 184.79944
+      },
+      "handshakes": 98,
+      "handshake_total_ms": 11739.574663,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 56.459381375,
+      "requests_per_second": 664.1943125612222,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 22760.435057,
+        "p95": 39617.804742,
+        "p99": 41124.941138
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1573779.738417,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 139408,
+    "median_pss_kib": 137180.0,
+    "threads": 8,
+    "measured_cpu_seconds": 77.37,
+    "cpu_microseconds_per_total_request": 1473.7142857142858
+  },
+  {
+    "name": "r4-offload2-bg2500",
+    "variant": "offload2",
+    "background_rate": 2500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.055950437,
+      "requests_per_second": 996.2838322805246,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 14.075013,
+        "p95": 55.52117,
+        "p99": 67.812372
+      },
+      "handshakes": 103,
+      "handshake_total_ms": 7187.747681,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 53.187868349,
+      "requests_per_second": 705.0479961696951,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 21072.751766,
+        "p95": 36499.627762,
+        "p99": 37905.864471
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1676405.963209,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 92492,
+    "median_pss_kib": 90504,
+    "threads": 14,
+    "measured_cpu_seconds": 69.5,
+    "cpu_microseconds_per_total_request": 1323.8095238095239
+  },
+  {
+    "name": "r4-offload1-bg2500",
+    "variant": "offload1",
+    "background_rate": 2500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 14.999497851,
+      "requests_per_second": 1000.0334777207203,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 1.261472,
+        "p95": 27.716485,
+        "p99": 33.176967
+      },
+      "handshakes": 42,
+      "handshake_total_ms": 2700.56709,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 52.142561485,
+      "requests_per_second": 719.1821600629983,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20934.292724,
+        "p95": 35541.591502,
+        "p99": 36848.876327
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1671121.48612,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 82188,
+    "median_pss_kib": 80120.0,
+    "threads": 16,
+    "measured_cpu_seconds": 64.02,
+    "cpu_microseconds_per_total_request": 1219.4285714285713
+  },
+  {
+    "name": "r4-baseline-bg2500",
+    "variant": "baseline",
+    "background_rate": 2500,
+    "repetition": 4,
+    "primary": {
+      "requests": 15000,
+      "errors": 0,
+      "duration_seconds": 15.05002185,
+      "requests_per_second": 996.6762938619919,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 55.212649,
+        "p95": 92.927606,
+        "p99": 139.656138
+      },
+      "handshakes": 125,
+      "handshake_total_ms": 7907.558048,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "background": {
+      "requests": 37500,
+      "errors": 0,
+      "duration_seconds": 51.142189468,
+      "requests_per_second": 733.2497961094136,
+      "payload_bytes": 0,
+      "latency_ms": {
+        "p50": 20084.590881,
+        "p95": 34600.650112,
+        "p99": 35836.271597
+      },
+      "handshakes": 37500,
+      "handshake_total_ms": 1529805.393317,
+      "protocol": "h1",
+      "workload": "small",
+      "error_samples": null
+    },
+    "success": true,
+    "peak_pss_kib": 94060,
+    "median_pss_kib": 91886.0,
+    "threads": 12,
+    "measured_cpu_seconds": 64.74,
+    "cpu_microseconds_per_total_request": 1233.142857142857
+  }
+]

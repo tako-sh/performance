@@ -1,0 +1,46 @@
+{
+  "name": "r1-baseline-bg2500",
+  "variant": "baseline",
+  "background_rate": 2500,
+  "repetition": 1,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 15.078021136,
+    "requests_per_second": 994.8255055954446,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 54.234726,
+      "p95": 91.939441,
+      "p99": 137.436711
+    },
+    "handshakes": 125,
+    "handshake_total_ms": 9179.954102,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": {
+    "requests": 37500,
+    "errors": 0,
+    "duration_seconds": 51.344856642,
+    "requests_per_second": 730.3555302815874,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 20064.076082,
+      "p95": 34727.191679,
+      "p99": 36031.317615
+    },
+    "handshakes": 37500,
+    "handshake_total_ms": 1534085.220925,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "success": true,
+  "peak_pss_kib": 94946,
+  "median_pss_kib": 93022.0,
+  "threads": 14,
+  "measured_cpu_seconds": 64.69,
+  "cpu_microseconds_per_total_request": 1232.1904761904761
+}

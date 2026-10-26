@@ -1,0 +1,17 @@
+{
+  "case": "r2-baseline-rate",
+  "event": "cpu-clock",
+  "frequency_hz": 99,
+  "call_graph": "dwarf,8192",
+  "samples": 2105,
+  "inclusive_percent": {
+    "EVP_DigestSignFinal": 21.38,
+    "BN_mod_exp_mont_consttime_x2": 18.38
+  },
+  "notes": [
+    "Inclusive percentages overlap.",
+    "Profile includes setup and warmup.",
+    "Symbol resolution is incomplete.",
+    "Raw stack/address data is intentionally not published."
+  ]
+}

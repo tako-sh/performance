@@ -1,0 +1,30 @@
+{
+  "name": "r2-offload1-bg0",
+  "variant": "offload1",
+  "background_rate": 0,
+  "repetition": 2,
+  "primary": {
+    "requests": 15000,
+    "errors": 0,
+    "duration_seconds": 14.999504213,
+    "requests_per_second": 1000.0330535591684,
+    "payload_bytes": 0,
+    "latency_ms": {
+      "p50": 0.833327,
+      "p95": 1.401039,
+      "p99": 1.488077
+    },
+    "handshakes": 14,
+    "handshake_total_ms": 22.425854,
+    "protocol": "h1",
+    "workload": "small",
+    "error_samples": null
+  },
+  "background": null,
+  "success": true,
+  "peak_pss_kib": 69046,
+  "median_pss_kib": 68574,
+  "threads": 12,
+  "measured_cpu_seconds": 3.8000000000000003,
+  "cpu_microseconds_per_total_request": 253.33333333333337
+}
