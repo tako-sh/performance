@@ -1,0 +1,29 @@
+{
+  "name": "r2-tako-plaintext-c2500",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.207516926,
+  "concurrency": 2500,
+  "requests": 209379,
+  "errors": 0,
+  "bytes": 2721927,
+  "requests_per_sec": 6931.354222623469,
+  "bytes_per_sec": 90107.6048941051,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 2799.788881,
+    "mean": 358.43185,
+    "min": 0.17247,
+    "p50": 343.18941,
+    "p90": 610.843799,
+    "p95": 666.951465,
+    "p99": 1590.039224
+  },
+  "status_counts": {
+    "200": 209379
+  },
+  "started_at": "2026-10-27T00:05:48.035940634Z"
+}

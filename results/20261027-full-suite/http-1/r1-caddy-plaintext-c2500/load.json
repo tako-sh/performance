@@ -1,0 +1,29 @@
+{
+  "name": "r1-caddy-plaintext-c2500",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.213721031,
+  "concurrency": 2500,
+  "requests": 165971,
+  "errors": 0,
+  "bytes": 2157623,
+  "requests_per_sec": 5493.2326882117495,
+  "bytes_per_sec": 71412.02494675275,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 2959.844166,
+    "mean": 453.070903,
+    "min": 0.142005,
+    "p50": 439.840317,
+    "p90": 535.956244,
+    "p95": 578.670525,
+    "p99": 2765.167935
+  },
+  "status_counts": {
+    "200": 165971
+  },
+  "started_at": "2026-10-27T00:44:06.164672417Z"
+}

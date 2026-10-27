@@ -1,0 +1,29 @@
+{
+  "name": "r3-envoy-plaintext-c7500",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.708815467,
+  "concurrency": 7500,
+  "requests": 124483,
+  "errors": 0,
+  "bytes": 1618279,
+  "requests_per_sec": 4053.656844360235,
+  "bytes_per_sec": 52697.538976683056,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 9037.747569,
+    "mean": 1810.117138,
+    "min": 690.251034,
+    "p50": 1408.762061,
+    "p90": 1730.56657,
+    "p95": 8074.201319,
+    "p99": 8662.613776
+  },
+  "status_counts": {
+    "200": 124483
+  },
+  "started_at": "2026-10-27T00:55:28.633872323Z"
+}

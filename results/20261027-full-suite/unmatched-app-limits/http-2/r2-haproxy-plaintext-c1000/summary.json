@@ -1,0 +1,67 @@
+{
+  "name": "r2-haproxy-plaintext-c1000",
+  "proxy": "haproxy",
+  "endpoint": "plaintext",
+  "concurrency": 1000,
+  "repetition": 2,
+  "load": {
+    "name": "r2-haproxy-plaintext-c1000",
+    "method": "GET",
+    "url": "https://127.0.0.1:18443/plaintext",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 30.040195761,
+    "concurrency": 1000,
+    "requests": 452463,
+    "errors": 0,
+    "bytes": 5882019,
+    "requests_per_sec": 15061.91915657936,
+    "bytes_per_sec": 195804.9490355317,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 1289.850915,
+      "mean": 65.20918,
+      "min": 0.525412,
+      "p50": 59.359435,
+      "p90": 97.20591,
+      "p95": 110.546436,
+      "p99": 139.083526
+    },
+    "status_counts": {
+      "200": 452463
+    },
+    "started_at": "2026-10-26T23:59:00.420609943Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 113.814453125,
+      "median_pss_mib": 107.013671875,
+      "peak_rss_mib": 137.34765625,
+      "peak_private_mib": 92.9140625,
+      "cpu_pct": 42.708797181221044
+    },
+    "app": {
+      "peak_pss_mib": 39.734375,
+      "median_pss_mib": 38.25390625,
+      "peak_rss_mib": 39.7421875,
+      "peak_private_mib": 39.734375,
+      "cpu_pct": 21.759589036213555
+    },
+    "loadgen": {
+      "peak_pss_mib": 102.203125,
+      "median_pss_mib": 93.05078125,
+      "peak_rss_mib": 102.2109375,
+      "peak_private_mib": 102.203125,
+      "cpu_pct": 34.50153538943211
+    },
+    "total_cpu_pct": 99.49758129570692,
+    "sample_count": 29
+  },
+  "rps200": 15061.91915657936,
+  "success_pct": 100.0,
+  "non200_pct": 0.0,
+  "client_error_pct": 0.0,
+  "clean": true,
+  "completed": true
+}

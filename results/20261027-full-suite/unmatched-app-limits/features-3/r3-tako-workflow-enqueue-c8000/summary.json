@@ -1,0 +1,77 @@
+{
+  "name": "r3-tako-workflow-enqueue-c8000",
+  "proxy": "tako",
+  "endpoint": "workflow-enqueue",
+  "concurrency": 8000,
+  "repetition": 3,
+  "load": {
+    "name": "r3-tako-workflow-enqueue-c8000",
+    "method": "POST",
+    "url": "https://127.0.0.1:18443/workflow-enqueue",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 35.988373877,
+    "concurrency": 8000,
+    "requests": 33965,
+    "errors": 0,
+    "bytes": 1137500,
+    "requests_per_sec": 943.7770129899332,
+    "bytes_per_sec": 31607.429774062974,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 29657.513584,
+      "mean": 7931.26752,
+      "min": 242.960482,
+      "p50": 8039.309624,
+      "p90": 12814.353964,
+      "p95": 16895.782711,
+      "p99": 24962.731871
+    },
+    "status_counts": {
+      "200": 25665,
+      "502": 5850,
+      "503": 2450
+    },
+    "started_at": "2026-10-27T00:06:54.813717674Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 963.798828125,
+      "median_pss_mib": 780.896484375,
+      "peak_rss_mib": 967.8515625,
+      "peak_private_mib": 961.0078125,
+      "cpu_pct": 57.89427563481363
+    },
+    "app": {
+      "peak_pss_mib": 95.724609375,
+      "median_pss_mib": 82.0390625,
+      "peak_rss_mib": 128.9765625,
+      "peak_private_mib": 65.13671875,
+      "cpu_pct": 1.323713337378905
+    },
+    "loadgen": {
+      "peak_pss_mib": 582.27734375,
+      "median_pss_mib": 547.630859375,
+      "peak_rss_mib": 582.28515625,
+      "peak_private_mib": 582.27734375,
+      "cpu_pct": 18.604718225358454
+    },
+    "total_cpu_pct": 99.54311496345004,
+    "sample_count": 28
+  },
+  "rps200": 713.1469759572099,
+  "success_pct": 75.5630796408067,
+  "non200_pct": 24.436920359193287,
+  "client_error_pct": 0.0,
+  "clean": false,
+  "completed": true,
+  "workflow_after_load": {
+    "runs": {
+      "pending": 28947,
+      "running": 2,
+      "succeeded": 6621
+    },
+    "ack_steps": 6635
+  }
+}

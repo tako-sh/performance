@@ -1,0 +1,77 @@
+{
+  "name": "r1-tako-workflow-enqueue-c8000",
+  "proxy": "tako",
+  "endpoint": "workflow-enqueue",
+  "concurrency": 8000,
+  "repetition": 1,
+  "load": {
+    "name": "r1-tako-workflow-enqueue-c8000",
+    "method": "POST",
+    "url": "https://127.0.0.1:18443/workflow-enqueue",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 33.981858277,
+    "concurrency": 8000,
+    "requests": 72867,
+    "errors": 0,
+    "bytes": 2567463,
+    "requests_per_sec": 2144.2912099165187,
+    "bytes_per_sec": 75553.93172061283,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 20436.385066,
+      "mean": 3501.503177,
+      "min": 108.003652,
+      "p50": 2521.907719,
+      "p90": 6844.091789,
+      "p95": 8403.296617,
+      "p99": 15055.191514
+    },
+    "status_counts": {
+      "200": 59318,
+      "502": 7836,
+      "503": 5713
+    },
+    "started_at": "2026-10-27T00:07:05.402083257Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 971.4609375,
+      "median_pss_mib": 768.8896484375,
+      "peak_rss_mib": 975.5625,
+      "peak_private_mib": 968.6484375,
+      "cpu_pct": 50.46321055828153
+    },
+    "app": {
+      "peak_pss_mib": 102.5048828125,
+      "median_pss_mib": 85.34423828125,
+      "peak_rss_mib": 135.79296875,
+      "peak_private_mib": 71.88671875,
+      "cpu_pct": -2.7364176582648874
+    },
+    "loadgen": {
+      "peak_pss_mib": 577.88671875,
+      "median_pss_mib": 561.607421875,
+      "peak_rss_mib": 577.89453125,
+      "peak_private_mib": 577.88671875,
+      "cpu_pct": 19.41480684914194
+    },
+    "total_cpu_pct": 98.93601053221431,
+    "sample_count": 28
+  },
+  "rps200": 1745.578464734764,
+  "success_pct": 81.40584901258457,
+  "non200_pct": 18.59415098741543,
+  "client_error_pct": 0.0,
+  "clean": false,
+  "completed": true,
+  "workflow_after_load": {
+    "runs": {
+      "pending": 52225,
+      "running": 1,
+      "succeeded": 31960
+    },
+    "ack_steps": 31988
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "r1-nginx-plaintext-c10000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.671536971,
+  "concurrency": 10000,
+  "requests": 278655,
+  "errors": 0,
+  "bytes": 3622515,
+  "requests_per_sec": 9085.133238137654,
+  "bytes_per_sec": 118106.73209578951,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 2740.152695,
+    "mean": 1078.5204,
+    "min": 610.663018,
+    "p50": 985.997849,
+    "p90": 1417.964682,
+    "p95": 1527.603383,
+    "p99": 2468.776956
+  },
+  "status_counts": {
+    "200": 278655
+  },
+  "started_at": "2026-10-27T00:16:15.638934673Z"
+}

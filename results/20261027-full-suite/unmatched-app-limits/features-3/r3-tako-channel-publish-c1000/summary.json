@@ -1,0 +1,67 @@
+{
+  "name": "r3-tako-channel-publish-c1000",
+  "proxy": "tako",
+  "endpoint": "channel-publish",
+  "concurrency": 1000,
+  "repetition": 3,
+  "load": {
+    "name": "r3-tako-channel-publish-c1000",
+    "method": "POST",
+    "url": "https://127.0.0.1:18443/channel-publish",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 30.249863835,
+    "concurrency": 1000,
+    "requests": 90854,
+    "errors": 0,
+    "bytes": 2199497,
+    "requests_per_sec": 3003.451536032344,
+    "bytes_per_sec": 72710.97192361957,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 1733.247664,
+      "mean": 330.846274,
+      "min": 109.027789,
+      "p50": 315.907828,
+      "p90": 351.32437,
+      "p95": 368.179098,
+      "p99": 1347.700135
+    },
+    "status_counts": {
+      "200": 90854
+    },
+    "started_at": "2026-10-27T00:00:31.668591707Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 201.81640625,
+      "median_pss_mib": 200.5390625,
+      "peak_rss_mib": 205.5703125,
+      "peak_private_mib": 198.85546875,
+      "cpu_pct": 64.64182931088496
+    },
+    "app": {
+      "peak_pss_mib": 62.8359375,
+      "median_pss_mib": 58.71875,
+      "peak_rss_mib": 64.578125,
+      "peak_private_mib": 61.88671875,
+      "cpu_pct": 17.57286359038407
+    },
+    "loadgen": {
+      "peak_pss_mib": 89.26171875,
+      "median_pss_mib": 87.23046875,
+      "peak_rss_mib": 89.26953125,
+      "peak_private_mib": 89.26171875,
+      "cpu_pct": 15.802085589433656
+    },
+    "total_cpu_pct": 98.96634891820857,
+    "sample_count": 29
+  },
+  "rps200": 3003.451536032344,
+  "success_pct": 100.0,
+  "non200_pct": 0.0,
+  "client_error_pct": 0.0,
+  "clean": true,
+  "completed": true
+}

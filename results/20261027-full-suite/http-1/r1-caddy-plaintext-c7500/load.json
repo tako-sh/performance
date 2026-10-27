@@ -1,0 +1,30 @@
+{
+  "name": "r1-caddy-plaintext-c7500",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.757734642,
+  "concurrency": 7500,
+  "requests": 133185,
+  "errors": 0,
+  "bytes": 1713868,
+  "requests_per_sec": 4330.130341203169,
+  "bytes_per_sec": 55721.528908039145,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 8879.130577,
+    "mean": 1703.230137,
+    "min": 0.195615,
+    "p50": 1394.846605,
+    "p90": 1859.392559,
+    "p95": 7162.976864,
+    "p99": 8498.834695
+  },
+  "status_counts": {
+    "200": 131836,
+    "502": 1349
+  },
+  "started_at": "2026-10-27T00:52:40.79342277Z"
+}

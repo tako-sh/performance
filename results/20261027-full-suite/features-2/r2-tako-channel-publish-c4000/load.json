@@ -1,0 +1,29 @@
+{
+  "name": "r2-tako-channel-publish-c4000",
+  "method": "POST",
+  "url": "https://127.0.0.1:18443/channel-publish",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.929000687,
+  "concurrency": 4000,
+  "requests": 105546,
+  "errors": 0,
+  "bytes": 2569310,
+  "requests_per_sec": 3412.5253857413777,
+  "bytes_per_sec": 83071.22580523354,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 4731.794293,
+    "mean": 1148.427306,
+    "min": 186.757998,
+    "p50": 1057.473652,
+    "p90": 1127.266757,
+    "p95": 1371.165473,
+    "p99": 3805.096106
+  },
+  "status_counts": {
+    "200": 105546
+  },
+  "started_at": "2026-10-27T00:44:58.590565989Z"
+}

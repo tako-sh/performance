@@ -1,0 +1,29 @@
+{
+  "name": "r1-tako-channel-publish-c500",
+  "method": "POST",
+  "url": "https://127.0.0.1:18443/channel-publish",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.087230271,
+  "concurrency": 500,
+  "requests": 89940,
+  "errors": 0,
+  "bytes": 2178105,
+  "requests_per_sec": 2989.3080615895024,
+  "bytes_per_sec": 72393.00461961755,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 943.946442,
+    "mean": 166.794763,
+    "min": 41.472307,
+    "p50": 159.755841,
+    "p90": 193.444773,
+    "p95": 206.268139,
+    "p99": 232.284552
+  },
+  "status_counts": {
+    "200": 89940
+  },
+  "started_at": "2026-10-27T00:39:55.212469641Z"
+}

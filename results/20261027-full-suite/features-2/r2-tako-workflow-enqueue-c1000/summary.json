@@ -1,0 +1,107 @@
+{
+  "name": "r2-tako-workflow-enqueue-c1000",
+  "proxy": "tako",
+  "endpoint": "workflow-enqueue",
+  "concurrency": 1000,
+  "repetition": 2,
+  "load": {
+    "name": "r2-tako-workflow-enqueue-c1000",
+    "method": "POST",
+    "url": "https://127.0.0.1:18443/workflow-enqueue",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 30.240763224,
+    "concurrency": 1000,
+    "requests": 110599,
+    "errors": 0,
+    "bytes": 4423960,
+    "requests_per_sec": 3657.2820328894754,
+    "bytes_per_sec": 146291.28131557902,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 1100.96067,
+      "mean": 272.030594,
+      "min": 96.218905,
+      "p50": 265.745805,
+      "p90": 291.423118,
+      "p95": 300.262044,
+      "p99": 352.916577
+    },
+    "status_counts": {
+      "200": 110599
+    },
+    "started_at": "2026-10-27T00:42:20.750167232Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 232.173828125,
+      "median_pss_mib": 227.15625,
+      "peak_rss_mib": 236.26953125,
+      "peak_private_mib": 229.390625,
+      "cpu_pct": 56.352108539109466
+    },
+    "app": {
+      "peak_pss_mib": 76.34375,
+      "median_pss_mib": 74.935546875,
+      "peak_rss_mib": 109.6484375,
+      "peak_private_mib": 46.15234375,
+      "cpu_pct": 16.534796113034332
+    },
+    "loadgen": {
+      "peak_pss_mib": 90.2109375,
+      "median_pss_mib": 86.66015625,
+      "peak_rss_mib": 90.21875,
+      "peak_private_mib": 90.2109375,
+      "cpu_pct": 13.402124367814169
+    },
+    "total_cpu_pct": 87.1287801932497,
+    "sample_count": 30
+  },
+  "rps200": 3657.2820328894754,
+  "success_pct": 100.0,
+  "non200_pct": 0.0,
+  "client_error_pct": 0.0,
+  "clean": true,
+  "completed": true,
+  "app_limits": [
+    {
+      "before": [
+        4096,
+        4096
+      ],
+      "after": [
+        65535,
+        65535
+      ]
+    },
+    {
+      "before": [
+        65535,
+        65535
+      ],
+      "after": [
+        65535,
+        65535
+      ]
+    },
+    {
+      "before": [
+        4096,
+        4096
+      ],
+      "after": [
+        65535,
+        65535
+      ]
+    }
+  ],
+  "workflow_after_load": {
+    "runs": {
+      "pending": 142108,
+      "running": 2,
+      "succeeded": 5508
+    },
+    "ack_steps": 5589
+  }
+}

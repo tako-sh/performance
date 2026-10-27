@@ -1,0 +1,74 @@
+{
+  "name": "r2-tako-workflow-enqueue-c4000",
+  "proxy": "tako",
+  "endpoint": "workflow-enqueue",
+  "concurrency": 4000,
+  "repetition": 2,
+  "load": {
+    "name": "r2-tako-workflow-enqueue-c4000",
+    "method": "POST",
+    "url": "https://127.0.0.1:18443/workflow-enqueue",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 31.086183341999998,
+    "concurrency": 4000,
+    "requests": 73836,
+    "errors": 0,
+    "bytes": 2953440,
+    "requests_per_sec": 2375.2031308469277,
+    "bytes_per_sec": 95008.1252338771,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 8444.602391,
+      "mean": 1638.586091,
+      "min": 619.230003,
+      "p50": 1365.635123,
+      "p90": 1551.404256,
+      "p95": 4291.803134,
+      "p99": 6881.881698
+    },
+    "status_counts": {
+      "200": 73836
+    },
+    "started_at": "2026-10-27T00:05:04.110651499Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 488.0986328125,
+      "median_pss_mib": 450.0869140625,
+      "peak_rss_mib": 492.2109375,
+      "peak_private_mib": 485.2890625,
+      "cpu_pct": 63.65294164995875
+    },
+    "app": {
+      "peak_pss_mib": 100.1796875,
+      "median_pss_mib": 95.12109375,
+      "peak_rss_mib": 133.2109375,
+      "peak_private_mib": 69.83203125,
+      "cpu_pct": 16.764279176823322
+    },
+    "loadgen": {
+      "peak_pss_mib": 277.4609375,
+      "median_pss_mib": 275.62890625,
+      "peak_rss_mib": 277.46875,
+      "peak_private_mib": 277.4609375,
+      "cpu_pct": 16.28529977177122
+    },
+    "total_cpu_pct": 99.00171582804361,
+    "sample_count": 27
+  },
+  "rps200": 2375.2031308469277,
+  "success_pct": 100.0,
+  "non200_pct": 0.0,
+  "client_error_pct": 0.0,
+  "clean": true,
+  "completed": true,
+  "workflow_after_load": {
+    "runs": {
+      "pending": 85304,
+      "succeeded": 4874
+    },
+    "ack_steps": 4887
+  }
+}

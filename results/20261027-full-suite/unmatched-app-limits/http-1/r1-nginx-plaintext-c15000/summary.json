@@ -1,0 +1,88 @@
+{
+  "name": "r1-nginx-plaintext-c15000",
+  "proxy": "nginx",
+  "endpoint": "plaintext",
+  "concurrency": 15000,
+  "repetition": 1,
+  "load": {
+    "name": "r1-nginx-plaintext-c15000",
+    "method": "GET",
+    "url": "https://127.0.0.1:18443/plaintext",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 30.982844485,
+    "concurrency": 15000,
+    "requests": 157871,
+    "errors": 2672,
+    "bytes": 2272411,
+    "requests_per_sec": 5095.432734603548,
+    "bytes_per_sec": 73344.16958069045,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 16997.92228,
+      "mean": 2629.120365,
+      "min": 137.777119,
+      "p50": 1646.302885,
+      "p90": 2659.178223,
+      "p95": 12567.345455,
+      "p99": 16798.463402
+    },
+    "status_counts": {
+      "200": 156529,
+      "500": 1342
+    },
+    "error_kinds": {
+      "connection_reset": 1,
+      "eof": 105,
+      "timeout": 2566
+    },
+    "error_samples": {
+      "connection_reset": [
+        "Get \"https://127.0.0.1:18443/plaintext\": read tcp 127.0.0.13:47687->127.0.0.1:18443: read: connection reset by peer"
+      ],
+      "eof": [
+        "Get \"https://127.0.0.1:18443/plaintext\": EOF",
+        "Get \"https://127.0.0.1:18443/plaintext\": EOF",
+        "Get \"https://127.0.0.1:18443/plaintext\": EOF"
+      ],
+      "timeout": [
+        "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.10:0->127.0.0.1:18443: i/o timeout",
+        "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.12:0->127.0.0.1:18443: i/o timeout",
+        "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.13:0->127.0.0.1:18443: i/o timeout"
+      ]
+    },
+    "started_at": "2026-10-27T00:25:56.914364622Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 597.4736328125,
+      "median_pss_mib": 597.4736328125,
+      "peak_rss_mib": 613.8359375,
+      "peak_private_mib": 589.90625,
+      "cpu_pct": 51.13298460306832
+    },
+    "app": {
+      "peak_pss_mib": 188.1640625,
+      "median_pss_mib": 117.40625,
+      "peak_rss_mib": 188.171875,
+      "peak_private_mib": 188.1640625,
+      "cpu_pct": 14.941009959672622
+    },
+    "loadgen": {
+      "peak_pss_mib": 930.53125,
+      "median_pss_mib": 791.15234375,
+      "peak_rss_mib": 930.5390625,
+      "peak_private_mib": 930.53125,
+      "cpu_pct": 30.225886661800306
+    },
+    "total_cpu_pct": 99.59871695760569,
+    "sample_count": 25
+  },
+  "rps200": 5052.118441732546,
+  "success_pct": 97.49973527341584,
+  "non200_pct": 0.8359131198495108,
+  "client_error_pct": 1.6643516067346442,
+  "clean": false,
+  "completed": true
+}

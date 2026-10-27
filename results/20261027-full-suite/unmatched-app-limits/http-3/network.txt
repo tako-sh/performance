@@ -1,0 +1,4 @@
+net.ipv4.ip_local_port_range = 10240 65535
+net.ipv4.ip_local_reserved_ports = 18080,18443
+net.core.somaxconn = 65535
+net.ipv4.tcp_max_syn_backlog = 65535

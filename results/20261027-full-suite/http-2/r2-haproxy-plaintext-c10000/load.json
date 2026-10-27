@@ -1,0 +1,29 @@
+{
+  "name": "r2-haproxy-plaintext-c10000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 31.651625252,
+  "concurrency": 10000,
+  "requests": 152410,
+  "errors": 0,
+  "bytes": 1981330,
+  "requests_per_sec": 4815.2345665210205,
+  "bytes_per_sec": 62598.049364773266,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 22206.394122,
+    "mean": 1941.922153,
+    "min": 290.606294,
+    "p50": 1128.310938,
+    "p90": 3048.790887,
+    "p95": 6537.702573,
+    "p99": 19170.895447
+  },
+  "status_counts": {
+    "200": 152410
+  },
+  "started_at": "2026-10-27T00:57:31.614075214Z"
+}

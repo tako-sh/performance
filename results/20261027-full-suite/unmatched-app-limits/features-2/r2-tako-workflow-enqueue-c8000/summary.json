@@ -1,0 +1,77 @@
+{
+  "name": "r2-tako-workflow-enqueue-c8000",
+  "proxy": "tako",
+  "endpoint": "workflow-enqueue",
+  "concurrency": 8000,
+  "repetition": 2,
+  "load": {
+    "name": "r2-tako-workflow-enqueue-c8000",
+    "method": "POST",
+    "url": "https://127.0.0.1:18443/workflow-enqueue",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 33.845819725,
+    "concurrency": 8000,
+    "requests": 34040,
+    "errors": 0,
+    "bytes": 1151242,
+    "requests_per_sec": 1005.7372011249169,
+    "bytes_per_sec": 34014.30396290986,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 27407.120986,
+      "mean": 7488.213321,
+      "min": 166.824323,
+      "p50": 6827.322793,
+      "p90": 13981.093548,
+      "p95": 15850.048841,
+      "p99": 24185.761913
+    },
+    "status_counts": {
+      "200": 26250,
+      "502": 5846,
+      "503": 1944
+    },
+    "started_at": "2026-10-27T00:07:03.355822368Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 862.7431640625,
+      "median_pss_mib": 709.5673828125,
+      "peak_rss_mib": 866.8359375,
+      "peak_private_mib": 859.9296875,
+      "cpu_pct": 60.22663909161648
+    },
+    "app": {
+      "peak_pss_mib": 98.203125,
+      "median_pss_mib": 77.74609375,
+      "peak_rss_mib": 131.21875,
+      "peak_private_mib": 67.78515625,
+      "cpu_pct": -3.0952581072398133
+    },
+    "loadgen": {
+      "peak_pss_mib": 538.96875,
+      "median_pss_mib": 491.39453125,
+      "peak_rss_mib": 538.9765625,
+      "peak_private_mib": 538.96875,
+      "cpu_pct": 20.419463931343245
+    },
+    "total_cpu_pct": 99.40120201208724,
+    "sample_count": 27
+  },
+  "rps200": 775.5758381177751,
+  "success_pct": 77.11515863689776,
+  "non200_pct": 22.884841363102232,
+  "client_error_pct": 0.0,
+  "clean": false,
+  "completed": true,
+  "workflow_after_load": {
+    "runs": {
+      "pending": 32993,
+      "running": 3,
+      "succeeded": 6796
+    },
+    "ack_steps": 6816
+  }
+}
