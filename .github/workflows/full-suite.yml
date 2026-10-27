@@ -1,0 +1,178 @@
+name: Full public benchmark
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - diagnostics/full-suite/**
+      - .github/workflows/full-suite.yml
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: full-suite-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TAKO_REVISION: 1093899fd6b09d6227e5b7b585ee8bfeb4b5c028
+  OPENSSL_NO_VENDOR: '1'
+  REUSE_BUILD_RUN: '40422659586'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        if: env.REUSE_BUILD_RUN == ''
+        with:
+          go-version: '1.26.3'
+          cache-dependency-path: diagnostics/full-memory/caddy/go.sum
+      - uses: oven-sh/setup-bun@v2
+        if: env.REUSE_BUILD_RUN == ''
+        with:
+          bun-version: '1.4.4'
+      - name: Toolchains and libraries
+        if: env.REUSE_BUILD_RUN == ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake zstd
+          rustup toolchain install 1.99.1 --profile minimal
+          rustup default 1.99.1
+      - uses: actions/cache@v4
+        if: env.REUSE_BUILD_RUN == ''
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tako-source/target
+          key: full-suite-${{ runner.os }}-rust-1.99.1-${{ env.TAKO_REVISION }}
+          restore-keys: |
+            buffer-release-${{ runner.os }}-rust-1.99.1-738e023e721cb6bfe63cda184b8e78ad7bf8d1c6-
+      - name: Validate and build pinned binaries
+        if: env.REUSE_BUILD_RUN == ''
+        run: |
+          go test ./cmd/loadgen ./cmd/benchapp
+          python3 -m py_compile diagnostics/full-suite/*.py
+          bash -n diagnostics/full-suite/entrypoint.sh
+          mkdir -p build
+          cargo build --manifest-path tako-source/Cargo.toml --locked --release -p tako-server --bin tako-server -j 4
+          cp tako-source/target/release/tako-server build/tako-server
+          CGO_ENABLED=0 go build -trimpath -o build/benchapp ./cmd/benchapp
+          CGO_ENABLED=0 go build -trimpath -o build/loadgen ./cmd/loadgen
+          (cd diagnostics/full-memory/caddy && CGO_ENABLED=0 go build -mod=readonly -trimpath -o ../../../build/caddy .)
+          cp "$(command -v bun)" build/bun
+          (cd tako-source && bun install --frozen-lockfile && bun run --cwd sdk/javascript build)
+          python3 diagnostics/full-suite/package-features.py "$PWD/tako-source" "$PWD/build"
+          chmod 755 build/{tako-server,benchapp,loadgen,caddy,bun}
+          {
+            echo "tako_revision=$TAKO_REVISION"
+            echo "performance_revision=$(git rev-parse HEAD)"
+            rustc --version
+            go version
+            sha256sum build/{tako-server,benchapp,loadgen,caddy,bun,features.tar}
+          } > build/build.txt
+      - name: Build one shared runtime image
+        if: env.REUSE_BUILD_RUN == ''
+        run: |
+          docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-full-suite -f diagnostics/full-suite/Dockerfile .
+          docker image inspect tako-full-suite --format '{{.Id}}' > build/runtime-image.txt
+          docker save tako-full-suite | zstd -T0 -3 -o build/runtime-image.tar.zst
+      - name: Reuse identical measured binaries and runtime image
+        if: env.REUSE_BUILD_RUN != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: full-suite-build
+          path: build
+          run-id: ${{ env.REUSE_BUILD_RUN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: full-suite-build
+          path: |
+            build/tako-server
+            build/benchapp
+            build/loadgen
+            build/caddy
+            build/bun
+            build/features.tar
+            build/build.txt
+            build/runtime-image.txt
+            build/runtime-image.tar.zst
+          compression-level: 0
+          retention-days: 7
+
+  smoke:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: full-suite-build
+          path: build
+      - name: Verify all five proxies and both feature operations
+        run: bash diagnostics/full-suite/run-container.sh smoke 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-suite-smoke-${{ github.sha }}
+          path: |
+            results/full-suite/**/*.json
+            results/full-suite/build.txt
+            results/full-suite/runtime-image.txt
+            results/full-suite/network.txt
+          retention-days: 7
+
+  compare:
+    needs: [build, smoke]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [http, features]
+        repetition: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tako-sh/tako
+          ref: ${{ env.TAKO_REVISION }}
+          path: tako-source
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: full-suite-build
+          path: build
+      - name: Run complete comparison
+        env:
+          GROUP: ${{ matrix.group }}
+          REPETITION: ${{ matrix.repetition }}
+        run: bash diagnostics/full-suite/run-container.sh "$GROUP" "$REPETITION"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-suite-${{ matrix.group }}-${{ matrix.repetition }}-${{ github.sha }}
+          path: |
+            results/full-suite/**/*.json
+            results/full-suite/build.txt
+            results/full-suite/runtime-image.txt
+            results/full-suite/network.txt
+          retention-days: 14

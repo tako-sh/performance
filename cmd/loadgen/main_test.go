@@ -4,9 +4,28 @@ import (
 	"context"
 	"errors"
 	"net"
+	"net/http"
+	"net/http/httptest"
 	"sync"
 	"testing"
+	"time"
 )
+
+func TestTruncatedResponseIsOnlyAClientError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Length", "100")
+		_, _ = w.Write([]byte("short"))
+	}))
+	defer server.Close()
+	res := run(server.Client(), runConfig{url: server.URL, method: http.MethodGet,
+		duration: 20 * time.Millisecond, reqTimeout: time.Second, concurrency: 1})
+	if res.Errors == 0 || res.ErrorKinds["read_response"] != res.Errors {
+		t.Fatalf("expected response-read errors, got %+v", res)
+	}
+	if res.Requests != 0 || len(res.StatusCounts) != 0 || res.Bytes != 0 {
+		t.Fatalf("truncated responses must not also count as successful requests: %+v", res)
+	}
+}
 
 type timeoutError struct{}
 
