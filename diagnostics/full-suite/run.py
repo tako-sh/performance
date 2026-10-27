@@ -92,9 +92,12 @@ def sample(server, upstream, load):
     limits = [list(resource.prlimit(pid, resource.RLIMIT_NOFILE)) for pid in apps]
     if not limits or any(limit != [APP_NOFILE, APP_NOFILE] for limit in limits):
         raise RuntimeError(f'backend limits changed during measurement: {limits}')
+    app_metrics = process_metrics(apps)
+    cpu_group = '/sys/fs/cgroup/tako-apps' if upstream is None else '/sys/fs/cgroup/benchmark-upstream'
+    app_metrics['cpu_seconds'] = int(dict(line.split() for line in Path(cpu_group, 'cpu.stat').read_text().splitlines())['usage_usec']) / 1e6
     return dict(timestamp=time.time(), proxy=process_metrics(descendants(server.pid) - apps),
                 app_nofile=limits,
-                app=process_metrics(apps), loadgen=process_metrics(descendants(load.pid)),
+                app=app_metrics, loadgen=process_metrics(descendants(load.pid)),
                 cpu_seconds=cgroup_cpu(), memory_bytes=int(Path('/sys/fs/cgroup/memory.current').read_text()))
 
 
@@ -222,7 +225,11 @@ def case(args, proxy, endpoint, concurrency, index):
             server = start_tako(case_dir, name, feature)
         else:
             port = 10000 + index
-            upstream = common.start(['/build/benchapp'], case_dir / 'app.log', env={**ENV, 'PORT': str(port)})
+            app_group = Path('/sys/fs/cgroup/benchmark-upstream')
+            app_group.mkdir(exist_ok=True)
+            def assign_app_group():
+                (app_group / 'cgroup.procs').write_text(str(os.getpid()))
+            upstream = common.start(['/build/benchapp'], case_dir / 'app.log', env={**ENV, 'PORT': str(port)}, preexec_fn=assign_app_group)
             server = start_proxy(case_dir, proxy, port)
         ready(server, 'status' if feature else 'plaintext')
         app_limits = match_app_limits(upstream)
