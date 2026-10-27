@@ -1,71 +1,55 @@
 # Tako Performance
 
-The [26 October production validation](results/20261026-buffer-release/README.md)
-measures the buffer reclamation merged into Tako master: **55.2% less retained
-memory with 20,000 held TLS connections**, and **42.0% less for uploads followed
-by streaming responses**, preserving 64 KiB transfer reads. All 188 complete
-correctness cases passed. The report includes longer paired and matched-rate
-checks, their uncertainty, and existing Caddy bulk-transfer advantages.
-Reproduce the pinned [production workflow](.github/workflows/buffer-release.yml)
-using the [validation guide](diagnostics/release-validation/README.md).
+Complete, reproducible comparisons of Tako, nginx, HAProxy, Envoy and Caddy.
 
-The [full-server memory comparison](diagnostics/full-memory/README.md) runs Tako's
-64/32/16 KiB socket-buffer experiment and a Caddy control in the dedicated
-[GitHub Actions workflow](.github/workflows/memory.yml).
+The current [27 October full-suite report](results/20261027-full-suite/README.md)
+contains all 135 cases, throughput, latency, errors, CPU, memory, channels and
+workflows. [RESULTS.md](RESULTS.md) summarizes the findings and measurement limits.
+Every chart uses this dataset; older VM results remain in the
+[archive](results/archived-vm-summary.md).
 
-The [buffer lifetime experiments](diagnostics/buffer-lifetime/README.md) test idle
-socket-buffer release and completed request-body release against unchanged Tako
-and Caddy, including HTTP/2, bulk transfers, and streaming responses.
-The [26 October investigation](results/20261026-buffer-lifetime/README.md) records
-the memory savings, performance limitations and socket-count correction.
+## Run in GitHub Actions
 
-The [TLS offload investigation](results/20261026-tls-offload/README.md) compares
-established-request latency, completed handshake throughput and memory after
-profiling found handshake interference.
-
-Repeatable benchmarks for Tako, nginx, Caddy, HAProxy, and Envoy.
-
-See [RESULTS.md](RESULTS.md) for the baseline, high-load follow-up, raw result
-links, findings, and profiling targets.
-
-This repo contains:
-
-- A small Go HTTP application used by every proxy candidate.
-- Proxy configs for single-upstream runs, with load-balanced mode available for
-  larger testbeds.
-- Remote setup and restore scripts for benchmark hosts.
-- A VM-local high-load harness with CPU/RAM/RPS/failure graph rendering.
-- Raw benchmark output and Markdown reports.
-
-The first baseline target was an Ubuntu 24.04 VM. The public report
-intentionally omits exact hostnames, IP addresses, and private network details.
-
-## Run
+Use the free standard Ubuntu runner and the pinned
+[full-suite workflow](.github/workflows/full-suite.yml). Each repetition compares
+all five proxies in a two-CPU, 8 GiB, no-swap container. Proxy, app and load
+generator share that budget. Read the [harness guide](diagnostics/full-suite/README.md)
+for source pins, matched backend limits, checks and artifact contents.
 
 ```bash
-BENCH_VM=<ssh-host> ./scripts/sync-to-vm.sh
-BENCH_VM=<ssh-host> BENCH_IP=<target-ip> CONCURRENCY_LIST="100 500" ./scripts/run-http-benchmarks.sh
-BENCH_VM=<ssh-host> \
-TAKO_SERVER_BIN=/opt/tako-performance/bin/<tako-server-release> \
-SOURCE_IPS="127.0.0.2,127.0.0.3" \
-PROXIES="nginx haproxy envoy tako caddy" \
-CONCURRENCY_LIST="1000 2500 5000" \
-REQUEST_TIMEOUT=60s \
-COOLDOWN_SECONDS=10 \
-./scripts/run-vm-local-http-benchmarks.sh
-./scripts/render-metrics-graphs.sh results/<timestamp>/http-vm-local
-BENCH_VM=<ssh-host> \
-TAKO_SERVER_BIN=/opt/tako-performance/bin/<tako-server-release> \
-COOLDOWN_SECONDS=10 \
-./scripts/run-vm-local-tako-feature-benchmarks.sh
+gh workflow run full-suite.yml -R tako-sh/performance --ref '<performance-branch>'
+gh run list -R tako-sh/performance --branch '<performance-branch>'
+gh run watch '<run-id>' -R tako-sh/performance --exit-status
+gh run download '<run-id>' -R tako-sh/performance --dir '<artifact-directory>'
 ```
 
-HTTP scripts default to `MODES=single`. Use `MODES="single lb"` only on a
-larger testbed where four upstream app processes have enough CPU capacity.
-HTTP scripts also default to `REQUEST_TIMEOUT=60s` so high-concurrency rows
-measure overload latency instead of a short client timeout.
+Manual dispatch requires the workflow to exist on the default branch. Before
+that, use its PR-triggered run. Verify the run's exact source and harness revisions.
+Do not compare a narrow experiment with historical charts as a full refresh.
 
-HAProxy and Envoy cases require the matching system binaries on the benchmark
-VM. All proxy cases use the same local app, HTTPS route, certificate, and
-high-water request/connection protection where the proxy exposes a comparable
-knob.
+To regenerate the current report after collecting its artifacts:
+
+```bash
+python3 results/20261027-full-suite/analyze.py results/20261027-full-suite
+python3 results/20261027-full-suite/render.py results/20261027-full-suite
+```
+
+The dated analyzer checks all identities and raw metrics, preserves the three
+recorded sampling caveats, and marks the invalid CPU aggregate unavailable.
+It does not edit the raw data. Rendering requires Matplotlib.
+
+## Diagnostic and historical evidence
+
+- [Merged buffer-lifetime validation](results/20261026-buffer-release/README.md):
+  188 complete correctness cases, held/streaming memory and paired performance.
+- [Initial buffer experiments](results/20261026-buffer-lifetime/README.md).
+- [TLS offload investigation](results/20261026-tls-offload/README.md).
+- [Memory harness](diagnostics/full-memory/README.md),
+  [buffer harness](diagnostics/buffer-lifetime/README.md), and
+  [production validation](diagnostics/release-validation/README.md).
+- [Historical VM report](results/archived-vm-summary.md); remote scripts and proxy
+  configs remain available for dedicated test machines.
+
+Raw failures and superseded runs are retained. Public reports exclude credentials,
+private hosts and runtime logs. Load-balanced mode requires a larger or multi-node
+testbed and is outside this single-host suite.

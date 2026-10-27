@@ -1,0 +1,29 @@
+{
+  "name": "r2-envoy-plaintext-c5000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.480832977,
+  "concurrency": 5000,
+  "requests": 148587,
+  "errors": 0,
+  "bytes": 1931631,
+  "requests_per_sec": 4874.768354005276,
+  "bytes_per_sec": 63371.98860206858,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 6007.405415,
+    "mean": 1008.757261,
+    "min": 60.883019,
+    "p50": 848.410575,
+    "p90": 1078.891568,
+    "p95": 1201.01074,
+    "p99": 5631.656034
+  },
+  "status_counts": {
+    "200": 148587
+  },
+  "started_at": "2026-10-27T00:50:10.15150093Z"
+}

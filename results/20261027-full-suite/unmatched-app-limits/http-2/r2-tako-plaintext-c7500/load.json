@@ -1,0 +1,30 @@
+{
+  "name": "r2-tako-plaintext-c7500",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.75381429,
+  "concurrency": 7500,
+  "requests": 160532,
+  "errors": 0,
+  "bytes": 2107646,
+  "requests_per_sec": 5219.905358282633,
+  "bytes_per_sec": 68532.83238708143,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 13339.490266,
+    "mean": 1410.460788,
+    "min": 0.169996,
+    "p50": 945.382907,
+    "p90": 3088.177679,
+    "p95": 4529.066511,
+    "p99": 7202.020113
+  },
+  "status_counts": {
+    "200": 157077,
+    "503": 3455
+  },
+  "started_at": "2026-10-27T00:14:28.834469175Z"
+}

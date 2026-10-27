@@ -1,0 +1,29 @@
+{
+  "name": "r1-haproxy-plaintext-c7500",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.242991364,
+  "concurrency": 7500,
+  "requests": 419068,
+  "errors": 0,
+  "bytes": 5447884,
+  "requests_per_sec": 13856.698067865109,
+  "bytes_per_sec": 180137.0748822464,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 7651.980369,
+    "mean": 534.366672,
+    "min": 1.480111,
+    "p50": 436.739671,
+    "p90": 658.5229,
+    "p95": 730.400964,
+    "p99": 4707.266206
+  },
+  "status_counts": {
+    "200": 419068
+  },
+  "started_at": "2026-10-27T00:55:17.066213108Z"
+}

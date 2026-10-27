@@ -1,0 +1,29 @@
+{
+  "name": "r1-tako-workflow-enqueue-c4000",
+  "method": "POST",
+  "url": "https://127.0.0.1:18443/workflow-enqueue",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.871082204,
+  "concurrency": 4000,
+  "requests": 129446,
+  "errors": 0,
+  "bytes": 5177840,
+  "requests_per_sec": 4193.115069455762,
+  "bytes_per_sec": 167724.60277823047,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 4775.431282,
+    "mean": 936.968159,
+    "min": 127.927209,
+    "p50": 861.078034,
+    "p90": 986.997315,
+    "p95": 1019.280251,
+    "p99": 3230.701207
+  },
+  "status_counts": {
+    "200": 129446
+  },
+  "started_at": "2026-10-27T00:05:03.005609434Z"
+}

@@ -1,0 +1,97 @@
+{
+  "run_url": "https://github.com/tako-sh/performance/actions/runs/40427497462",
+  "run_id": 40427497462,
+  "source_revision": "1093899fd6b09d6227e5b7b585ee8bfeb4b5c028",
+  "harness_head": "6f3c236ed17a0b241ccb64257a36434dc8afac6d",
+  "measured_checkout": "09635f382de34d2952332130bbcd8eb2e92bc60e",
+  "completed_cases": 135,
+  "http_cases": 105,
+  "feature_cases": 30,
+  "clean_cases": 122,
+  "validation": "All 135 cases validated. Three known sampling issues are explicitly flagged in analysis.json; the invalid load-generator CPU aggregate is unavailable. Raw files unchanged.",
+  "quality_flags": [
+    {
+      "case": "r1-nginx-plaintext-c15000",
+      "metric": "sample_density",
+      "samples": 24,
+      "note": "Below planned 25-sample threshold; samples span 29.04 seconds."
+    },
+    {
+      "case": "r3-nginx-plaintext-c15000",
+      "metric": "sample_density",
+      "samples": 23,
+      "note": "Below planned 25-sample threshold; samples span 28.17 seconds."
+    },
+    {
+      "case": "r2-tako-plaintext-c15000",
+      "metric": "loadgen_cpu_pct",
+      "value": -16.964136115826882,
+      "note": "Invalid counter delta when load generator exits during sampling. Raw data retained unchanged; this CPU value must not be used."
+    }
+  ],
+  "backend_nofile": 65535,
+  "production_default_backend_nofile": 4096,
+  "artifacts": [
+    {
+      "id": 12702067013,
+      "name": "full-suite-http-3-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 175921,
+      "digest": "sha256:71da70173711755a7fd1d3e5ee3811b33ef13e838b8f9611512b5a3fbd3ed028",
+      "created_at": "2026-10-27T01:13:46Z"
+    },
+    {
+      "id": 12701309029,
+      "name": "full-suite-http-1-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 166768,
+      "digest": "sha256:e3228d61bf4e60d073e45df6fdedf1ca09ea2e1050c981222195ec5d4ff3836d",
+      "created_at": "2026-10-27T01:10:46Z"
+    },
+    {
+      "id": 12701279642,
+      "name": "full-suite-http-2-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 176210,
+      "digest": "sha256:b8147ac884097994979a4a16eff58a1c096b3033deefcf3762872d4c08825e5f",
+      "created_at": "2026-10-27T01:13:53Z"
+    },
+    {
+      "id": 12700682755,
+      "name": "full-suite-features-1-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 56500,
+      "digest": "sha256:1752a76057614ccb5991716da1dad170a07f36c61b726f007d6f18f15c5c6e95",
+      "created_at": "2026-10-27T00:48:41Z"
+    },
+    {
+      "id": 12700682727,
+      "name": "full-suite-features-2-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 56906,
+      "digest": "sha256:2028f1d8e9860753e75fb916e123dfb91f7cb9aa8fb09241b302b3e95be1cbac",
+      "created_at": "2026-10-27T00:48:25Z"
+    },
+    {
+      "id": 12700259402,
+      "name": "full-suite-features-3-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 56672,
+      "digest": "sha256:a9206f5d10987b47eaf607e918e85b8224cdbd7abf1fed911eae99d70c5d983d",
+      "created_at": "2026-10-27T00:48:28Z"
+    },
+    {
+      "id": 12699993721,
+      "name": "full-suite-smoke-09635f382de34d2952332130bbcd8eb2e92bc60e",
+      "bytes": 22499,
+      "digest": "sha256:0884402fd210a06768a0a1a0a91a36828c9f30d08b29538bec663939d661ca74",
+      "created_at": "2026-10-27T00:38:58Z"
+    },
+    {
+      "id": 12699654894,
+      "name": "full-suite-build",
+      "bytes": 438444164,
+      "digest": "sha256:686017750e7334ba820ca08ebdb7d359157082ad5ab1671935de788878a6e4c9",
+      "created_at": "2026-10-27T00:37:38Z"
+    }
+  ],
+  "disposition": "Complete dated report: all measurements retained, sampling caveats disclosed, invalid load-generator CPU aggregate marked unavailable.",
+  "workflow_url": "https://github.com/tako-sh/performance/actions/runs/40427497462",
+  "initial_rejected_run": 40422659586,
+  "harness_pull_request": "https://github.com/tako-sh/performance/pull/9",
+  "harness_merged_commit": "4e2cdf4485d31b4251ed37b34939f9e9715b214b"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "r3-tako-plaintext-c5000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.546129639,
+  "concurrency": 5000,
+  "requests": 116012,
+  "errors": 0,
+  "bytes": 1508156,
+  "requests_per_sec": 3797.9279657047223,
+  "bytes_per_sec": 49373.063554161396,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 9667.602591,
+    "mean": 1291.447812,
+    "min": 0.252559,
+    "p50": 986.67997,
+    "p90": 1944.122284,
+    "p95": 2958.344098,
+    "p99": 8264.694331
+  },
+  "status_counts": {
+    "200": 116012
+  },
+  "started_at": "2026-10-27T00:48:15.904436134Z"
+}

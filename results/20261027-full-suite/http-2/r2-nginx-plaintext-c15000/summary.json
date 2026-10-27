@@ -1,0 +1,89 @@
+{
+  "name": "r2-nginx-plaintext-c15000",
+  "proxy": "nginx",
+  "endpoint": "plaintext",
+  "concurrency": 15000,
+  "repetition": 2,
+  "load": {
+    "name": "r2-nginx-plaintext-c15000",
+    "method": "GET",
+    "url": "https://127.0.0.1:18443/plaintext",
+    "host_header": "bench.test",
+    "server_name": "bench.test",
+    "source_ip_count": 16,
+    "duration_sec": 32.183318696,
+    "concurrency": 15000,
+    "requests": 129173,
+    "errors": 375,
+    "bytes": 1679249,
+    "requests_per_sec": 4013.6631408386934,
+    "bytes_per_sec": 52177.62083090301,
+    "request_timeout_sec": 60,
+    "latency_ms": {
+      "max": 16391.372979,
+      "mean": 3479.151982,
+      "min": 1106.633735,
+      "p50": 2529.011458,
+      "p90": 7802.391432,
+      "p95": 10278.061444,
+      "p99": 15319.305849
+    },
+    "status_counts": {
+      "200": 129173
+    },
+    "error_kinds": {
+      "timeout": 375
+    },
+    "error_samples": {
+      "timeout": [
+        "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.15:0->127.0.0.1:18443: i/o timeout",
+        "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.2:0->127.0.0.1:18443: i/o timeout",
+        "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.7:0->127.0.0.1:18443: i/o timeout"
+      ]
+    },
+    "started_at": "2026-10-27T01:02:15.982456495Z"
+  },
+  "resources": {
+    "proxy": {
+      "peak_pss_mib": 335.7548828125,
+      "median_pss_mib": 335.7548828125,
+      "peak_rss_mib": 351.8203125,
+      "peak_private_mib": 328.234375,
+      "cpu_pct": 42.02917844504364
+    },
+    "app": {
+      "peak_pss_mib": 183.91796875,
+      "median_pss_mib": 117.7109375,
+      "peak_rss_mib": 183.92578125,
+      "peak_private_mib": 183.91796875,
+      "cpu_pct": 25.854781770688508
+    },
+    "loadgen": {
+      "peak_pss_mib": 875.171875,
+      "median_pss_mib": 694.42578125,
+      "peak_rss_mib": 875.1796875,
+      "peak_private_mib": 875.171875,
+      "cpu_pct": 27.814379263707618
+    },
+    "total_cpu_pct": 99.17754271787965,
+    "sample_count": 25
+  },
+  "rps200": 4013.6631408386934,
+  "success_pct": 99.71053200358169,
+  "non200_pct": 0.0,
+  "client_error_pct": 0.289467996418316,
+  "clean": false,
+  "completed": true,
+  "app_limits": [
+    {
+      "before": [
+        131072,
+        131072
+      ],
+      "after": [
+        65535,
+        65535
+      ]
+    }
+  ]
+}

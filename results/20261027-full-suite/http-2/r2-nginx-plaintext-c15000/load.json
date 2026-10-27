@@ -1,0 +1,39 @@
+{
+  "name": "r2-nginx-plaintext-c15000",
+  "method": "GET",
+  "url": "https://127.0.0.1:18443/plaintext",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 32.183318696,
+  "concurrency": 15000,
+  "requests": 129173,
+  "errors": 375,
+  "bytes": 1679249,
+  "requests_per_sec": 4013.6631408386934,
+  "bytes_per_sec": 52177.62083090301,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 16391.372979,
+    "mean": 3479.151982,
+    "min": 1106.633735,
+    "p50": 2529.011458,
+    "p90": 7802.391432,
+    "p95": 10278.061444,
+    "p99": 15319.305849
+  },
+  "status_counts": {
+    "200": 129173
+  },
+  "error_kinds": {
+    "timeout": 375
+  },
+  "error_samples": {
+    "timeout": [
+      "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.15:0-\u003e127.0.0.1:18443: i/o timeout",
+      "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.2:0-\u003e127.0.0.1:18443: i/o timeout",
+      "Get \"https://127.0.0.1:18443/plaintext\": dial tcp 127.0.0.7:0-\u003e127.0.0.1:18443: i/o timeout"
+    ]
+  },
+  "started_at": "2026-10-27T01:02:15.982456495Z"
+}

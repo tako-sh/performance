@@ -1,0 +1,29 @@
+{
+  "name": "r3-tako-channel-publish-c1000",
+  "method": "POST",
+  "url": "https://127.0.0.1:18443/channel-publish",
+  "host_header": "bench.test",
+  "server_name": "bench.test",
+  "source_ip_count": 16,
+  "duration_sec": 30.225458874,
+  "concurrency": 1000,
+  "requests": 86330,
+  "errors": 0,
+  "bytes": 2085058,
+  "requests_per_sec": 2856.2014677719662,
+  "bytes_per_sec": 68983.50191115116,
+  "request_timeout_sec": 60,
+  "latency_ms": {
+    "max": 1676.077881,
+    "mean": 348.165456,
+    "min": 104.489489,
+    "p50": 334.024451,
+    "p90": 376.016335,
+    "p95": 393.797869,
+    "p99": 1387.902681
+  },
+  "status_counts": {
+    "200": 86330
+  },
+  "started_at": "2026-10-27T00:41:26.454564531Z"
+}
