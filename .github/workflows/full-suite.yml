@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: full-suite-${{ github.ref }}
@@ -17,6 +18,7 @@ concurrency:
 env:
   TAKO_REVISION: 1093899fd6b09d6227e5b7b585ee8bfeb4b5c028
   OPENSSL_NO_VENDOR: '1'
+  REUSE_BUILD_RUN: '40422659586'
 
 jobs:
   build:
@@ -31,19 +33,23 @@ jobs:
           path: tako-source
           persist-credentials: false
       - uses: actions/setup-go@v5
+        if: env.REUSE_BUILD_RUN == ''
         with:
           go-version: '1.26.3'
           cache-dependency-path: diagnostics/full-memory/caddy/go.sum
       - uses: oven-sh/setup-bun@v2
+        if: env.REUSE_BUILD_RUN == ''
         with:
           bun-version: '1.4.4'
       - name: Toolchains and libraries
+        if: env.REUSE_BUILD_RUN == ''
         run: |
           sudo apt-get update
           sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake zstd
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
       - uses: actions/cache@v4
+        if: env.REUSE_BUILD_RUN == ''
         with:
           path: |
             ~/.cargo/registry
@@ -53,6 +59,7 @@ jobs:
           restore-keys: |
             buffer-release-${{ runner.os }}-rust-1.99.1-738e023e721cb6bfe63cda184b8e78ad7bf8d1c6-
       - name: Validate and build pinned binaries
+        if: env.REUSE_BUILD_RUN == ''
         run: |
           go test ./cmd/loadgen ./cmd/benchapp
           python3 -m py_compile diagnostics/full-suite/*.py
@@ -75,10 +82,19 @@ jobs:
             sha256sum build/{tako-server,benchapp,loadgen,caddy,bun,features.tar}
           } > build/build.txt
       - name: Build one shared runtime image
+        if: env.REUSE_BUILD_RUN == ''
         run: |
           docker build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t tako-full-suite -f diagnostics/full-suite/Dockerfile .
           docker image inspect tako-full-suite --format '{{.Id}}' > build/runtime-image.txt
           docker save tako-full-suite | zstd -T0 -3 -o build/runtime-image.tar.zst
+      - name: Reuse identical measured binaries and runtime image
+        if: env.REUSE_BUILD_RUN != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: full-suite-build
+          path: build
+          run-id: ${{ env.REUSE_BUILD_RUN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: full-suite-build

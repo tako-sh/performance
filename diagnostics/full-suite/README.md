@@ -19,6 +19,11 @@ separately: HTTP enqueue throughput is not workflow completion throughput.
 Every case measures throughput, p50/p95/p99, HTTP status counts, client errors,
 process PSS/RSS/private memory, and CPU. nginx includes its master and workers;
 Tako's app and workflow processes are counted separately from the proxy.
+Backend app/worker file-descriptor limits are explicitly matched at 65,535 and
+checked in every sample. Tako's production app default is 4,096; the benchmark
+raises this app limit for the high-concurrency comparison without changing the
+server binary. Directly launched backends receive the same limit. The initial
+unmatched-limit run is archived and excluded from current charts.
 Memory is sampled during the same run as throughput, never substituted from a
 different held-connection experiment. Expected overload responses/timeouts are
 retained as results; setup failures and invalid counts fail the workflow.
@@ -59,3 +64,7 @@ publish runtime logs, credentials, private host identities, or certificate keys.
 Replace the whole website dataset and its conclusions from a completed suite;
 keep older results in the repository archive rather than mixing them into the
 current benchmark page.
+
+`REUSE_BUILD_RUN` currently reuses the original run's identical binaries and
+runtime image to isolate the harness correction. After artifact expiry, clear
+that variable to rebuild the pinned sources and image, then record new hashes.

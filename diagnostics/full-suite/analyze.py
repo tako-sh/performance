@@ -47,6 +47,7 @@ def analyze(root):
             assert len(rows) == len(expected)
             for row in rows:
                 assert row['repetition'] == repetition and row['completed'] is True
+                assert row['app_limits'] and all(l['after'] == [65535, 65535] for l in row['app_limits'])
                 case_dir = directory / row['name']
                 assert json.loads((case_dir / 'summary.json').read_text()) == row
                 result = json.loads((case_dir / 'load.json').read_text())
@@ -73,6 +74,7 @@ def analyze(root):
                 if group == 'http' and row['clean']:
                     assert result['bytes'] == ok * 13
                 samples = json.loads((case_dir / 'samples.json').read_text())
+                assert all(s['app_nofile'] and all(l == [65535, 65535] for l in s['app_nofile']) for s in samples)
                 start = datetime.fromisoformat(result['started_at'].replace('Z', '+00:00')).timestamp()
                 measured = [s for s in samples if start <= s['timestamp'] <= start + result['duration_sec']]
                 assert len(measured) == row['resources']['sample_count'] and len(measured) >= 25

@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import resource
 import shutil
 import sqlite3
 import statistics
@@ -23,6 +24,20 @@ PROXIES = ['nginx', 'haproxy', 'tako', 'envoy', 'caddy']
 LEVELS = [1000, 2500, 5000, 7500, 10000, 15000, 20000]
 FEATURE_LEVELS = [500, 1000, 2000, 4000, 8000]
 ENV = {**os.environ, 'GOMAXPROCS': '2'}
+APP_NOFILE = 65535
+
+
+def match_app_limits(upstream):
+    pids = app_pids() if upstream is None else descendants(upstream.pid)
+    limits = []
+    for pid in sorted(pids):
+        before = resource.prlimit(pid, resource.RLIMIT_NOFILE)
+        resource.prlimit(pid, resource.RLIMIT_NOFILE, (APP_NOFILE, APP_NOFILE))
+        after = resource.prlimit(pid, resource.RLIMIT_NOFILE)
+        limits.append(dict(before=list(before), after=list(after)))
+    if not limits:
+        raise RuntimeError('no backend app processes found')
+    return limits
 
 
 def write_json(path, value):
@@ -74,7 +89,11 @@ def cgroup_cpu():
 
 def sample(server, upstream, load):
     apps = app_pids() if upstream is None else descendants(upstream.pid)
+    limits = [list(resource.prlimit(pid, resource.RLIMIT_NOFILE)) for pid in apps]
+    if not limits or any(limit != [APP_NOFILE, APP_NOFILE] for limit in limits):
+        raise RuntimeError(f'backend limits changed during measurement: {limits}')
     return dict(timestamp=time.time(), proxy=process_metrics(descendants(server.pid) - apps),
+                app_nofile=limits,
                 app=process_metrics(apps), loadgen=process_metrics(descendants(load.pid)),
                 cpu_seconds=cgroup_cpu(), memory_bytes=int(Path('/sys/fs/cgroup/memory.current').read_text()))
 
@@ -206,6 +225,7 @@ def case(args, proxy, endpoint, concurrency, index):
             upstream = common.start(['/build/benchapp'], case_dir / 'app.log', env={**ENV, 'PORT': str(port)})
             server = start_proxy(case_dir, proxy, port)
         ready(server, 'status' if feature else 'plaintext')
+        app_limits = match_app_limits(upstream)
         # Validate the feature's actual operation before timed load begins.
         if feature:
             response = subprocess.run(['curl', '--http1.1', '--silent', '--show-error', '--fail-with-body', '--max-time', '30',
@@ -228,6 +248,7 @@ def case(args, proxy, endpoint, concurrency, index):
                 else:
                     raise RuntimeError(f'workflow worker did not persist its ack: {preflight}')
                 write_json(case_dir / 'workflow-preflight.json', preflight)
+                app_limits.extend(match_app_limits(upstream))
         argv = ['/build/loadgen', '-name', name, '-url', f'https://127.0.0.1:18443/{endpoint}',
                 '-host', 'bench.test', '-sni', 'bench.test', '-insecure', '-source-ips', common.SOURCE_IPS,
                 '-concurrency', str(concurrency), '-warmup', f'{args.warmup}s',
@@ -262,7 +283,7 @@ def case(args, proxy, endpoint, concurrency, index):
                    rps200=ok / result['duration_sec'], success_pct=ok / attempts * 100,
                    non200_pct=(result['requests'] - ok) / attempts * 100,
                    client_error_pct=result['errors'] / attempts * 100,
-                   clean=ok == attempts, completed=True)
+                   clean=ok == attempts, completed=True, app_limits=app_limits)
         if endpoint == 'workflow-enqueue':
             row['workflow_after_load'] = workflow_state()
         write_json(case_dir / 'samples.json', samples)
