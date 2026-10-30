@@ -45,7 +45,7 @@ jobs:
           sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         id: cargo-cache
         with:
           path: |
@@ -76,7 +76,7 @@ jobs:
             go version
             sha256sum diagnostics/full-memory/tako-l4-buffer.patch
           } > results/full-memory/build.txt
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         if: steps.cargo-cache.outputs.cache-hit != 'true'
         with:
           path: |
