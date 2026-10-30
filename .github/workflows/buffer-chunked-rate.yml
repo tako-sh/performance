@@ -24,8 +24,8 @@ jobs:
       matrix:
         scenario: [chunked]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: 35c4234595be4e66fc86339c2a37a298653a4c63

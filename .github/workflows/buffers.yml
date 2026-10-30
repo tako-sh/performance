@@ -26,14 +26,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: ${{ env.TAKO_REVISION }}
           path: tako-source
           persist-credentials: false
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: cloudflare/pingora
           ref: ${{ env.PINGORA_REVISION }}
@@ -131,8 +131,8 @@ jobs:
       matrix:
         group: [memory, h1, h2]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: ${{ env.TAKO_REVISION }}

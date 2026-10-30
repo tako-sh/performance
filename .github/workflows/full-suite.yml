@@ -25,10 +25,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 50
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Test sampler accounting
         run: python3 -m unittest discover -s diagnostics/full-suite -p 'test_*.py' -v
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: ${{ env.TAKO_REVISION }}
@@ -118,8 +118,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: ${{ env.TAKO_REVISION }}
@@ -152,8 +152,8 @@ jobs:
         group: [http, features]
         repetition: [1, 2, 3]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: ${{ env.TAKO_REVISION }}
