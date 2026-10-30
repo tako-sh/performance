@@ -28,8 +28,8 @@ jobs:
       TAKO_REVISION: f0ed5d938a4f26f4c775336c8f16aa572fe20dae
       OPENSSL_NO_VENDOR: '1'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: tako-sh/tako
           ref: ${{ env.TAKO_REVISION }}
