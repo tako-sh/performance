@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Five-proxy and Tako feature suite, only inside a disposable test container."""
 import argparse
-from datetime import datetime
 import hashlib
 import importlib.util
 import json
@@ -11,11 +10,12 @@ import platform
 import resource
 import shutil
 import sqlite3
-import statistics
 import subprocess
 import time
 
-spec = importlib.util.spec_from_file_location('common', '/perf/diagnostics/full-memory/run.py')
+from accounting import summarize_samples
+
+spec = importlib.util.spec_from_file_location('common', Path(__file__).resolve().parents[1] / 'full-memory/run.py')
 common = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(common)
 OUT, DATA = common.OUT, common.DATA
@@ -72,14 +72,29 @@ def app_pids():
     return found
 
 
+class IncompleteSample(RuntimeError):
+    """A process disappeared or could not be read; its counters are not zero."""
+
+
 def process_metrics(pids):
+    if not pids:
+        raise IncompleteSample('empty process group')
     total = dict(pss_kib=0, rss_kib=0, private_kib=0, cpu_seconds=0)
-    for pid in pids:
+    identities = []
+    for pid in sorted(pids):
         try:
-            for key, value in common.memory(pid).items():
+            stat = Path(f'/proc/{pid}/stat')
+            before = stat.read_text().rsplit(')', 1)[1].split()[19]
+            metrics = common.memory(pid)
+            after = stat.read_text().rsplit(')', 1)[1].split()[19]
+            if before != after:
+                raise IncompleteSample(f'process {pid} was replaced during collection')
+            for key, value in metrics.items():
                 total[key] += value
-        except (OSError, ProcessLookupError):
-            pass
+            identities.append([pid, before])
+        except (OSError, KeyError, ValueError, IndexError) as error:
+            raise IncompleteSample(f'cannot collect process {pid}') from error
+    total['processes'] = identities
     return total
 
 
@@ -88,17 +103,58 @@ def cgroup_cpu():
 
 
 def sample(server, upstream, load):
+    collection_started_at = time.time()
     apps = app_pids() if upstream is None else descendants(upstream.pid)
     limits = [list(resource.prlimit(pid, resource.RLIMIT_NOFILE)) for pid in apps]
-    if not limits or any(limit != [APP_NOFILE, APP_NOFILE] for limit in limits):
+    if not limits:
+        raise IncompleteSample('empty backend process group')
+    if any(limit != [APP_NOFILE, APP_NOFILE] for limit in limits):
         raise RuntimeError(f'backend limits changed during measurement: {limits}')
     app_metrics = process_metrics(apps)
     cpu_group = '/sys/fs/cgroup/tako-apps' if upstream is None else '/sys/fs/cgroup/benchmark-upstream'
     app_metrics['cpu_seconds'] = int(dict(line.split() for line in Path(cpu_group, 'cpu.stat').read_text().splitlines())['usage_usec']) / 1e6
-    return dict(timestamp=time.time(), proxy=process_metrics(descendants(server.pid) - apps),
+    current = dict(proxy=process_metrics(descendants(server.pid) - apps),
                 app_nofile=limits,
                 app=app_metrics, loadgen=process_metrics(descendants(load.pid)),
                 cpu_seconds=cgroup_cpu(), memory_bytes=int(Path('/sys/fs/cgroup/memory.current').read_text()))
+    current.update(collection_started_at=collection_started_at, timestamp=time.time())
+    return current
+
+
+def collect_sample(server, upstream, load):
+    started = time.time()
+    try:
+        current = sample(server, upstream, load)
+    except (IncompleteSample, ProcessLookupError) as error:
+        # Keep an explicit unavailable observation, then continue if load is alive.
+        # A worker exiting during /proc collection need not invalidate the case.
+        return dict(collection_started_at=started, timestamp=time.time(),
+                    valid=False, unavailable_reason=str(error))
+    # Also catches an exit after successful /proc reads. Mark the terminal
+    # observation unavailable even if its timestamp is in the window.
+    if load.poll() is not None:
+        current.update(valid=False, unavailable_reason='load generator exited during collection')
+    return current
+
+
+def collect_samples(server, upstream, load, args, case_dir):
+    samples, started = [], time.monotonic()
+    try:
+        while load.poll() is None:
+            if server.poll() is not None:
+                raise RuntimeError('proxy exited under load')
+            current = collect_sample(server, upstream, load)
+            samples.append(current)
+            if current.get('valid', True) and (len(samples) - 1) % 5 == 0:
+                current['established_tls_port_connections'] = common.established_connections()
+            if time.monotonic() - started > args.warmup + args.duration + 180:
+                raise RuntimeError('load generator deadline exceeded')
+            time.sleep(1)
+        return samples
+    finally:
+        # Preserve complete and unavailable observations even if a later read,
+        # process check, or deadline aborts collection.
+        write_json(case_dir / 'samples.json', samples)
 
 
 def prepare():
@@ -194,26 +250,6 @@ def start_proxy(case_dir, proxy, port):
     return common.start(commands[proxy], case_dir / 'server.log', env=ENV)
 
 
-def summarize_samples(samples, result):
-    start = datetime.fromisoformat(result['started_at'].replace('Z', '+00:00')).timestamp()
-    measured = [s for s in samples if start <= s['timestamp'] <= start + result['duration_sec']]
-    if len(measured) < 2:
-        raise RuntimeError('insufficient measurement samples')
-    first, last = measured[0], measured[-1]
-    seconds = last['timestamp'] - first['timestamp']
-    resources = {}
-    for group in ['proxy', 'app', 'loadgen']:
-        resources[group] = dict(
-            peak_pss_mib=max(s[group]['pss_kib'] for s in measured) / 1024,
-            median_pss_mib=statistics.median(s[group]['pss_kib'] for s in measured) / 1024,
-            peak_rss_mib=max(s[group]['rss_kib'] for s in measured) / 1024,
-            peak_private_mib=max(s[group]['private_kib'] for s in measured) / 1024,
-            cpu_pct=(last[group]['cpu_seconds'] - first[group]['cpu_seconds']) / seconds / 2 * 100)
-    resources['total_cpu_pct'] = (last['cpu_seconds'] - first['cpu_seconds']) / seconds / 2 * 100
-    resources['sample_count'] = len(measured)
-    return resources
-
-
 def case(args, proxy, endpoint, concurrency, index):
     name = f'r{args.repetition}-{proxy}-{endpoint}-c{concurrency}'
     case_dir = OUT / name
@@ -264,17 +300,7 @@ def case(args, proxy, endpoint, concurrency, index):
             argv.extend(['-method', 'POST', '-body', 'ok', '-content-type', 'application/json'])
         with (case_dir / 'load.json').open('wb') as output, (case_dir / 'load.stderr').open('wb') as error:
             load = subprocess.Popen(argv, stdout=output, stderr=error, env=ENV)
-        samples, started = [], time.monotonic()
-        while load.poll() is None:
-            if server.poll() is not None:
-                raise RuntimeError('proxy exited under load')
-            current = sample(server, upstream, load)
-            if len(samples) % 5 == 0:
-                current['established_tls_port_connections'] = common.established_connections()
-            samples.append(current)
-            if time.monotonic() - started > args.warmup + args.duration + 180:
-                raise RuntimeError('load generator deadline exceeded')
-            time.sleep(1)
+        samples = collect_samples(server, upstream, load, args, case_dir)
         if load.returncode:
             raise RuntimeError(f'load generator exited {load.returncode}')
         result = json.loads((case_dir / 'load.json').read_text())
@@ -293,7 +319,6 @@ def case(args, proxy, endpoint, concurrency, index):
                    clean=ok == attempts, completed=True, app_limits=app_limits)
         if endpoint == 'workflow-enqueue':
             row['workflow_after_load'] = workflow_state()
-        write_json(case_dir / 'samples.json', samples)
         write_json(case_dir / 'summary.json', row)
         print(json.dumps({k: row[k] for k in ['name', 'rps200', 'success_pct', 'clean']}), flush=True)
         return row

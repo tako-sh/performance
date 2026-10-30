@@ -68,3 +68,27 @@ current benchmark page.
 `REUSE_BUILD_RUN` currently reuses the original run's identical binaries and
 runtime image to isolate the harness correction. After artifact expiry, clear
 that variable to rebuild the pinned sources and image, then record new hashes.
+
+Sampler regression checks (no container or benchmark run required):
+
+```sh
+python3 -m unittest discover -s diagnostics/full-suite -p 'test_*.py'
+```
+
+Process reads must be complete: missing or unreadable `/proc` counters are never
+substituted with zero. An incomplete sample or one overlapping load-generator
+exit is retained with `valid: false` and an `unavailable_reason`, and excluded
+from resource calculations. Collection continues through ordinary app worker
+exits while the load generator is alive. New samples
+record collection start and finish, and only collections wholly inside the load
+measurement window contribute to the summary. Legacy samples retain their
+original timestamp filtering. Cumulative CPU counters must be finite,
+nonnegative, and nondecreasing throughout the selected interval, with strictly
+increasing timestamps. Proxy and load-generator process identities must remain
+stable; app CPU uses its cgroup counter and permits worker turnover. Invalid
+accounting fails explicitly rather than clamping or publishing a negative rate.
+Complete and unavailable observations are saved even when a later collection
+error aborts the case. The runner and generic analyzer share the same accounting
+validation. At least two usable observations are needed to summarize; the full
+suite analyzer additionally requires at least 25, as before. Historical data and its dated
+analyzers are not rewritten by this change.

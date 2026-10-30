@@ -2,11 +2,12 @@
 """Validate all 135 cases and export the one dataset used by reports and website."""
 import argparse
 from collections import defaultdict
-from datetime import datetime
 import json
 import math
 from pathlib import Path
 import statistics
+
+from accounting import summarize_samples
 
 PROXIES = ['nginx', 'haproxy', 'tako', 'envoy', 'caddy']
 HTTP_LEVELS = [1000, 2500, 5000, 7500, 10000, 15000, 20000]
@@ -21,6 +22,19 @@ def close(actual, expected):
 def mean_range(values):
     assert all(math.isfinite(x) for x in values)
     return dict(mean=statistics.mean(values), minimum=min(values), maximum=max(values), repetitions=values)
+
+
+def validate_resources(samples, result, resources):
+    """Reject invalid raw accounting before comparing any published aggregates."""
+    assert all(s['app_nofile'] and all(l == [65535, 65535] for l in s['app_nofile'])
+               for s in samples if s.get('valid', True))
+    expected = summarize_samples(samples, result)
+    assert expected['sample_count'] == resources['sample_count'] and expected['sample_count'] >= 25
+    for process in ['proxy', 'app', 'loadgen']:
+        for key, value in expected[process].items():
+            close(resources[process][key], value)
+        assert resources[process]['peak_pss_mib'] > 0
+    close(resources['total_cpu_pct'], expected['total_cpu_pct'])
 
 
 def analyze(root):
@@ -74,20 +88,7 @@ def analyze(root):
                 if group == 'http' and row['clean']:
                     assert result['bytes'] == ok * 13
                 samples = json.loads((case_dir / 'samples.json').read_text())
-                assert all(s['app_nofile'] and all(l == [65535, 65535] for l in s['app_nofile']) for s in samples)
-                start = datetime.fromisoformat(result['started_at'].replace('Z', '+00:00')).timestamp()
-                measured = [s for s in samples if start <= s['timestamp'] <= start + result['duration_sec']]
-                assert len(measured) == row['resources']['sample_count'] and len(measured) >= 25
-                seconds = measured[-1]['timestamp'] - measured[0]['timestamp']
-                for process in ['proxy', 'app', 'loadgen']:
-                    resource = row['resources'][process]
-                    close(resource['peak_pss_mib'], max(s[process]['pss_kib'] for s in measured) / 1024)
-                    close(resource['median_pss_mib'], statistics.median(s[process]['pss_kib'] for s in measured) / 1024)
-                    close(resource['peak_rss_mib'], max(s[process]['rss_kib'] for s in measured) / 1024)
-                    close(resource['peak_private_mib'], max(s[process]['private_kib'] for s in measured) / 1024)
-                    close(resource['cpu_pct'], (measured[-1][process]['cpu_seconds'] - measured[0][process]['cpu_seconds']) / seconds / 2 * 100)
-                    assert resource['peak_pss_mib'] > 0 and resource['cpu_pct'] >= 0
-                close(row['resources']['total_cpu_pct'], (measured[-1]['cpu_seconds'] - measured[0]['cpu_seconds']) / seconds / 2 * 100)
+                validate_resources(samples, result, row['resources'])
                 cases.append(row)
             groups.append(dict(group=group, repetition=repetition, metadata=metadata))
     assert len(manifests) == len(images) == 1
