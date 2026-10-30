@@ -37,7 +37,7 @@ jobs:
       - uses: actions/setup-go@v5
         if: env.REUSE_BUILD_RUN == ''
         with:
-          go-version: '1.26.3'
+          go-version: '1.27.3'
           cache-dependency-path: diagnostics/full-memory/caddy/go.sum
       - uses: oven-sh/setup-bun@v2
         if: env.REUSE_BUILD_RUN == ''
