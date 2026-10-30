@@ -44,7 +44,7 @@ jobs:
           sudo apt-get install -y libvips-dev libssl-dev pkg-config cmake
           rustup toolchain install 1.99.1 --profile minimal
           rustup default 1.99.1
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/registry
