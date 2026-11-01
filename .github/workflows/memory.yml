@@ -22,7 +22,7 @@ concurrency:
 jobs:
   memory:
     # Standard Linux runners are free for this public performance repository.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 60
     env:
       TAKO_REVISION: f0ed5d938a4f26f4c775336c8f16aa572fe20dae
