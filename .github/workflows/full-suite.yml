@@ -34,7 +34,7 @@ jobs:
           ref: ${{ env.TAKO_REVISION }}
           path: tako-source
           persist-credentials: false
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         if: env.REUSE_BUILD_RUN == ''
         with:
           go-version: '1.26.3'
