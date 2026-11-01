@@ -39,7 +39,7 @@ jobs:
           ref: ${{ env.PINGORA_REVISION }}
           path: pingora-upstream
           persist-credentials: false
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.26.3'
           cache-dependency-path: diagnostics/full-memory/caddy/go.sum
