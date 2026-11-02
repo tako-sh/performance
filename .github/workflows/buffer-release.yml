@@ -87,7 +87,7 @@ jobs:
             go version
             sha256sum build/{tako-server,tako-candidate,benchapp,buffer-load,hold-connections,caddy}
           } > build/build.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: buffer-release-binaries
           path: build/
@@ -109,7 +109,7 @@ jobs:
           ref: ${{ env.CANDIDATE_REVISION }}
           path: tako-source
           persist-credentials: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: buffer-release-binaries
           path: build
@@ -139,7 +139,7 @@ jobs:
           if test -f results/buffer-release/summary.json; then
             python3 diagnostics/buffer-lifetime/summarize.py results/buffer-release >> "$GITHUB_STEP_SUMMARY"
           fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: buffer-release-${{ matrix.group }}-${{ github.sha }}

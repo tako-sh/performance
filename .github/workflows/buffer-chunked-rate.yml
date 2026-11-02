@@ -36,7 +36,7 @@ jobs:
           python3 -m py_compile diagnostics/rate-validation/run.py
           bash -n diagnostics/rate-validation/entrypoint.sh
       - name: Reuse the exact measured binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: buffer-release-binaries
           run-id: 40340201528
@@ -66,7 +66,7 @@ jobs:
           if test -f results/buffer-chunked-rate/summary.json; then
             python3 diagnostics/buffer-lifetime/summarize.py results/buffer-chunked-rate >> "$GITHUB_STEP_SUMMARY"
           fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: buffer-chunked-rate-${{ matrix.scenario }}-${{ github.sha }}

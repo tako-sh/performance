@@ -124,7 +124,7 @@ jobs:
               python3 diagnostics/full-memory/summarize.py "$run" >> "$GITHUB_STEP_SUMMARY"
             fi
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: full-memory-${{ github.sha }}
