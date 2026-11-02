@@ -91,13 +91,13 @@ jobs:
           docker save tako-full-suite | zstd -T0 -3 -o build/runtime-image.tar.zst
       - name: Reuse identical measured binaries and runtime image
         if: env.REUSE_BUILD_RUN != ''
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: full-suite-build
           path: build
           run-id: ${{ env.REUSE_BUILD_RUN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: full-suite-build
           path: |
@@ -125,13 +125,13 @@ jobs:
           ref: ${{ env.TAKO_REVISION }}
           path: tako-source
           persist-credentials: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: full-suite-build
           path: build
       - name: Verify all five proxies and both feature operations
         run: bash diagnostics/full-suite/run-container.sh smoke 1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: full-suite-smoke-${{ github.sha }}
@@ -159,7 +159,7 @@ jobs:
           ref: ${{ env.TAKO_REVISION }}
           path: tako-source
           persist-credentials: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: full-suite-build
           path: build
@@ -168,7 +168,7 @@ jobs:
           GROUP: ${{ matrix.group }}
           REPETITION: ${{ matrix.repetition }}
         run: bash diagnostics/full-suite/run-container.sh "$GROUP" "$REPETITION"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: full-suite-${{ matrix.group }}-${{ matrix.repetition }}-${{ github.sha }}

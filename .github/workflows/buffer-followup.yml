@@ -31,7 +31,7 @@ jobs:
           path: tako-source
           persist-credentials: false
       - name: Reuse the exact measured binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: buffer-release-binaries
           run-id: 40340201528
@@ -61,7 +61,7 @@ jobs:
           if test -f results/buffer-followup/summary.json; then
             python3 diagnostics/buffer-lifetime/summarize.py results/buffer-followup >> "$GITHUB_STEP_SUMMARY"
           fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: buffer-followup-${{ matrix.scenario }}-${{ github.sha }}
